@@ -1,6 +1,9 @@
-{
-  "dependencies": {
-    "firebase": "^10.13.0",
-    "react-router-dom": "^6.26.1"
+  {
+    "dependencies": {
+      "firebase": "^10.13.1",
+      "react-router-dom": "^6.26.1"
+    },
+    "scripts": {
+      "dev" : "vite"
+    }
   }
-}
