@@ -1,0 +1,73 @@
+.sidebar {
+    background: rgb(238,174,202);
+    background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+    width: 5%;
+    height:97vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-item {
+    flex: 1;
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .profile {
+    margin: 5px;
+  }
+  
+  .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px; /* Góc bo tròn của hình ảnh */
+  }
+  .logo {
+    padding: 5px;
+    width: 50px;
+    height: 50px;
+    border-radius: 10px; /* Góc bo tròn của hình ảnh */
+  }
+  /* Style cho các icon */
+  .icon-group::before {
+    content: '\f0c0'; /* Mã Unicode cho icon nhóm người */
+    font-family: FontAwesome;
+    font-size: 24px;
+    color: white;
+  }
+  
+  .icon-message::before {
+    content: '\f075'; /* Mã Unicode cho icon tin nhắn */
+    font-family: FontAwesome;
+    font-size: 24px;
+    color: white;
+  }
+  
+  .icon-save::before {
+    content: '\f0c7'; /* Mã Unicode cho icon lưu */
+    font-family: FontAwesome;
+    font-size: 24px;
+    color: white;
+  }
+  
+  .icon-bell::before {
+    content: '\f0f3'; /* Mã Unicode cho icon chuông */
+    font-family: FontAwesome;
+    font-size: 24px;
+    color: white;
+  }
+  
+  .icon-settings::before {
+    content: '\f013'; /* Mã Unicode cho icon cài đặt */
+    font-family: FontAwesome;
+    font-size: 24px;
+    color: white;
+  }
+  
+  /* Hiệu ứng hover cho các item */
+  .sidebar-item:hover .icon-group,
+  .sidebar-item:hover .icon-message,
+  .sidebar-item:hover .icon-save,
+  .sidebar-item:hover .icon-bell,
+  .sidebar-item:hover .icon-settings {
+    color: #add8e6; /* Màu thay đổi khi hover */
+  }

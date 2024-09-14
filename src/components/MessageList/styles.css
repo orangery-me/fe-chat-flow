@@ -1,31 +1,47 @@
-.message-list-container {
-    margin-bottom: 16px;
-    margin-top: 16px;
-    flex: 1;
-    overflow: scroll;
+.message {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
-.message-list {
-    height: 100%;
+.message-content {
+    padding: 10px 15px;
+    border-radius: 20px;
+    max-width: 75%;
+    color: white;
+}
+
+.incoming .message-content {
+    background-color: rgb(245, 192, 215); /* Gray bubble for incoming messages */
+    align-self: flex-start;
+}
+
+.outgoing .message-content {
+    background-color: #5f98fa; /* Blue bubble for outgoing messages */
+    align-self: flex-end;
+}
+
+.message.outgoing {
+    justify-content: flex-end;
+}
+.chat-container {
+    padding: 20px;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    gap: 10px;
+    height: 460px;
+    overflow-y: scroll; /* Enable vertical scrolling */
+    overflow-x: hidden;
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: darkgrey lightgrey; /* Màu của thanh cuộn và nền */
+    border-radius: 10px; /* Bo */
 }
-
-.message {
-    padding: 8px 16px;
-    margin-bottom: 8px;
-    background: var(--color-gray);
-    border-radius: var(--border-radius);
-    text-align: left;
-}
-
-.own-message {
-    background: var(--color-blue);
+ .outgoing .sender{
     align-self: flex-end;
-    text-align: right;
+    padding-right: 15px;
 }
-
-.sender {
-    margin-bottom: 8px;
+ .incoming .sender{
+    align-self: flex-start;
+    padding-left: 15px;
 }

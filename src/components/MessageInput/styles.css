@@ -1,18 +1,27 @@
-.message-input-container {
+.group-chat{
+    padding: 10px;
     display: flex;
-    gap: 4px;
-}
+    flex-direction: row;
+    align-items: center;
+    width: 98%;
+  }
+ 
 
-.message-input {
-    padding: 12px 8px;
-    flex: 1;
-    background: var(--color-gray);
-    border-radius: var(--border-radius);
-}
+.textZone{
+  flex:1;
+  padding: 10px;
+  border-radius: 20px;
+  background-color:#f0f0f0;
+  display: flex;
+  align-items: center;
 
-.send-message {
-    padding: 12px 14px;
-    background: var(--color-blue);
-    border-radius: var(--border-radius);
-    cursor: pointer;
+}
+.textZone input{
+  background-color: transparent;
+  border: none;
+  width: 90%;
+
+}
+.textZone input:focus{
+  outline: none;
 }

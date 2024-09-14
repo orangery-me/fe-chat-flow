@@ -1,0 +1,137 @@
+
+.home {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 97vh;
+}
+.profile-form {
+    width: 25%;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-form h2 {
+    font-size: 24px;
+  }
+  .account{
+    width: 200px;
+    height: 200px;
+    padding-bottom: 20px;
+  }
+  .profile-form form {
+    width: 307px;
+    height: 100%;
+    justify-content: space-between;
+    opacity: 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .profile-form input {
+    padding: 10px;
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  .profile-form button {
+    padding: 10px;
+    /* background: rgb(238,174,202); */
+    background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+/* GoogleButton.css */
+/* .google-btn {
+  display: flex;
+  align-items: center;
+  border: 1px solid #67696A;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #67696A;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  font-family: 'Arial', sans-serif;
+}
+
+.google-btn:hover {
+  background-color: #f1f1f1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.chat{
+  padding: 10px 0;
+  width: 100%;
+  height: 500px;
+  overflow-y: scroll; 
+  overflow-x: hidden;
+  scrollbar-width: thin; /* For Firefox 
+  scrollbar-color: darkgrey lightgrey; /* Màu của thanh cuộn và nền 
+  border-radius: 10px; /* Bo tròn các góc của thanh cuộn 
+
+}
+
+.group{
+  padding-top: 10px;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid #333;
+  gap: 30px;
+  padding-bottom: 10px;
+  align-items: center;
+}
+.info{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.imagine{
+  
+
+width: 70px;
+height: 70px;
+border-radius: 50%;
+background: #669ac2;
+align-self: flex-start;
+}
+.group-item{
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  row-gap: 5px;
+}
+.message{
+ 
+  font-size: 15px;
+}
+h3 {
+  display: block;
+  font-size: 1.17em;
+  margin-block-start: 0em;
+  margin-block-end: 2px;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+  unicode-bidi: isolate;
+}
+p {
+  display: block;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  unicode-bidi: isolate;
+} */

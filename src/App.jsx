@@ -1,18 +1,14 @@
-import './index.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import UnauthenticatedApp from './pages/UnauthenticatedApp'; 
-import AuthenticatedApp from './pages/AuthenticatedApp';
-import { useAuth } from './hooks/useAuth';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import AuthenticatedApp from "./pages/AuthenticatedApp";
+import { useAuth } from "./hooks/useAuth";
+import HomePage from "./components/HomePage/HomePage";
+import ProfilePage from "./components/ProfileUpdate/ProfilePage";
 
-function App () {
-  const info  = useAuth();
+function App() {
+  const info = useAuth();
 
-  return (
-    <div className="container">
-    <h1> 💬  Chat Room</h1>
-      {info.user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
-    </div>
-  );
+  return <div>{info.user ? <AuthenticatedApp /> : <HomePage />}</div>;
 }
 
 export default App;
