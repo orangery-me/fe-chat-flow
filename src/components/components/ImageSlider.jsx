@@ -6,10 +6,11 @@ import "./ImageSlider.css";
 
 const ImageSlider = () => {
   const images = [
+    "/1.png",
+    "/2.png",
+    "/3.png",
+    "/4.png",
     "https://chat.zalo.me/assets/quick-message-onboard.3950179c175f636e91e3169b65d1b3e2.png",
-    "https://chat.zalo.me/assets/inapp-welcome-screen-0.19afb7ab96c7506bb92b41134c4e334c.jpg",
-    "https://chat.zalo.me/assets/inapp-welcome-screen-02.7f8cab265c34128a01a19f3bcd5f327a.jpg",
-    "https://subiz.com.vn/blog/wp-content/uploads/2022/10/chatbot-ho-tro-con-nguoi-e1665570278987.jpg",
   ];
 
   const settings = {
@@ -31,11 +32,22 @@ const ImageSlider = () => {
         Khám phá những tiện ích hỗ trợ làm việc, quản lý tệp tin và trò chuyện
         cùng người thân, bạn bè của bạn
       </p>
-      <div style={{ width: "600px", height: "400px", margin: "20px" }}>
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "600px",
+          height: "auto",
+          margin: "20px auto",
+        }}
+      >
         <Slider {...settings}>
           {images.map((img, index) => (
             <div key={index}>
-              <img src={img} alt={`Slide ${index}`} style={{ width: "100%" }} />
+              <img
+                src={img}
+                alt={`Slide ${index}`}
+                style={{ width: "100%", height: "auto", borderRadius: "10px" }}
+              />
             </div>
           ))}
         </Slider>

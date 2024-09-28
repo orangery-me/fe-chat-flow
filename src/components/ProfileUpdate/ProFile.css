@@ -1,137 +1,61 @@
 
-.home {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 97vh;
-}
-.profile-form {
-    width: 25%;
-    margin: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .profile-form h2 {
-    font-size: 24px;
-  }
-  .account{
-    width: 200px;
-    height: 200px;
-    padding-bottom: 20px;
-  }
-  .profile-form form {
-    width: 307px;
-    height: 100%;
-    justify-content: space-between;
-    opacity: 0px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .profile-form input {
-    padding: 10px;
-    width: 100%;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-  }
-  
-  .profile-form button {
-    padding: 10px;
-    /* background: rgb(238,174,202); */
-    background: radial-gradient(circle, rgba(19,50,85,1) 0%, rgba(62,88,115,1) 100%);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-/* GoogleButton.css */
-/* .google-btn {
-  display: flex;
-  align-items: center;
-  border: 1px solid #67696A;
-  border-radius: 5px;
-  font-size: 16px;
-  color: #67696A;
-  padding: 10px 15px;
-  cursor: pointer;
-  transition: box-shadow 0.3s ease, background-color 0.3s ease;
-  font-family: 'Arial', sans-serif;
+
+.profile-form h2 {
+  font-size: 24px;
+  margin-bottom: 15px; /* Added space below the heading */
 }
 
-.google-btn:hover {
-  background-color: #f1f1f1;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.account {
+  width: 200px;
+  height: 200px;
+  padding-bottom: 20px;
 }
 
-.google-icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-}
-
-.chat{
-  padding: 10px 0;
-  width: 100%;
-  height: 500px;
-  overflow-y: scroll; 
-  overflow-x: hidden;
-  scrollbar-width: thin; /* For Firefox 
-  scrollbar-color: darkgrey lightgrey; /* Màu của thanh cuộn và nền 
-  border-radius: 10px; /* Bo tròn các góc của thanh cuộn 
-
-}
-
-.group{
-  padding-top: 10px;
-  display: flex;
-  flex-direction: row;
-  border-bottom: 1px solid #333;
-  gap: 30px;
-  padding-bottom: 10px;
-  align-items: center;
-}
-.info{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.imagine{
-  
-
-width: 70px;
-height: 70px;
-border-radius: 50%;
-background: #669ac2;
-align-self: flex-start;
-}
-.group-item{
+/* Adjusted form styling */
+.profile-form form {
+  width: 100%; /* Full width of the parent container */
+  max-width: 307px; /* Max width constraint */
+  height: auto; /* Allow height to adjust based on content */
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  row-gap: 5px;
+  gap: 10px;
+  opacity: 1; /* Make the form visible */
 }
-.message{
- 
-  font-size: 15px;
+
+.profile-form input {
+  padding: 10px;
+  width: 90%;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s; /* Smooth transition for border color */
 }
-h3 {
-  display: block;
-  font-size: 1.17em;
-  margin-block-start: 0em;
-  margin-block-end: 2px;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
-  font-weight: bold;
-  unicode-bidi: isolate;
+
+.profile-form input:focus {
+  border-color: #5f98fa; /* Change border color on focus */
+  outline: none; /* Remove default outline */
 }
-p {
-  display: block;
-  margin-block-start: 0em;
-  margin-block-end: 0em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
-  unicode-bidi: isolate;
-} */
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .profile-form {
+    width: 80%; /* Increase width on smaller screens */
+  }
+
+  .profile-form h2 {
+    font-size: 20px; /* Adjust heading size */
+  }
+
+  .account {
+    width: 150px; /* Adjust account image size */
+    height: 150px;
+  }
+
+  .profile-form input {
+    font-size: 14px; /* Adjust font size for inputs */
+  }
+
+  .profile-form button {
+    font-size: 14px; /* Adjust button font size */
+  }
+}

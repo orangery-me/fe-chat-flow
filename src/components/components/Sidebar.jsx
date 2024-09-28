@@ -73,8 +73,10 @@ const Sidebar = () => {
               </div>
               <div
                 style={{
-                  border: "1px solid #ccc", // Đường viền màu xám, dày 2px
-                  borderRadius: "10px",
+                  border: "1px solid #fff", // White border
+                  borderRadius: "10px", // Rounded corners
+                  padding: "10px", // Optional: Add some padding for better spacing
+                  boxShadow: "0 2px 5px rgba(0, 0, 0, 0.3)", // Optional: Add a subtle shadow for depth
                   marginTop: "20px",
                 }}
               ></div>
@@ -89,8 +91,10 @@ const Sidebar = () => {
                   <input type="text"></input>
                   <div
                     style={{
-                      border: "1px solid #6aaff4", // Đường viền màu xám, dày 2px
-                      borderRadius: "10px",
+                      border: "1px solid #fff", // White border
+                      borderRadius: "10px", // Rounded corners
+                      padding: "10px", // Optional: Add some padding for better spacing
+                      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.3)", // Optional: Add a subtle shadow for depth
                     }}
                     className="line"
                   ></div>
@@ -109,8 +113,10 @@ const Sidebar = () => {
               </div>
               <div
                 style={{
-                  border: "1px solid #ccc", // Đường viền màu xám, dày 2px
-                  borderRadius: "10px",
+                  border: "1px solid #fff", // White border
+                  borderRadius: "10px", // Rounded corners
+                  padding: "10px", // Optional: Add some padding for better spacing
+                  boxShadow: "0 2px 5px rgba(0, 0, 0, 0.3)", // Optional: Add a subtle shadow for depth
                   marginTop: "20px",
                 }}
               ></div>

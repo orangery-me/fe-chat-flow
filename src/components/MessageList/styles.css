@@ -9,10 +9,11 @@
     border-radius: 20px;
     max-width: 75%;
     color: white;
+    word-wrap: break-word; /* Allow long words to break onto the next line */
 }
 
 .incoming .message-content {
-    background-color: rgb(245, 192, 215); /* Gray bubble for incoming messages */
+    background-color: rgb(245, 192, 215); /* Pink bubble for incoming messages */
     align-self: flex-start;
 }
 
@@ -24,24 +25,42 @@
 .message.outgoing {
     justify-content: flex-end;
 }
+
 .chat-container {
     padding: 20px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    height: 460px;
-    overflow-y: scroll; /* Enable vertical scrolling */
+    overflow-y: auto; /* Changed to auto for better UX */
     overflow-x: hidden;
     scrollbar-width: thin; /* For Firefox */
-    scrollbar-color: darkgrey lightgrey; /* Màu của thanh cuộn và nền */
-    border-radius: 10px; /* Bo */
+    scrollbar-color: darkgrey lightgrey; /* Color of the scrollbar */
+    border-radius: 10px; /* Rounded corners */
 }
- .outgoing .sender{
+
+/* Styling for the sender name */
+.outgoing .sender {
+    color: #FDFEFE;
     align-self: flex-end;
     padding-right: 15px;
+    font-weight: normal; /* Make the sender's name bold */
 }
- .incoming .sender{
+
+.incoming .sender {
+    color: #FDFEFE;
     align-self: flex-start;
     padding-left: 15px;
+    font-weight: normal; /* Make the sender's name bold */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .chat-container {
+        height: 300px; /* Reduced height for smaller screens */
+    }
+
+    .message-content {
+        max-width: 90%; /* Increase max-width for mobile devices */
+    }
 }

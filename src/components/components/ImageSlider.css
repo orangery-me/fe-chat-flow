@@ -1,16 +1,28 @@
 .welcome-text {
-   background: #222629;
-    width: 66%;
-    /* height: 350px; */
-    margin: 0;
-    padding: 0;
-    display: flex;
+  /* background: rgb(214,234,248); */
+  background: radial-gradient(circle, rgba(214,234,248,1) 0%, rgba(74,118,143,1) 80%);
+  width: 66%;
+  margin: 0;
+  padding: 0;
+  display: flex;
   flex-direction: column;
-  justify-content: left;
+  justify-content: flex-start; /* Sửa 'left' thành 'flex-start' */
+  border: 2px solid #ccc;
+  border-radius: 20px;
+}
+
+.homemain {
+align-items: center;
+}
+
+/* Media query để đảm bảo tính responsive trên các màn hình nhỏ hơn */
+@media only screen and (max-width: 768px) {
+  .welcome-text {
+      width: 100%; /* Đảm bảo văn bản chiếm hết chiều rộng trên màn hình nhỏ */
+      padding: 1rem;
   }
 
-  .homemain{
-    align-items: center;
-
+  .homemain {
+      align-items: flex-start; /* Căn chỉnh theo đầu trên màn hình nhỏ */
   }
-  
+}

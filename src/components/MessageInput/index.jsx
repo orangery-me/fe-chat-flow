@@ -127,9 +127,12 @@ function MessageInput({ roomId }) {
                   <Picker
                     onEmojiClick={handleEmojiClick}
                     style={{
-                      marginTop: "-350px",
-                      height: "350px",
-                      width: "300px",
+                      marginTop: "-350px", // Pulls the element up by 350 pixels
+                      height: "350px", // Sets the height of the element
+                      width: "300px", // Sets the width of the element
+                      backgroundColor: "#fff", // Optional: Set a background color for visibility
+                      borderRadius: "10px", // Optional: Rounded corners
+                      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.3)", // Optional: Add a subtle shadow for depth
                     }}
                   />
                 )}

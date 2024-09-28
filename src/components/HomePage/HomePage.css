@@ -1,50 +1,42 @@
-.home {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 97vh;
-  }
-  .profile-form {
-    width: 25%;
-    /* height: 350px; */
-    margin: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .profile-form h2 {
-    font-size: 24px;
-  }
-  .profile-form button {
-    padding: 10px;
-    /* background: rgb(238,174,202); */
-    background: radial-gradient(circle, rgba(19,50,85,1) 0%, rgba(62,88,115,1) 100%);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-/* GoogleButton.css */
-.google-btn {
+
+.profile-form h2 {
+  font-size: 1.5rem; /* 24px = 1.5rem */
+}
+
+.profile-form button {
+  background: #659dbd;
+  /* background: radial-gradient(circle, rgba(19,50,85,1) 0%, rgba(62,88,115,1) 100%); */
+  border: none;
+  border-radius: 0.3125rem; 
+  cursor: pointer;
+  color: #fff;
+  font-size: 1rem; 
+  transition: background-color 0.3s ease;
   display: flex;
   align-items: center;
-  border: 1px solid #67696A;
-  border-radius: 5px;
-  font-size: 16px;
-  color: #67696A;
-  padding: 10px 15px;
-  cursor: pointer;
-  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  padding: 0.625rem 0.9375rem;
   font-family: 'Arial', sans-serif;
 }
 
-.google-btn:hover {
-  background-color: #f1f1f1;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.profile-form button:hover {
+  background-color: #54819a; 
 }
 
 .google-icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
+  width: 1.25rem; /* 20px = 1.25rem */
+  height: 1.25rem;
+  margin-right: 0.625rem; /* 10px = 0.625rem */
+}
+
+/* Media Queries để làm cho layout responsive */
+@media (max-width: 768px) {
+  .home {
+      flex-direction: column;
+      height: auto;
+  }
+
+  .profile-form {
+      width: 90%; /* Chiếm gần hết màn hình trên thiết bị nhỏ */
+      margin: 1rem;
+  }
 }

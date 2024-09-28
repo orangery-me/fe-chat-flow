@@ -1,79 +1,85 @@
 .sidebar {
-    background: #25274d;
-    width: 5%;
-    height:97vh;
-    display: flex;
-    flex-direction: column;
-  }
-  .sidebar-item {
-    flex: 1;
-    text-align: center;
-    margin: 20px 0;
-  }
-  
-  .profile {
-    margin: 5px;
-  }
-  
-  .avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 10px; /* Góc bo tròn của hình ảnh */
-  }
-  .logo {
-    padding: 5px;
-    width: 50px;
-    height: 50px;
-    border-radius: 10px; /* Góc bo tròn của hình ảnh */
-  }
-  /* Style cho các icon */
-  .icon-group::before {
-    content: '\f0c0'; /* Mã Unicode cho icon nhóm người */
-    font-family: FontAwesome;
-    font-size: 24px;
-    color: white;
-  }
-  
-  .icon-message::before {
-    content: '\f075'; /* Mã Unicode cho icon tin nhắn */
-    font-family: FontAwesome;
-    font-size: 24px;
-    color: white;
-  }
-  
-  .icon-save::before {
-    content: '\f0c7'; /* Mã Unicode cho icon lưu */
-    font-family: FontAwesome;
-    font-size: 24px;
-    color: white;
-  }
-  
-  .icon-bell::before {
-    content: '\f0f3'; /* Mã Unicode cho icon chuông */
-    font-family: FontAwesome;
-    font-size: 24px;
-    color: white;
-  }
-  
-  .icon-settings::before {
-    content: '\f013'; /* Mã Unicode cho icon cài đặt */
-    font-family: FontAwesome;
-    font-size: 24px;
-    color: white;
-  }
-  
-  /* Hiệu ứng hover cho các item */
-  .sidebar-item:hover .icon-group,
-  .sidebar-item:hover .icon-message,
-  .sidebar-item:hover .icon-save,
-  .sidebar-item:hover .icon-bell,
-  .sidebar-item:hover .icon-settings {
-    color: #add8e6; /* Màu thay đổi khi hover */
-  }
-  /* Style cho nội dung chính */
+  background: linear-gradient(218deg, rgba(214,234,248,1) 0%, rgba(84,129,154,1) 58%);
+  width: 5%;
+  height: 97vh;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #ccc;
+  border-radius: 20px;
+}
+
+.sidebar-item {
+  flex: 1;
+  text-align: center;
+  margin: 1.25rem 0; /* 20px = 1.25rem */
+}
+
+.profile {
+  margin: 0.3125rem; /* 5px = 0.3125rem */
+}
+
+.avatar {
+  width: 3.125rem; /* 50px = 3.125rem */
+  height: 3.125rem;
+  border-radius: 10px; /* Góc bo tròn của hình ảnh */
+}
+
+.logo {
+  padding: 0.3125rem;
+  width: 3.125rem;
+  height: 3.125rem;
+  border-radius: 10px;
+}
+
+/* Style cho các icon */
+.icon-group::before {
+  content: '\f0c0'; /* Mã Unicode cho icon nhóm người */
+  font-family: FontAwesome;
+  font-size: 1.5rem; /* 24px = 1.5rem */
+  color: white;
+}
+
+.icon-message::before {
+  content: '\f075'; /* Mã Unicode cho icon tin nhắn */
+  font-family: FontAwesome;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.icon-save::before {
+  content: '\f0c7'; /* Mã Unicode cho icon lưu */
+  font-family: FontAwesome;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.icon-bell::before {
+  content: '\f0f3'; /* Mã Unicode cho icon chuông */
+  font-family: FontAwesome;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.icon-settings::before {
+  content: '\f013'; /* Mã Unicode cho icon cài đặt */
+  font-family: FontAwesome;
+  font-size: 1.5rem;
+  color: white;
+}
+
+/* Hiệu ứng hover cho các item */
+.sidebar-item:hover .icon-group,
+.sidebar-item:hover .icon-message,
+.sidebar-item:hover .icon-save,
+.sidebar-item:hover .icon-bell,
+.sidebar-item:hover .icon-settings {
+  color: #add8e6; /* Màu thay đổi khi hover */
+}
+
+/* Style cho nội dung chính */
 .content {
   text-align: center;
-  padding: 50px;
+  padding: 3.125rem; /* 50px = 3.125rem */
 }
 
 /* Style cho overlay */
@@ -84,7 +90,7 @@
   width: 100%;
   height: 97vh;
   z-index: 9999;
-  background: rgba(0, 0, 0, 0.2); /* Bóng mờ nhưng không che khuất hoàn toàn */
+  background: rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -92,30 +98,33 @@
 
 /* Style cho nội dung bên trong overlay */
 .overlay-content {
-  width: 520px;
+  width: 32.5rem; /* 520px = 32.5rem */
   height: 97vh;
   background-color: white;
-  padding: 20px;
+  padding: 1.25rem; /* 20px = 1.25rem */
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
-.overlay-title{
+
+.overlay-title {
   display: flex;
   justify-content: space-between;
   height: 5%;
   text-align: start;
-  padding-top: 20px;
+  padding-top: 1.25rem; /* 20px = 1.25rem */
 }
-.overlay-title button{
+
+.overlay-title button {
   padding: 0;
   border: 0;
-  height: 10px;
+  height: 0.625rem; /* 10px = 0.625rem */
   background-color: #fff;
 }
+
 .circle-icon {
-  width: 40px;
-  height: 40px;
+  width: 2.5rem; /* 40px = 2.5rem */
+  height: 2.5rem;
   border-radius: 50%;
   background-color: #fff;
   border: 2px solid #ccc;
@@ -123,87 +132,107 @@
   justify-content: center;
   align-items: center;
 }
-.nameroom{
-  padding-top: 30px;
+
+.nameroom {
+  padding-top: 1.875rem; /* 30px = 1.875rem */
   display: flex;
-  gap:10px;
+  gap: 0.625rem; /* 10px = 0.625rem */
 }
+
 .name {
   width: 80%;
-  padding-top: 15px;
+  padding-top: 0.9375rem; /* 15px = 0.9375rem */
 }
-.name input{
+
+.name input {
   width: 80%;
-  margin-right: 20px;
+  margin-right: 1.25rem; /* 20px = 1.25rem */
   border: none;
   background-color: transparent;
   outline: none;
 }
-.search{
+
+.search {
   border: 1px solid #ccc;
   border-radius: 20px;
   text-align: start;
-  margin-top: 30px;
+  margin-top: 1.875rem; /* 30px = 1.875rem */
   width: 95%;
-  height: 35px;
-  padding-left: 20px;
-  padding-top: 10px;
+  height: 2.1875rem; /* 35px = 2.1875rem */
+  padding-left: 1.25rem; /* 20px = 1.25rem */
+  padding-top: 0.625rem; /* 10px = 0.625rem */
 }
-.search input{
+
+.search input {
   border: none;
   background-color: transparent;
   outline: none;
-
 }
-.list{
-  padding: 10px 0;
+
+.list {
+  padding: 0.625rem 0; /* 10px = 0.625rem */
   width: 100%;
   height: 50vh;
   overflow-y: scroll; /* Enable vertical scrolling */
   overflow-x: hidden;
   scrollbar-width: thin; /* For Firefox */
-  scrollbar-color: darkgrey lightgrey; /* Màu của thanh cuộn và nền */
-  border-radius: 10px; /* Bo tròn các góc của thanh cuộn */
-
+  scrollbar-color: darkgrey lightgrey;
+  border-radius: 10px;
 }
-.group-overlay{
-  padding-top: 10px;
+
+.group-overlay {
+  padding-top: 0.625rem;
   display: flex;
   flex-direction: row;
-  gap: 30px;
-  padding-bottom: 10px;
+  gap: 1.875rem; /* 30px = 1.875rem */
+  padding-bottom: 0.625rem;
   align-items: center;
 }
-.imagine{
-  
-  /* Ellipse 2 */
-  
-  width: 40px;
-  height:40px;
+
+.imagine {
+  width: 2.5rem; /* 40px = 2.5rem */
+  height: 2.5rem;
   border-radius: 50%;
   background: #669ac2;
   align-self: flex-start;
-  }
-.group-title{
+}
+
+.group-title {
   display: flex;
   flex-direction: row;
-  gap: 20px;
-  padding: 0px 15px;
+  gap: 1.25rem; /* 20px = 1.25rem */
+  padding: 0px 0.9375rem; /* 15px = 0.9375rem */
 }
-.group-items{
+
+.group-items {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-grow: 1;
 }
 
-.icons{
- display: flex;
- flex-direction: row;
- gap:30px;
+.icons {
+  display: flex;
+  flex-direction: row;
+  gap: 1.875rem; /* 30px = 1.875rem */
 }
-.icons img{
-  height: 20px;
+
+.icons img {
+  height: 1.25rem; /* 20px = 1.25rem */
   width: auto;
 }
 
+/* Media query cho các thiết bị nhỏ hơn */
+@media only screen and (max-width: 768px) {
+  .sidebar {
+      width: 10%;
+  }
+
+  .overlay-content {
+      width: 90%;
+  }
+
+  .search {
+      width: 100%;
+  }
+}

@@ -29,24 +29,7 @@ function AuthenticatedApp() {
           ))}
         </div>
       </div>
-      {/* <h2>Welcome { info.user.displayName}</h2>
-            <button onClick={info.logout} >
-                Logout
-            </button> */}
-      {/* <h2>Choose a Chat Room</h2> */}
-      {/* <ul className="chat-room-list">
-                {chatRooms.map((room) => (
-                    <li key={room.id}>
-                        <Link to={`/room/${room.id}`}>{room.title}</Link>
-                    </li>
-                ))}
-            </ul> */}
-      <div
-        style={{
-          border: "1px solid #ccc", // Đường viền màu xám, dày 2px
-          borderRadius: "10px",
-        }}
-      ></div>
+
       <ImageSlider />
     </div>
   );

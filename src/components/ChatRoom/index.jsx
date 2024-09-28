@@ -29,12 +29,6 @@ function ChatRoom() {
           ))}
         </div>
       </div>
-      <div
-        style={{
-          border: "1px solid #ccc", // Đường viền màu xám, dày 2px
-          borderRadius: "10px",
-        }}
-      ></div>
       <div className="welcome-text">
         <div className="group-title">
           <img src="" alt="avatar" className="imagine"></img>
@@ -52,19 +46,12 @@ function ChatRoom() {
         </div>
         <div
           style={{
-            border: "1px solid #fff", // Đường viền màu xám, dày 2px
-            borderRadius: "10px",
+            border: "1px solid #fff", // White border
+            borderRadius: "10px", // Rounded corners
+            boxShadow: "0 0 5px rgba(0, 0, 0, 0.2)", // Optional: Add a subtle shadow for depth
           }}
         ></div>
-        {/* <div className="chat-container"> */}
         <MessageList roomId={room.id}></MessageList>
-        {/* </div> */}
-        {/* <div
-          style={{
-            border: "1px solid #fff", // Đường viền màu xám, dày 2px
-            borderRadius: "10px",
-          }}
-        ></div> */}
         <MessageInput roomId={room.id}></MessageInput>
       </div>
     </div>
