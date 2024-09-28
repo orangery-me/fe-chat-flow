@@ -59,12 +59,12 @@ function ChatRoom() {
         {/* <div className="chat-container"> */}
         <MessageList roomId={room.id}></MessageList>
         {/* </div> */}
-        <div
+        {/* <div
           style={{
             border: "1px solid #fff", // Đường viền màu xám, dày 2px
             borderRadius: "10px",
           }}
-        ></div>
+        ></div> */}
         <MessageInput roomId={room.id}></MessageInput>
       </div>
     </div>

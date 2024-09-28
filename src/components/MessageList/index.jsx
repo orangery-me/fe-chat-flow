@@ -31,24 +31,34 @@ function MessageList({ roomId }) {
   );
 }
 
-// function Message({ message, isOwnMessage }) {
-//   const { sender, text } = message;
-//   return (
-//     <li className={["message", isOwnMessage && "own-message"].join(" ")}>
-//       <h4 className="sender">{isOwnMessage ? "You" : sender.displayName}</h4>
-//       <div>{text}</div>
-//     </li>
-//   );
-// }
 function Message({ message, type }) {
-  const { sender, text } = message;
+  const { sender, text, imageUrl } = message;
   return (
     <div className={["message", type].join(" ")}>
       <div className={["sender", type].join(" ")}>
         {type === "outgoing" ? "You" : sender.displayName}
       </div>
-      <div className="message-content">{text}</div>
+      <div className="message-content">
+        {text && <div className="text">{text}</div>}{" "}
+        {/* Display text separately */}
+        {imageUrl && (
+          <div className="image-container">
+            {" "}
+            {/* Container for images */}
+            <img
+              src={imageUrl}
+              alt="Uploaded"
+              style={{
+                maxWidth: "200px",
+                maxHeight: "200px",
+                marginTop: "10px",
+              }}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+
 export default MessageList;

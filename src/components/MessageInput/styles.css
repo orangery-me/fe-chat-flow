@@ -1,27 +1,125 @@
-.group-chat{
-    padding: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 98%;
-  }
- 
-
-.textZone{
-  flex:1;
+.group-chat {
   padding: 10px;
-  border-radius: 20px;
-  background-color:#f0f0f0;
   display: flex;
   align-items: center;
-
+  flex-direction: column;
+  width: 98%;
 }
-.textZone input{
+
+/* Khu vực nhập tin nhắn */
+.textZone {
+  flex: 1;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.textZone input {
   background-color: transparent;
   border: none;
   width: 90%;
-
 }
-.textZone input:focus{
+
+.textZone input:focus {
   outline: none;
+}
+
+/* Điều chỉnh các icon trong khu vực nhập tin nhắn */
+.textZone i {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.textZone i:hover {
+  transform: scale(1.1);
+}
+
+/* Khu vực preview hình ảnh */
+.image-preview-container {
+  position: relative;
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.image-preview-container img {
+  max-width: 50%;
+  max-height: 200px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Nút xóa hình ảnh trong preview */
+.image-preview-container button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 5px;
+  color: red;
+  transition: background-color 0.3s ease;
+}
+
+.image-preview-container button:hover {
+  background-color: rgba(255, 0, 0, 0.8);
+}
+
+/* Hiệu ứng cho ảnh khi hiển thị */
+.image-preview-container img:hover {
+  transform: scale(1.05);
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  color: white;
+  gap: 1rem;
+ 
+
+.emoji {
+  position: relative;
+  display: flex;
+  flex-direction: row-reverse; 
+    svg {
+  font-size: 1.5rem;
+  color: #000;
+  cursor: pointer;
+}
+
+.emoji-picker-react {
+      
+  background-color: #080420;
+  box-shadow: 0 5px 10px #9a86f3;
+  border-color: #9a86f3;
+
+      .emoji-scroll-wrapper::-webkit-scrollbar {
+  background-color: #080420;
+  width: 5px;
+        &-thumb {
+  background-color: #9a86f3;
+}
+      }
+      .emoji-categories {
+        button {
+  filter: contrast(0);
+}
+      }
+      .emoji-search {
+  background-color: transparent;
+  border-color: #9a86f3;
+}
+      .emoji-group:before {
+  background-color: #080420;
+}
+    }
+  }
 }
