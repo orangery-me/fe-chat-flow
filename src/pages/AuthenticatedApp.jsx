@@ -1,12 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { chatRooms } from "../data/chatRooms";
 import { useAuth } from "../hooks/useAuth";
 import Sidebar from "../components/components/Sidebar";
 import ImageSlider from "../components/components/ImageSlider";
 import "./AuthenticatedApp.css";
+import { JoinedRooms } from "../components/JoinedRooms/joined-rooms";
 function AuthenticatedApp() {
-  const info = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <div className="home">
@@ -15,18 +14,19 @@ function AuthenticatedApp() {
         <h2>Chat</h2>
         <input type="text" placeholder="Tìm kiếm"></input>
         <div className="chat">
-          {chatRooms.map((room) => (
+          {/* {chatRooms.map((room) => (
             <div className="group">
               <img src="" alt="avatar" className="imagine"></img>
               <div className="group-item">
                 <div className="info" key={room.id}>
                   <Link to={`/room/${room.id}`}>{room.title}</Link>
-                  {/* <div>{room.title}</div> */}
+                  {/* <div>{room.title}</div> 
                 </div>
-                {/* <p className='message'>{items.Message}</p> */}
+                {/* <p className='message'>{items.Message}</p> 
               </div>
             </div>
-          ))}
+          ))} */}
+          <JoinedRooms userId={user.uid}></JoinedRooms>
         </div>
       </div>
 

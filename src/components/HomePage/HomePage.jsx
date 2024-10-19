@@ -2,9 +2,10 @@ import React from "react";
 import Sidebar from "../components/Sidebar";
 import ImageSlider from "../components/ImageSlider";
 import "./HomePage.css";
-import { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuth";
 const HomePage = () => {
+ 
+
   return (
     <div className="home">
       <Sidebar />
@@ -15,7 +16,17 @@ const HomePage = () => {
 };
 
 const SignIn = () => {
-  const { login } = useContext(AuthContext);
+  const { login, logout } = useAuth();
+
+  const connect = (event) => {
+      event.preventDefault();
+
+      login((result, error) => {
+          if (error) {
+              console.log('Error logging in', error);
+          }
+      });
+  }
   return (
     <div className="profile-form">
       <h2>Đăng nhập</h2>
@@ -23,7 +34,7 @@ const SignIn = () => {
         src="https://www.cybindose.com/wp-content/uploads/2020/03/login-graphic.png"
         alt=""
       ></img>
-      <button onClick={login}>
+      <button onClick={connect}>
         <img
           src="icons8-google-20.png"
           alt="Google icon"

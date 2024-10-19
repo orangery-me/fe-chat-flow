@@ -1,18 +1,34 @@
-import { readMessages } from "../services/firebase";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from 'react';
+import { useStompClient } from '../Context/StompClientContext';
 
 function useMessages (roomId) {
     const [messages, setMessages] = useState([]);
-    
-    // get messages, re-run when roomId changes
-  useEffect(() => { 
-        // unsubcribe is used to stop listening to changes in the collection -> prevent memory leaks
-      const unsubcribe = readMessages(roomId, setMessages);
-        // return a cleanup function when the component unmounts or roomId changes
-      return unsubcribe;
-  }, [roomId]);
-  
-  return messages;
+    const {setOnMessageCallback} = useStompClient();
+
+    async function fetchMessages (roomId) {
+        var res = await fetch(`http://localhost:8080/getMessages/${roomId}`);
+        var data = await res.json();
+        console.log(data);
+        return data;
+    }
+
+    useEffect(() => {
+        fetchMessages(roomId).then(data => {
+            setMessages(data);
+        });
+
+        // set value for the callback function in StompClientContext
+        setOnMessageCallback((newMessage) => {
+            if (newMessage && newMessage.chatRoomId === roomId) {
+                setMessages((prevMessages) => {
+                    return [...prevMessages, newMessage];
+                });
+            }
+        })
+
+    }, [setOnMessageCallback, roomId]);
+
+    return messages;
 }
 
 export { useMessages };

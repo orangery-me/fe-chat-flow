@@ -1,53 +1,65 @@
-import {createContext, useEffect, useState, useContext} from "react";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import { createContext, useEffect, useState } from "react";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { app } from "../firebase/config.js";
 
 export const AuthContext = createContext({});
 
 // children are the components that are wrapped by the provider
-export const AuthProvider = ({ children }) => { 
+export const AuthProvider = ({ children }) => {
+
     const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(true);
     const provider = new GoogleAuthProvider();
     const auth = getAuth(app);
     provider.addScope("email");
 
+
+    // This is called when the component is mounted and when the auth state changes
     useEffect(() => {
-        const storedIdToken = localStorage.getItem('idToken');
-        const storedAccessToken = localStorage.getItem('accessToken');  
-
-        if (storedIdToken && storedAccessToken) {
-            const credential = GoogleAuthProvider.credential(storedIdToken, storedAccessToken);
-            signInWithCredential(auth, credential).then(result => {
-                setUserData(result.user);
-            }).catch(error => {
+        // 2 params: 1. the auth object, 2. the callback function when the auth state changes (user logs in or logs out)
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setUserData(user);
+                console.log("user", user);
+            } else {
                 setUserData(null);
-                console.log("Token is expired:", error);
-            });
-        }
-    }, []);
+            }
+            setLoading(false);
+        })
+        // when the component is unmounted, the unsubscribe function is called
+        return () => unsubscribe();
+    }, [auth]);
 
-    const login = () => {
+
+    const login = (callback) => {
+
         if (userData == null) {
-            signInWithPopup(auth, provider).then(result => {
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                localStorage.setItem('idToken', credential.idToken);
-                localStorage.setItem("accessToken", credential.accessToken)
-                setUserData(result.user);
-            })
-            .catch(error => {
-                console.log("Error signing in with popup:", error);
-            })
+
+            signInWithPopup(auth, provider)
+
+                .then(result => {
+                    setUserData(result.user);
+                    if (callback) {
+                        callback(result, null);
+                    }
+                })
+
+                .catch(error => {
+                    console.log("error", error);
+                    if (callback) {
+                        callback(null, error);
+                    }
+                })
         }
     }
 
     const logout = () => {
-        localStorage.removeItem('idToken');
-        localStorage.removeItem('accessToken');
-        setUserData(null);
+        // automatically remove the user, token from firebase authentication
+        auth.signOut();
         console.log("Logging out here");
-      }
+    }
 
-    return <AuthContext.Provider value={ {userData, login, logout} }>
+    return <AuthContext.Provider value={{ userData, loading, login, logout }}>
         {children}
     </AuthContext.Provider>
-} 
+}

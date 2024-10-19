@@ -1,14 +1,14 @@
 import { useMessages } from "../../hooks/useMessages";
-import { useAuth } from "../../hooks/useAuth";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import "./styles.css";
 
-function MessageList({ roomId }) {
-  const info = useAuth();
-  const containerRef = useRef(null);
-  const user = info.user;
+function MessageList({ roomId, userId }) {
+  // const info = useAuth();
+  // const containerRef = useRef(null);
+  // const user = info.user;
+  // const messages = useMessages(roomId);
+  const containerRef = React.useRef(null);
   const messages = useMessages(roomId);
-
   useLayoutEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
@@ -83,7 +83,7 @@ function MessageList({ roomId }) {
           <Message
             key={x.id}
             message={x}
-            type={x.sender.uid === user.uid ? "outgoing" : "incoming"}
+            type={x.sender.uid === userId ? "outgoing" : "incoming"}
           />
         ))}
     </div>

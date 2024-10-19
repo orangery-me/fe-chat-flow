@@ -1,17 +1,43 @@
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useAuth } from "../../hooks/useAuth";
-import { sendMessage } from "../../services/firebase";
 import { useState } from "react";
 import "./styles.css";
 import { BsEmojiSmileFill } from "react-icons/bs";
 import Picker from "emoji-picker-react";
 
 function MessageInput({ roomId }) {
-  const info = useAuth();
-  const [typing, setTyping] = useState("");
+
+  // const info = useAuth();
+  // const [typing, setTyping] = useState("");
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const { stompClient } = useStompClient();
+  const { user, loading, logout } = useAuth();
+  var [typing, setTyping] = useState("");
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/"); // Redirect to the login page (or any other page)
+    }
+  });
+
+  function sendMessage(e) {
+    e.preventDefault();
+
+    if (stompClient && stompClient.connected && typing) {
+      const chatMessage = {
+        chatRoomId: roomId,
+        senderId: user.uid,
+        content: typing,
+        timestamp: new Date(),
+      };
+      stompClient.publish({
+        destination: "/app/chat",
+        body: JSON.stringify(chatMessage),
+      });
+    }
+  }
   const handleChange = (event) => {
     setTyping(event.target.value);
   };
@@ -20,8 +46,8 @@ function MessageInput({ roomId }) {
     event.preventDefault();
 
     const sender = {
-      uid: info.user.uid,
-      displayName: info.user.displayName,
+      uid: user.uid,
+      displayName: user.displayName,
     };
 
     // Chỉ cho phép gửi khi có văn bản hoặc hình ảnh (không bắt buộc cả hai)
