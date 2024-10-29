@@ -21,109 +21,33 @@ function MessageInput({ roomId }) {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate("/"); // Redirect to the login page (or any other page)
+      navigate("/"); 
     }
   }, [loading, user, navigate]);
 
-  const onSubmit = (e) => {
-    e.preventDefault(); // Ngăn chặn hành vi mặc định
-    sendMessage(e.target); // Truyền đối tượng form
-  };
-    const sendMessage = async (data) => {
-      const formData = new FormData();
-      formData.append("file", data.file[0]);
-      formData.append("chatRoomId", roomId);
-      formData.append("SenderId", user.uid);
-      formData.append("content", typing);
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append("chatRoomId", roomId); 
+    formData.append("senderId", user.uid); 
+    formData.append("content", typing); 
+    if (image) {
+        formData.append("file", image); 
+    }
+
     const res = await fetch("http://localhost:8080/sendMessageToRoom", {
-      method: "POST",
-      headers: {
-            "Content-Type": "application/json",
-          },
-      body: JSON.stringify(chatMessage),
-    }).then((res) => res.json());
-    // // alert(JSON.stringify(`${res.message}, status: ${res.status}`));
-    //   e.preventDefault();
+        method: "POST",
+        body: formData,
+    });
 
-    //   const chatMessage = {
-    //               chatRoomId: roomId,
-    //               senderId: user.uid,
-    //               content: typing,
-    //               file: "",
-    //           };
+    if (res.ok) {
+        const savedMessage = await res.json(); 
+        console.log(savedMessage); 
+    } else {
+        console.error("Error sending message:", res.statusText);
+    }
+};
 
-    //   console.log("Request Body:", JSON.stringify(requestBody));
-
-    //   try {
-    //     const response = await fetch("http://localhost:8080/sendMessageToRoom", {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify(chatMessage),
-    //     });
-
-    //     const textResponse = await response.text();
-    //     console.log("Raw Response:", textResponse);
-
-    //     // Check if the response is JSON by verifying the Content-Type header
-    //     if (response.headers.get("content-type")?.includes("application/json")) {
-    //       const data = JSON.parse(textResponse);
-
-    //       if (response.ok) {
-    //         alert("Room created successfully: " + JSON.stringify(data));
-    //       } else {
-    //         console.error("Failed to create room:", data);
-    //         alert("Failed to create room: " + JSON.stringify(data));
-    //       }
-    //     } else {
-    //       // If not JSON, assume it's a success message or ID and display it directly
-    //       if (response.ok) {
-    //         alert("Room created successfully. Response: " + textResponse);
-    //       } else {
-    //         alert("Failed to create room: " + textResponse);
-    //       }
-    //     }
-    //   } catch (error) {
-    //     console.error("Error creating room:", error);
-    //     if (error instanceof TypeError) {
-    //       alert("Network error: " + error.message);
-    //     } else {
-    //       alert("Error creating room: " + error.message);
-    //     }
-    //   }
-    };
-//   function sendMessage() {
-//     if (stompClient && stompClient.connected) {
-//         const chatMessage = {
-//             chatRoomId: roomId,
-//             senderId: user.uid,
-//             content: typing,
-//             file: "",
-//         };
-//
-//         console.log("Sending message:", chatMessage);
-//
-//         stompClient.publish({
-//             destination: "/app/chat",
-//             body: JSON.stringify(chatMessage),
-//         });
-//
-//         setMessages((prevMessages) => [
-//             ...prevMessages,
-//             chatMessage,
-//         ]);
-//
-//         setTyping("");
-//         setImage(null);
-//         setImagePreview(null);
-//     } else {
-//         console.error("STOMP client is not connected or typing is empty.");
-//     }
-// }
-
-
-
+  
   
 
   const handleChange = (event) => {
@@ -139,7 +63,7 @@ function MessageInput({ roomId }) {
   };
 
   const handleCameraClick = () => {
-    document.getElementById("fileInput").click(); // Mở hộp thoại chọn file
+    document.getElementById("fileInput").click(); 
   };
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -154,7 +78,7 @@ function MessageInput({ roomId }) {
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="group-chat">
         {imagePreview && (
           <div
@@ -203,7 +127,9 @@ function MessageInput({ roomId }) {
           />
           <input
             id="fileInput"
-            type="file" {...register("file")}
+            type="file"
+            accept="image/*"
+            {...register("file")}
             style={{ display: "none" }}
             onChange={handleImageChange}
           />
