@@ -28,4 +28,3 @@ function JoinedRooms ({ userId }) {
 
 
 export { JoinedRooms };
-

@@ -42,6 +42,7 @@
     scrollbar-width: thin; /* For Firefox */
     scrollbar-color: darkgrey lightgrey; /* Color of the scrollbar */
     border-radius: 10px; /* Rounded corners */
+    height: 97vh;
 }
 
 .outgoing .sender {

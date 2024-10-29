@@ -22,9 +22,9 @@ export const StompClientProvider = ({ children }) => {
 
     useEffect(() => {
         if (!user) {
+            // console.log("User is not authenticated");
             return;
         }
-
         const stompClient = new Client({
             brokerURL: 'ws://localhost:8080/ws',
         });
@@ -50,7 +50,8 @@ export const StompClientProvider = ({ children }) => {
                     body: JSON.stringify({
                         uid: user.uid,
                         fullname: user.displayName,
-                        status: 'ONLINE'
+                        status: 'ONLINE',
+                        email: user.email
                     })
                 }
             );
@@ -67,6 +68,7 @@ export const StompClientProvider = ({ children }) => {
 
         // deactivate the client when the component is unmounted
         return () => {
+        
             stompClient.deactivate();
         }
     }, [user]);

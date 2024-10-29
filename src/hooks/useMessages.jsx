@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useStompClient } from '../Context/StompClientContext';
+import { useStompClient } from '../context/StompClientContext';
 
 function useMessages (roomId) {
     const [messages, setMessages] = useState([]);

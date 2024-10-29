@@ -3,10 +3,7 @@ import React, { useLayoutEffect, useRef, useState } from "react";
 import "./styles.css";
 
 function MessageList({ roomId, userId }) {
-  // const info = useAuth();
-  // const containerRef = useRef(null);
-  // const user = info.user;
-  // const messages = useMessages(roomId);
+
   const containerRef = React.useRef(null);
   const messages = useMessages(roomId);
   useLayoutEffect(() => {
@@ -14,7 +11,7 @@ function MessageList({ roomId, userId }) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   });
-
+  console.log(messages);
   const ImageComponent = ({ imageUrl }) => {
     const [isShowImg, setShowImg] = useState(false);
 
@@ -62,14 +59,14 @@ function MessageList({ roomId, userId }) {
   };
 
   function Message({ message, type }) {
-    const { sender, text, imageUrl } = message;
+    const { senderId, content, imageUrl } = message;
     return (
       <div className={["message", type].join(" ")}>
         <div className={["sender", type].join(" ")}>
-          {type === "outgoing" ? "You" : sender.displayName}
+          {type === "outgoing" ? "You" : senderId}
         </div>
         <div className="message-content">
-          {text && <div className="text">{text}</div>}
+          {content && <div className="text">{content}</div>}
           {imageUrl && <ImageComponent imageUrl={imageUrl} />}
         </div>
       </div>
@@ -83,7 +80,7 @@ function MessageList({ roomId, userId }) {
           <Message
             key={x.id}
             message={x}
-            type={x.sender.uid === userId ? "outgoing" : "incoming"}
+            type={x.senderId === userId ? "outgoing" : "incoming"}
           />
         ))}
     </div>

@@ -1,75 +1,140 @@
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useAuth } from "../../hooks/useAuth";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./styles.css";
+import { useStompClient } from "../../context/StompClientContext";
 import { BsEmojiSmileFill } from "react-icons/bs";
 import Picker from "emoji-picker-react";
+import React from "react";
+import { useForm } from "react-hook-form";
 
 function MessageInput({ roomId }) {
-
-  // const info = useAuth();
-  // const [typing, setTyping] = useState("");
+  const [messages, setMessages] = useState([]); 
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const { stompClient } = useStompClient();
   const { user, loading, logout } = useAuth();
   var [typing, setTyping] = useState("");
   const navigate = useNavigate();
+  const { register, handleSubmit } = useForm();
 
   useEffect(() => {
     if (!loading && !user) {
       navigate("/"); // Redirect to the login page (or any other page)
     }
-  });
+  }, [loading, user, navigate]);
 
-  function sendMessage(e) {
-    e.preventDefault();
+  const onSubmit = (e) => {
+    e.preventDefault(); // Ngăn chặn hành vi mặc định
+    sendMessage(e.target); // Truyền đối tượng form
+  };
+    const sendMessage = async (data) => {
+      const formData = new FormData();
+      formData.append("file", data.file[0]);
+      formData.append("chatRoomId", roomId);
+      formData.append("SenderId", user.uid);
+      formData.append("content", typing);
+    const res = await fetch("http://localhost:8080/sendMessageToRoom", {
+      method: "POST",
+      headers: {
+            "Content-Type": "application/json",
+          },
+      body: JSON.stringify(chatMessage),
+    }).then((res) => res.json());
+    // // alert(JSON.stringify(`${res.message}, status: ${res.status}`));
+    //   e.preventDefault();
 
-    if (stompClient && stompClient.connected && typing) {
-      const chatMessage = {
-        chatRoomId: roomId,
-        senderId: user.uid,
-        content: typing,
-        timestamp: new Date(),
-      };
-      stompClient.publish({
-        destination: "/app/chat",
-        body: JSON.stringify(chatMessage),
-      });
-    }
-  }
+    //   const chatMessage = {
+    //               chatRoomId: roomId,
+    //               senderId: user.uid,
+    //               content: typing,
+    //               file: "",
+    //           };
+
+    //   console.log("Request Body:", JSON.stringify(requestBody));
+
+    //   try {
+    //     const response = await fetch("http://localhost:8080/sendMessageToRoom", {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify(chatMessage),
+    //     });
+
+    //     const textResponse = await response.text();
+    //     console.log("Raw Response:", textResponse);
+
+    //     // Check if the response is JSON by verifying the Content-Type header
+    //     if (response.headers.get("content-type")?.includes("application/json")) {
+    //       const data = JSON.parse(textResponse);
+
+    //       if (response.ok) {
+    //         alert("Room created successfully: " + JSON.stringify(data));
+    //       } else {
+    //         console.error("Failed to create room:", data);
+    //         alert("Failed to create room: " + JSON.stringify(data));
+    //       }
+    //     } else {
+    //       // If not JSON, assume it's a success message or ID and display it directly
+    //       if (response.ok) {
+    //         alert("Room created successfully. Response: " + textResponse);
+    //       } else {
+    //         alert("Failed to create room: " + textResponse);
+    //       }
+    //     }
+    //   } catch (error) {
+    //     console.error("Error creating room:", error);
+    //     if (error instanceof TypeError) {
+    //       alert("Network error: " + error.message);
+    //     } else {
+    //       alert("Error creating room: " + error.message);
+    //     }
+    //   }
+    };
+//   function sendMessage() {
+//     if (stompClient && stompClient.connected) {
+//         const chatMessage = {
+//             chatRoomId: roomId,
+//             senderId: user.uid,
+//             content: typing,
+//             file: "",
+//         };
+//
+//         console.log("Sending message:", chatMessage);
+//
+//         stompClient.publish({
+//             destination: "/app/chat",
+//             body: JSON.stringify(chatMessage),
+//         });
+//
+//         setMessages((prevMessages) => [
+//             ...prevMessages,
+//             chatMessage,
+//         ]);
+//
+//         setTyping("");
+//         setImage(null);
+//         setImagePreview(null);
+//     } else {
+//         console.error("STOMP client is not connected or typing is empty.");
+//     }
+// }
+
+
+
+  
+
   const handleChange = (event) => {
     setTyping(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    const sender = {
-      uid: user.uid,
-      displayName: user.displayName,
-    };
-
-    // Chỉ cho phép gửi khi có văn bản hoặc hình ảnh (không bắt buộc cả hai)
-    if (!typing.trim() && !image) {
-      alert("Please enter a message or select an image before sending.");
-      return;
-    }
-
-    // Gửi tin nhắn văn bản hoặc hình ảnh (hoặc cả hai)
-    sendMessage(roomId, sender, typing || "", image);
-
-    // Reset trạng thái sau khi gửi
-    setTyping("");
-    setImage(null);
-    setImagePreview(null);
   };
 
   const handleImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       setImage(file);
-      setImagePreview(URL.createObjectURL(file)); // Hiển thị ảnh xem trước
+      setImagePreview(URL.createObjectURL(file)); 
     }
   };
 
@@ -85,13 +150,11 @@ function MessageInput({ roomId }) {
   const handleEmojiClick = (emojiObject, event) => {
     if (emojiObject && emojiObject.emoji) {
       setTyping((prevTyping) => prevTyping + emojiObject.emoji);
-    } else {
-      console.error("Emoji object is undefined:", emojiObject);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={onSubmit}>
       <div className="group-chat">
         {imagePreview && (
           <div
@@ -140,9 +203,8 @@ function MessageInput({ roomId }) {
           />
           <input
             id="fileInput"
-            type="file"
+            type="file" {...register("file")}
             style={{ display: "none" }}
-            accept="image/*"
             onChange={handleImageChange}
           />
           <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
@@ -153,12 +215,12 @@ function MessageInput({ roomId }) {
                   <Picker
                     onEmojiClick={handleEmojiClick}
                     style={{
-                      marginTop: "-350px", // Pulls the element up by 350 pixels
-                      height: "350px", // Sets the height of the element
-                      width: "300px", // Sets the width of the element
-                      backgroundColor: "#fff", // Optional: Set a background color for visibility
-                      borderRadius: "10px", // Optional: Rounded corners
-                      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.3)", // Optional: Add a subtle shadow for depth
+                      marginTop: "-350px", 
+                      height: "350px",
+                      width: "300px",
+                      backgroundColor: "#fff",
+                      borderRadius: "10px",
+                      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.3)",
                     }}
                   />
                 )}
@@ -172,16 +234,17 @@ function MessageInput({ roomId }) {
             <i className="fas fa-microphone" style={{ fontSize: "26px" }}></i>
           </div>
           <button
-            type="submit"
-            disabled={!typing.trim() && !image}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: typing.length > 0 || image ? "pointer" : "not-allowed",
-            }}
-          >
-            <i className="fas fa-paper-plane" style={{ fontSize: "26px" }}></i>
-          </button>
+    type="submit"
+    disabled={!typing.trim() && !image}
+    style={{
+        background: "none",
+        border: "none",
+        cursor: typing.length > 0 || image ? "pointer" : "not-allowed",
+    }}
+>
+    <i className="fas fa-paper-plane" style={{ fontSize: "26px" }}></i>
+</button>
+
         </div>
       </div>
     </form>
