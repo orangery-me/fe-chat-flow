@@ -2,15 +2,15 @@ import { useMessages } from "../../hooks/useMessages";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import "./styles.css";
 
-function MessageList({ roomId, userId }) {
+function MessageList({ roomId, userId, messages }) {
 
   const containerRef = React.useRef(null);
-  const messages = useMessages(roomId);
+   messages = useMessages(roomId);
   useLayoutEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  });
+  }, [messages]);
   console.log(messages);
   const ImageComponent = ({ imageUrl }) => {
     const [isShowImg, setShowImg] = useState(false);
@@ -50,7 +50,18 @@ function MessageList({ roomId, userId }) {
               <button onClick={closeShowImg}>
                 <i class="far fa-times-circle" style={{ fontSize: "24px" }}></i>
               </button>
-              <img src={imageUrl} alt="Full size" />
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px', width: '100%' }}>
+  <img 
+    src={imageUrl} 
+    alt="Image" 
+    style={{ 
+      maxWidth: '100%', 
+      maxHeight: '100%', 
+      objectFit: 'contain' 
+    }} 
+  />
+</div>
+
             </div>
           </div>
         )}
@@ -59,11 +70,12 @@ function MessageList({ roomId, userId }) {
   };
 
   function Message({ message, type }) {
-    const { senderId, content, imageUrl } = message;
+    const { sender, content, imageUrl } = message;
+    const senderName = sender.fullname;
     return (
       <div className={["message", type].join(" ")}>
         <div className={["sender", type].join(" ")}>
-          {type === "outgoing" ? "You" : senderId}
+          {type === "outgoing" ? "You" : senderName}
         </div>
         <div className="message-content">
           {content && <div className="text">{content}</div>}
@@ -77,11 +89,10 @@ function MessageList({ roomId, userId }) {
     <div className="chat-container" ref={containerRef}>
       {messages &&
         messages.map((x) => (
-          <Message
-            key={x.id}
-            message={x}
-            type={x.senderId === userId ? "outgoing" : "incoming"}
-          />
+          <Message key={x.id} 
+          message={x} 
+          type={x.sender.uid === userId ? "outgoing" : "incoming"} />
+          
         ))}
     </div>
   );

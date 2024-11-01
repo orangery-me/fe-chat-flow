@@ -7,20 +7,32 @@ function useRooms(userId) {
     useEffect(() => {
         const fetchAllJoinedRooms = async (userId) => {
             try {
-                const res = await fetch(`http://localhost:8080/getJoinedRooms?userId=${userId}`);
-
-                if (!res.ok) {
-                    throw new Error('Network response was not ok');
+                const [resJoinedRooms, resPrivateRooms] = await Promise.all([
+                    fetch(`http://localhost:8080/getJoinedRooms?userId=${userId}`),
+                    fetch(`http://localhost:8080/getJoinedPrivateRooms?userId=${userId}`)
+                ]);
+                if (!resJoinedRooms.ok) {
+                    const errorMessage = await resJoinedRooms.text();
+                    throw new Error(`Error fetching public rooms: ${errorMessage}`);
                 }
-                const data = await res.json();
-                console.log("Joined Rooms Data:", data); 
-                setJoinedRooms(data);
+                if (!resPrivateRooms.ok) {
+                    const errorMessage = await resPrivateRooms.text();
+                    throw new Error(`Error fetching private rooms: ${errorMessage}`);
+                }
+                
+                const dataJoinedRooms = await resJoinedRooms.json();
+                const dataPrivateRooms = await resPrivateRooms.json();
+                const combinedRooms = [...dataJoinedRooms, ...dataPrivateRooms];
+
+                console.log("Joined Rooms Data:", combinedRooms);
+                setJoinedRooms(combinedRooms);
             } catch (error) {
                 console.error("Error fetching joined rooms:", error);
             }
         };
     
         fetchAllJoinedRooms(userId);
+        
     }, [userId]);
     
 

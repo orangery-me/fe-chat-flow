@@ -9,7 +9,7 @@ import Picker from "emoji-picker-react";
 import React from "react";
 import { useForm } from "react-hook-form";
 
-function MessageInput({ roomId }) {
+function MessageInput({ roomId, addMessage }) {
   const [messages, setMessages] = useState([]); 
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -41,14 +41,17 @@ function MessageInput({ roomId }) {
 
     if (res.ok) {
         const savedMessage = await res.json(); 
+
+        setMessages((prevMessages) => [...prevMessages, savedMessage]);
+        addMessage(savedMessage);
         console.log(savedMessage); 
     } else {
         console.error("Error sending message:", res.statusText);
     }
+    setTyping("");
+    setImage(null);
+    setImagePreview(null);
 };
-
-  
-  
 
   const handleChange = (event) => {
     setTyping(event.target.value);

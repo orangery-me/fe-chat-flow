@@ -4,43 +4,22 @@ import { useStompClient } from "../../context/StompClientContext"
 import MessageInput from "../MessageInput";
 import MessageList from "../MessageList";
 import { useAuth } from "../../hooks/useAuth";
-import {JoinedRooms} from "../JoinedRooms/joined-rooms";
 import "./styles.css";
+import Form from "../components/form";
 import Sidebar from "../components/Sidebar";
 function ChatRoom() {
   const { stompClient } = useStompClient();
   const { user, loading, logout } = useAuth();
-  const [membersId, setMembersId] = useState([]);
-  const [membersEmail, setMemberEmail] = useState([]);
-  const [currentMemberEmail, setCurrentMemberEmail] = useState("");
-
+  const [messages, setMessages] = useState([]);
   const roomId = useParams()["roomId"];
   const navigate = useNavigate();
   useEffect(() => {
     if (!loading && !user) {
-      navigate("/"); // Redirect to the login page (or any other page)
+      navigate("/"); 
     }
   });
-  const handleAddMemberByEmail = async () => {
-    try {
-      const response = await fetch(`http://localhost:8080/findByEmail?email=${currentMemberEmail}`);
-      const data = await response.json();
-      if (response.ok && data.length > 0) {
-        const memberId = data[0].uid; // Assuming that you want to use the ID from the response
-        const memberEmail = data[0].email;
-        if (!membersEmail.includes(memberEmail)) {
-          setMemberEmail([...membersEmail, memberEmail]);}
-        if (!membersId.includes(memberId)) {
-          setMembersId([...membersId, memberId]); // Store ID instead of email
-        } 
-      } else {
-        alert("User not found.");
-      }
-      
-    } catch (error) {
-      console.error("Error finding user by email:", error);
-      alert("Error finding user by email: " + error.message);
-    }
+  const addMessage = (newMessage) => {
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
   };
   if (!stompClient) {
     return <div>Connecting...</div>;
@@ -48,30 +27,7 @@ function ChatRoom() {
   return (
     <div className="home">
       <Sidebar />
-      <div className="profile-form">
-        <h2>Chat</h2>
-        <div className="search">
-              <input
-                type="text"
-                value={currentMemberEmail}
-                onChange={(e) =>setCurrentMemberEmail(e.target.value)}
-                placeholder="Nhập email"
-                className="styled-input"
-              />
-              <button style={{
-      backgroundColor: "#4CAF50", 
-      color: "white", 
-      padding: "10px 20px", 
-      fontSize: "16px", 
-      cursor: "pointer", 
-      border: "none", 
-      borderRadius: "5px", 
-    }} onClick={handleAddMemberByEmail}>Thêm</button>
-            </div>
-        <div className="chat">
-        {!loading && <JoinedRooms userId={user.uid}></JoinedRooms>}
-        </div>
-      </div>
+      <Form/>
       <div className="connecting" hidden={stompClient.connected}>
               Connecting...
             </div>
@@ -94,8 +50,8 @@ function ChatRoom() {
             boxShadow: "0 0 5px rgba(0, 0, 0, 0.2)", // Optional: Add a subtle shadow for depth
           }}
         ></div>
-        <MessageList roomId={roomId} userId = {user.uid}></MessageList>
-        <MessageInput roomId={roomId} ></MessageInput>
+        <MessageList roomId={roomId} userId = {user.uid} messagess={messages}></MessageList>
+        <MessageInput roomId={roomId} addMessage={addMessage}  ></MessageInput>
       </div>
     </div>
   );
