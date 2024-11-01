@@ -1,12 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useRooms } from '../../hooks/useRooms';
 import { Link } from 'react-router-dom';
 
 function JoinedRooms({ userId }) {
-    const containerRef = React.useRef(null);
+    const containerRef = useRef(null);
     const joinedRooms = useRooms(userId);
+    const [displayNames, setDisplayNames] = useState({});
 
-    React.useLayoutEffect(() => {
+    useEffect(() => {
+        const fetchDisplayNames = async () => {
+            const names = {};
+            await Promise.all(
+                joinedRooms.map(async (room) => {
+                    const { roomName, user1Id } = room;
+                    if (roomName) {
+                        names[room.id] = roomName;
+                    }
+                    if (user1Id) {
+                        try {
+                            const response = await fetch(`http://localhost:8080/findById?Id=${user1Id}`);
+                            const data = await response.json();
+                            console.log(data);
+                            
+                                names[room.id] = data.fullname;
+                                console.log(names);
+                             
+                        } catch (error) {
+                            names[room.id] = 'Error loading name';
+                        }
+                    }
+                })
+            );
+            setDisplayNames(names);
+        };
+
+        fetchDisplayNames();
+    }, [joinedRooms]);
+
+    useEffect(() => {
         if (containerRef.current) {
             containerRef.current.scrollTop = containerRef.current.scrollHeight;
         }
@@ -14,28 +45,19 @@ function JoinedRooms({ userId }) {
 
     return (
         <div ref={containerRef}>
-            {joinedRooms && joinedRooms.map((room) => (
-                 <UsernameId2 key = {room.id} room={room}/>
+            {joinedRooms.map((room) => (
+                <div className="group" key={room.id}>
+                    <img src="" alt="avatar" className="imagine" />
+                    <div className="group-item">
+                        <div className="info">
+                            <Link to={`/chat/${room.id}`}>
+                                {displayNames[room.id] || 'Loading...'}
+                            </Link>
+                        </div>
+                    </div>
+                </div>
             ))}
         </div>
-    );
-}
-
-function UsernameId2({ room }) {
-    let displayName;
-    const {roomName, user2Id} = room;
-    if (roomName) displayName = roomName;
-    if (user2Id)
-     displayName= user2Id;
-    return (
-        <div className="group">
-        <img src="" alt="avatar" className="imagine" />
-        <div className="group-item">
-            <div className="info">
-                <Link to={`/chat/${room.id}`}>{displayName}</Link>
-            </div>
-        </div>
-    </div>
     );
 }
 

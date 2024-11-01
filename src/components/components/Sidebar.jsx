@@ -9,7 +9,7 @@ const Sidebar = () => {
   const [currentMemberEmail, setCurrentMemberEmail] = useState("");
   const [membersId, setMembersId] = useState([]);
   const [membersEmail, setMemberEmail] = useState([]);
- 
+
   const handleAddMemberByEmail = async () => {
     try {
       const response = await fetch(`http://localhost:8080/findByEmail?email=${currentMemberEmail}`);
@@ -28,7 +28,7 @@ const Sidebar = () => {
       } else {
         alert("User not found.");
       }
-      
+
     } catch (error) {
       console.error("Error finding user by email:", error);
       alert("Error finding user by email: " + error.message);
@@ -37,20 +37,20 @@ const Sidebar = () => {
 
   const handleCreateRoom = async (e) => {
     e.preventDefault();
-  
+
     if (!roomName) {
       alert("Please provide a room name");
       return;
     }
-  
+
     const requestBody = {
       roomName: roomName,
       roomOwnerId: user.uid,
       otherMembersId: membersId,
     };
-  
+
     console.log("Request Body:", JSON.stringify(requestBody));
-  
+
     try {
       const response = await fetch("http://localhost:8080/createChatRoom", {
         method: "POST",
@@ -59,14 +59,14 @@ const Sidebar = () => {
         },
         body: JSON.stringify(requestBody),
       });
-  
+
       const textResponse = await response.text();
       console.log("Raw Response:", textResponse);
-  
+
       // Check if the response is JSON by verifying the Content-Type header
       if (response.headers.get("content-type")?.includes("application/json")) {
         const data = JSON.parse(textResponse);
-        
+
         if (response.ok) {
           alert("Room created successfully: " + JSON.stringify(data));
         } else {
@@ -97,10 +97,10 @@ const Sidebar = () => {
 
   const closeOverlay = () => {
     setOverlayOpen(false);
-    setRoomName("");        
-  setCurrentMemberEmail(""); 
-  setMembersId([]);         
-  setMemberEmail([]); 
+    setRoomName("");
+    setCurrentMemberEmail("");
+    setMembersId([]);
+    setMemberEmail([]);
   };
 
   return (
@@ -132,46 +132,46 @@ const Sidebar = () => {
                 onChange={(e) => setRoomName(e.target.value)}
               />
             </div>
-            <h4 style={{textAlign: "left"}}>Thêm danh sách các thành viên</h4>
-            <div className="search">
+            <h4 style={{ textAlign: "left" }}>Thêm danh sách các thành viên</h4>
+            <div className="search" style={{ textAlign: "center" }}>
               <input
                 type="text"
                 value={currentMemberEmail}
-                onChange={(e) =>setCurrentMemberEmail(e.target.value)}
+                onChange={(e) => setCurrentMemberEmail(e.target.value)}
                 placeholder="Nhập email"
                 className="styled-input"
               />
               <button style={{
-      backgroundColor: "#4CAF50", 
-      color: "white", 
-      padding: "10px 20px", 
-      fontSize: "16px", 
-      cursor: "pointer", 
-      border: "none", 
-      borderRadius: "5px", 
-    }} onClick={handleAddMemberByEmail}>Thêm</button>
+                backgroundColor: "#4CAF50",
+                color: "white",
+                padding: "10px 20px",
+                fontSize: "16px",
+                cursor: "pointer",
+                border: "none",
+                borderRadius: "5px",
+              }} onClick={handleAddMemberByEmail}>Thêm</button>
             </div>
             <div className="list">
-              <ul style={{listStyleType: 'none'}}>
+              <ul style={{ listStyleType: 'none' }}>
                 {membersEmail.map((email, index) => (
                   <li key={index}>{email}</li>
                 ))}
               </ul>
             </div>
             <button
-    onClick={handleCreateRoom}
-    style={{
-      backgroundColor: "#4CAF50", 
-      color: "white", 
-      padding: "10px 20px", 
-      fontSize: "16px", 
-      cursor: "pointer", 
-      border: "none", 
-      borderRadius: "5px", 
-    }}
-  >
-    Tạo Phòng
-  </button>
+              onClick={handleCreateRoom}
+              style={{
+                backgroundColor: "#4CAF50",
+                color: "white",
+                padding: "10px 20px",
+                fontSize: "16px",
+                cursor: "pointer",
+                border: "none",
+                borderRadius: "5px",
+              }}
+            >
+              Tạo Phòng
+            </button>
           </div>
         </div>
       )}

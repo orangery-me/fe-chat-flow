@@ -3,19 +3,20 @@ import ImageSlider from "../components/components/ImageSlider";
 import Sidebar from "../components/components/Sidebar";
 
 import "./AuthenticatedApp.css";
-import Form from "../components/components/form";
+import Form from "../components/components/Form";
 
 function AuthenticatedApp() {
 
   return (
-    <div className="home">
+    <div className="home"
+    >
       <Sidebar />
-      <Form/>
+      <Form />
       <ImageSlider />
-  
-     
+
+
     </div>
   );
-}  
+}
 
 export { AuthenticatedApp }
