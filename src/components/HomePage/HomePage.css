@@ -5,7 +5,6 @@
 
 .profile-form button {
   background: #659dbd;
-  /* background: radial-gradient(circle, rgba(19,50,85,1) 0%, rgba(62,88,115,1) 100%); */
   border: none;
   border-radius: 0.3125rem; 
   cursor: pointer;

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { BsEmojiSmileFill } from "react-icons/bs";
 import Picker from "emoji-picker-react";
 import { useStompClient } from "../../context/StompClientContext";
-
+import "./Form.css";
 
 const Form = () => {
   const { user, logout } = useAuth();
@@ -13,7 +13,6 @@ const Form = () => {
   const [membersEmail, setMemberEmail] = useState([]);
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [foundUser, setFoundUser] = useState(null);
-  // const { stompClient } = useStompClient();
   const { register, handleSubmit } = useForm();
   const [image, setImage] = useState(null);
   const [currentMemberEmail, setCurrentMemberEmail] = useState("");
@@ -102,7 +101,7 @@ const Form = () => {
     }
   };
   return (
-    <div className="profile-form">
+    <div className="page">
       <h2>Chat</h2>
       <div className="search">
         <input
@@ -110,19 +109,10 @@ const Form = () => {
           value={currentMemberEmail}
           onChange={(e) => setCurrentMemberEmail(e.target.value)}
           placeholder="Nhập email"
-          className="styled-input"
+          className="search-input"
           aria-label="Email input"
         />
         <button
-          style={{
-            backgroundColor: "#4CAF50",
-            color: "white",
-            padding: "10px 20px",
-            fontSize: "16px",
-            cursor: "pointer",
-            border: "none",
-            borderRadius: "5px",
-          }}
           onClick={handleAddMemberByEmail}
           aria-label="Search button"
         >
@@ -133,14 +123,15 @@ const Form = () => {
         <JoinedRooms userId={user.uid} />
       </div>
       {overlayVisible && foundUser && (
-        <div className="overlay">
-          <div className="overlay-content">
+        <div className="overlay-message">
+          <div className="overlay-message-content">
             <h3>Thông tin người dùng</h3>
             <p>Email: {foundUser.email}</p>
-            <p>ID: {foundUser.fullname}</p>
+            <p>Tên: {foundUser.fullname}</p>
+            <p>ID: {foundUser.uid}</p>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="search">
-                <div className="textZone" style={{ position: "relative" }}>
+                <div className="textZonee" style={{ position: "relative" }}>
                   <input
                     type="text"
                     placeholder="Message"

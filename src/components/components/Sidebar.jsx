@@ -133,7 +133,7 @@ const Sidebar = () => {
               />
             </div>
             <h4 style={{ textAlign: "left" }}>Thêm danh sách các thành viên</h4>
-            <div className="search" style={{ textAlign: "center" }}>
+            <div className="search">
               <input
                 type="text"
                 value={currentMemberEmail}
@@ -141,15 +141,8 @@ const Sidebar = () => {
                 placeholder="Nhập email"
                 className="styled-input"
               />
-              <button style={{
-                backgroundColor: "#4CAF50",
-                color: "white",
-                padding: "10px 20px",
-                fontSize: "16px",
-                cursor: "pointer",
-                border: "none",
-                borderRadius: "5px",
-              }} onClick={handleAddMemberByEmail}>Thêm</button>
+              <button 
+              onClick={handleAddMemberByEmail}>Thêm</button>
             </div>
             <div className="list">
               <ul style={{ listStyleType: 'none' }}>
@@ -160,15 +153,7 @@ const Sidebar = () => {
             </div>
             <button
               onClick={handleCreateRoom}
-              style={{
-                backgroundColor: "#4CAF50",
-                color: "white",
-                padding: "10px 20px",
-                fontSize: "16px",
-                cursor: "pointer",
-                border: "none",
-                borderRadius: "5px",
-              }}
+              className="styled-button"
             >
               Tạo Phòng
             </button>

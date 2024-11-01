@@ -22,12 +22,12 @@
 .profile-form h2 {
   font-size: 24px;
 }
-.profile-form input {
+/* .profile-form input {
   padding: 10px;
   width: 100%;
   border-radius: 10px;
   border: 1px solid #ccc;
-}
+} */
 .chat{
   padding: 10px 0;
   width: 95%;
