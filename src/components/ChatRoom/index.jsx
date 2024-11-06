@@ -18,6 +18,9 @@ function ChatRoom() {
       navigate("/"); 
     }
   });
+  const handleDetail = () => {
+    
+  }
   const addMessage = (newMessage) => {
     setMessages((prevMessages) => [...prevMessages, newMessage]);
   };
@@ -39,7 +42,15 @@ function ChatRoom() {
             <div className="icons">
               <img src="/phone.png" alt=""></img>
               <img src="/face.png" alt=" "></img>
+              <button style={{ 
+                  backgroundColor: "transparent", 
+                  border: "none", 
+                  cursor: "pointer", 
+                  position: "relative" 
+                  }}
+                  onClick = {handleDetail}>
               <img src="/detail.png" alt=""></img>
+              </button>
             </div>
           </div>
         </div>

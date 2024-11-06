@@ -26,7 +26,6 @@
   outline: none;
 }
 
-/* Điều chỉnh các icon trong khu vực nhập tin nhắn */
 .textZone i {
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -36,7 +35,6 @@
   transform: scale(1.1);
 }
 
-/* Khu vực preview hình ảnh */
 .image-preview-container {
   position: relative;
   margin-top: 10px;
