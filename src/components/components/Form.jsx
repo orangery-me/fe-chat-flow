@@ -22,6 +22,7 @@ const Form = () => {
   const closeOverlay = () => {
     setOverlayVisible(false);
     setFoundUser(null);
+    setCurrentMemberEmail("");
   };
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -52,7 +53,9 @@ const Form = () => {
   const handleChange = (event) => {
     setTyping(event.target.value);
   };
-
+  const handleEmailChange = (e) => {
+    setCurrentMemberEmail(e.target.value);
+  };
   const handleImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -107,14 +110,12 @@ const Form = () => {
         <input
           type="text"
           value={currentMemberEmail}
-          onChange={(e) => setCurrentMemberEmail(e.target.value)}
+          onChange={handleEmailChange}
           placeholder="Nhập email"
           className="search-input"
-          aria-label="Email input"
         />
         <button
           onClick={handleAddMemberByEmail}
-          aria-label="Search button"
         >
           Tìm kiếm
         </button>

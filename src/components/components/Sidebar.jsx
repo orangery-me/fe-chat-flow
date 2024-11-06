@@ -18,7 +18,8 @@ const Sidebar = () => {
         const memberId = data[0].uid; // Assuming that you want to use the ID from the response
         const memberEmail = data[0].email;
         if (!membersEmail.includes(memberEmail)) {
-          setMemberEmail([...membersEmail, memberEmail]);}
+          setMemberEmail([...membersEmail, memberEmail]);
+        }
         if (!membersId.includes(memberId)) {
           setMembersId([...membersId, memberId]); // Store ID instead of email
           // alert(`Added member with ID ${memberId} to the members list.`);
@@ -127,7 +128,7 @@ const Sidebar = () => {
               <input
                 type="text"
                 placeholder="Tên nhóm"
-                className="styled-input"
+                className="search-input"
                 value={roomName}
                 onChange={(e) => setRoomName(e.target.value)}
               />
@@ -139,15 +140,15 @@ const Sidebar = () => {
                 value={currentMemberEmail}
                 onChange={(e) => setCurrentMemberEmail(e.target.value)}
                 placeholder="Nhập email"
-                className="styled-input"
+                className="search-input"
               />
-              <button 
-              onClick={handleAddMemberByEmail}>Thêm</button>
+              <button
+                onClick={handleAddMemberByEmail}>Thêm</button>
             </div>
             <div className="list">
               <ul style={{ listStyleType: 'none' }}>
                 {membersEmail.map((email, index) => (
-                  <li key={index}>{email}</li>
+                  <li key={index} className="email-item">{email}</li>
                 ))}
               </ul>
             </div>
