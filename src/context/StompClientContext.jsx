@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Client } from "@stomp/stompjs";
 import { useAuth } from "../hooks/useAuth";
 
@@ -7,16 +7,29 @@ const StompClientContext = createContext();
 
 export const StompClientProvider = ({ children }) => {
     const [stompClient, setStompClient] = useState(null);
-    const [onMessageCallback, setOnMessageCallback] = useState(null);
+    // const [onMessageCallback, setOnMessageCallback] = useState(null);
     const [isConnected, setIsConnected] = useState(false);
     const { user } = useAuth();
 
+    // Sử dụng ref để giữ giá trị của onMessageCallback
+    const messageCallbackRef = useRef(null);
+
+    // Hàm để set callback
+    const setOnMessageCallback = (callback) => {
+        messageCallbackRef.current = callback;
+    };
+
+
     function onMessageReceived (newMessage) {
-        console.log(newMessage.body);
+        console.log('nhan nek: ', newMessage.body);
         const parsedNewMessage = JSON.parse(newMessage.body);
 
-        if (onMessageCallback) {
-            onMessageCallback(parsedNewMessage);
+        // if (onMessageCallback) {
+        //     onMessageCallback(parsedNewMessage);
+        // }
+        // Gọi hàm callback nếu nó đã được set
+        if (messageCallbackRef.current) {
+            messageCallbackRef.current(parsedNewMessage);
         }
     }
 
@@ -68,14 +81,14 @@ export const StompClientProvider = ({ children }) => {
 
         // deactivate the client when the component is unmounted
         return () => {
-        
+
             stompClient.deactivate();
         }
     }, [user]);
 
 
     return (
-        <StompClientContext.Provider value={{ stompClient, isConnected, setOnMessageCallback}}>
+        <StompClientContext.Provider value={{ stompClient, isConnected, setOnMessageCallback }}>
             {children}
         </StompClientContext.Provider>
     );

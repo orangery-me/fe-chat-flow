@@ -1,17 +1,23 @@
 import { useMessages } from "../../hooks/useMessages";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import "./styles.css";
+import { useAuth } from "../../hooks/useAuth";
 
-function MessageList({ roomId, userId, messages }) {
-
+function MessageList ({ roomId, userId }) {
+  const messages = useMessages(roomId);
   const containerRef = React.useRef(null);
-   messages = useMessages(roomId);
+
+  console.log('tin nhawn nek: ', messages);
+  console.log('userId nek: ', userId);
+
+
   useLayoutEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [messages]);
-  console.log(messages);
+
+
   const ImageComponent = ({ imageUrl }) => {
     const [isShowImg, setShowImg] = useState(false);
 
@@ -51,16 +57,16 @@ function MessageList({ roomId, userId, messages }) {
                 <i class="far fa-times-circle" style={{ fontSize: "24px" }}></i>
               </button>
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px', width: '100%' }}>
-  <img 
-    src={imageUrl} 
-    alt="Image" 
-    style={{ 
-      maxWidth: '100%', 
-      maxHeight: '100%', 
-      objectFit: 'contain' 
-    }} 
-  />
-</div>
+                <img
+                  src={imageUrl}
+                  alt="Image"
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    objectFit: 'contain'
+                  }}
+                />
+              </div>
 
             </div>
           </div>
@@ -69,13 +75,12 @@ function MessageList({ roomId, userId, messages }) {
     );
   };
 
-  function Message({ message, type }) {
+  function Message ({ message, type }) {
     const { sender, content, imageUrl } = message;
-    const senderName = sender.fullname;
     return (
       <div className={["message", type].join(" ")}>
         <div className={["sender", type].join(" ")}>
-          {type === "outgoing" ? "You" : senderName}
+          {type === "outgoing" ? "You" : sender.fullname}
         </div>
         <div className="message-content">
           {content && <div className="text">{content}</div>}
@@ -89,10 +94,10 @@ function MessageList({ roomId, userId, messages }) {
     <div className="chat-container" ref={containerRef}>
       {messages &&
         messages.map((x) => (
-          <Message key={x.id} 
-          message={x} 
-          type={x.sender.uid === userId ? "outgoing" : "incoming"} />
-          
+          <Message key={x.id}
+            message={x}
+            type={x.sender?.uid === userId ? "outgoing" : "incoming"} />
+
         ))}
     </div>
   );

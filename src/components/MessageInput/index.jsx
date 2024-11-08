@@ -9,11 +9,10 @@ import Picker from "emoji-picker-react";
 import React from "react";
 import { useForm } from "react-hook-form";
 
-function MessageInput({ roomId, addMessage }) {
-  const [messages, setMessages] = useState([]); 
+function MessageInput ({ roomId }) {
+  const [messages, setMessages] = useState([]);
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const { stompClient } = useStompClient();
   const { user, loading, logout } = useAuth();
   var [typing, setTyping] = useState("");
   const navigate = useNavigate();
@@ -21,52 +20,40 @@ function MessageInput({ roomId, addMessage }) {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate("/"); 
+      navigate("/");
     }
   }, [loading, user, navigate]);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (e) => {
+    e.preventDefault();
     const formData = new FormData();
-    formData.append("chatRoomId", roomId); 
-    formData.append("senderId", user.uid); 
-    formData.append("content", typing); 
+    formData.append("chatRoomId", roomId);
+    formData.append("senderId", user.uid);
+    formData.append("content", typing);
     if (image) {
-        formData.append("file", image); 
+      formData.append("file", image);
     }
 
     const res = await fetch("http://localhost:8080/sendMessageToRoom", {
-        method: "POST",
-        body: formData,
+      method: "POST",
+      body: formData,
     });
 
-    if (res.ok) {
-        const savedMessage = await res.json(); 
-
-        setMessages((prevMessages) => [...prevMessages, savedMessage]);
-        addMessage(savedMessage);
-        console.log(savedMessage); 
-    } else {
-        console.error("Error sending message:", res.statusText);
-    }
     setTyping("");
     setImage(null);
     setImagePreview(null);
-};
-
-  const handleChange = (event) => {
-    setTyping(event.target.value);
   };
 
   const handleImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       setImage(file);
-      setImagePreview(URL.createObjectURL(file)); 
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
   const handleCameraClick = () => {
-    document.getElementById("fileInput").click(); 
+    document.getElementById("fileInput").click();
   };
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -81,7 +68,7 @@ function MessageInput({ roomId, addMessage }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={(event) => handleSubmit(onSubmit(event))}>
       <div className="group-chat">
         {imagePreview && (
           <div
@@ -126,7 +113,9 @@ function MessageInput({ roomId, addMessage }) {
             type="text"
             placeholder="Message"
             value={typing}
-            onChange={handleChange}
+            onChange={(event) => {
+              setTyping(event.target.value);
+            }}
           />
           <input
             id="fileInput"
@@ -144,7 +133,7 @@ function MessageInput({ roomId, addMessage }) {
                   <Picker
                     onEmojiClick={handleEmojiClick}
                     style={{
-                      marginTop: "-350px", 
+                      marginTop: "-350px",
                       height: "350px",
                       width: "300px",
                       backgroundColor: "#fff",
@@ -163,16 +152,16 @@ function MessageInput({ roomId, addMessage }) {
             <i className="fas fa-microphone" style={{ fontSize: "26px" }}></i>
           </div>
           <button
-    type="submit"
-    disabled={!typing.trim() && !image}
-    style={{
-        background: "none",
-        border: "none",
-        cursor: typing.length > 0 || image ? "pointer" : "not-allowed",
-    }}
->
-    <i className="fas fa-paper-plane" style={{ fontSize: "26px" }}></i>
-</button>
+            type="submit"
+            disabled={!typing.trim() && !image}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: typing.length > 0 || image ? "pointer" : "not-allowed",
+            }}
+          >
+            <i className="fas fa-paper-plane" style={{ fontSize: "26px" }}></i>
+          </button>
 
         </div>
       </div>

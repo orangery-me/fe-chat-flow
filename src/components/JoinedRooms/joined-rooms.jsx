@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useRooms } from '../../hooks/useRooms';
 import { Link } from 'react-router-dom';
 
-function JoinedRooms({ userId }) {
+function JoinedRooms ({ userId }) {
     const containerRef = useRef(null);
     const joinedRooms = useRooms(userId);
     const [displayNames, setDisplayNames] = useState({});
@@ -20,11 +20,10 @@ function JoinedRooms({ userId }) {
                         try {
                             const response = await fetch(`http://localhost:8080/findById?Id=${user1Id}`);
                             const data = await response.json();
-                            console.log(data);
-                            
-                                names[room.id] = data.fullname;
-                                console.log(names);
-                             
+
+                            names[room.id] = data.fullname;
+                            console.log(names);
+
                         } catch (error) {
                             names[room.id] = 'Error loading name';
                         }

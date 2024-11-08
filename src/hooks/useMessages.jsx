@@ -3,7 +3,7 @@ import { useStompClient } from '../context/StompClientContext';
 
 function useMessages (roomId) {
     const [messages, setMessages] = useState([]);
-    const {setOnMessageCallback} = useStompClient();
+    const { setOnMessageCallback } = useStompClient();
 
     async function fetchMessages (roomId) {
         var res = await fetch(`http://localhost:8080/getMessages/${roomId}`);
@@ -17,14 +17,19 @@ function useMessages (roomId) {
             setMessages(data);
         });
 
-        // set value for the callback function in StompClientContext
-        setOnMessageCallback((newMessage) => {
+        const messageCallback = (newMessage) => {
+            console.log("Callback called");
             if (newMessage && newMessage.chatRoomId === roomId) {
-                setMessages((prevMessages) => {
-                    return [...prevMessages, newMessage];
-                });
+                setMessages((prevMessages) => [...prevMessages, newMessage]);
             }
-        })
+        };
+
+        // set value for the callback function in StompClientContext
+        setOnMessageCallback(messageCallback);
+
+        return () => {
+            setOnMessageCallback(null); // Clear the callback
+        };
 
     }, [setOnMessageCallback, roomId]);
 
