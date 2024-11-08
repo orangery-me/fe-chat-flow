@@ -1,15 +1,11 @@
 import { useMessages } from "../../hooks/useMessages";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 import "./styles.css";
 import { useAuth } from "../../hooks/useAuth";
 
 function MessageList ({ roomId, userId }) {
   const messages = useMessages(roomId);
   const containerRef = React.useRef(null);
-
-  console.log('tin nhawn nek: ', messages);
-  console.log('userId nek: ', userId);
-
 
   useLayoutEffect(() => {
     if (containerRef.current) {
@@ -75,12 +71,51 @@ function MessageList ({ roomId, userId }) {
     );
   };
 
+
+  if (!messages) return null;
+  return (
+    <div className="chat-container" ref={containerRef}>
+      {messages &&
+        messages.map((x) => (
+          console.log('x: ', x),
+          <Message key={x.id}
+            message={x}
+            type={x.sender?.uid === userId ? "outgoing" : "incoming"}
+          />
+        ))}
+    </div>
+  );
+
   function Message ({ message, type }) {
     const { sender, content, imageUrl } = message;
+    const [displayedSender, setDisplayedSender] = useState(sender);
+
+    // Khi sender thay đổi, cập nhật lại state
+    useEffect(() => {
+      if (sender) {
+        setDisplayedSender(sender);
+      }
+    }, [sender]);
+
+    if (!sender) {
+      return (
+        <div className={["message", type].join(" ")}>
+          <div className={["sender", type].join(" ")}>
+            Loading sender...
+          </div>
+          <div className="message-content">
+            {content && <div className="text">{content}</div>}
+            {imageUrl && <ImageComponent imageUrl={imageUrl} />}
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className={["message", type].join(" ")}>
         <div className={["sender", type].join(" ")}>
-          {type === "outgoing" ? "You" : sender.fullname}
+          {type === "outgoing" ? "You" : displayedSender.fullname || "Loading sender..."}
+          {/* {isSenderMissing ? "Loading sender..." : type === "outgoing" ? "You" : sender.fullname} */}
         </div>
         <div className="message-content">
           {content && <div className="text">{content}</div>}
@@ -90,17 +125,7 @@ function MessageList ({ roomId, userId }) {
     );
   }
 
-  return (
-    <div className="chat-container" ref={containerRef}>
-      {messages &&
-        messages.map((x) => (
-          <Message key={x.id}
-            message={x}
-            type={x.sender?.uid === userId ? "outgoing" : "incoming"} />
 
-        ))}
-    </div>
-  );
 }
 
 export default MessageList;

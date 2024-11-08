@@ -8,20 +8,14 @@ function useMessages (roomId) {
     async function fetchMessages (roomId) {
         var res = await fetch(`http://localhost:8080/getMessages/${roomId}`);
         var data = await res.json();
-        console.log(data);
         return data;
     }
 
     useEffect(() => {
-        fetchMessages(roomId).then(data => {
-            setMessages(data);
-        });
-
         const messageCallback = (newMessage) => {
-            console.log("Callback called");
-            if (newMessage && newMessage.chatRoomId === roomId) {
-                setMessages((prevMessages) => [...prevMessages, newMessage]);
-            }
+            fetchMessages(roomId).then(data => {
+                setMessages(data);
+            });
         };
 
         // set value for the callback function in StompClientContext
@@ -32,6 +26,14 @@ function useMessages (roomId) {
         };
 
     }, [setOnMessageCallback, roomId]);
+
+
+    useEffect(() => {
+        fetchMessages(roomId).then(data => {
+            setMessages(data);
+        });
+
+    }, [roomId]);
 
     return messages;
 }
