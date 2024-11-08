@@ -1,6 +1,5 @@
 .welcome-text {
-  /* background: rgb(214,234,248); */
-  background: radial-gradient(circle, rgba(214,234,248,1) 0%, rgba(74,118,143,1) 80%);
+  background: linear-gradient(218deg, rgba(214,234,248,1) 0%, rgba(84,129,154,1) 58%);
   width: 66%;
   margin: 0;
   padding: 0;
