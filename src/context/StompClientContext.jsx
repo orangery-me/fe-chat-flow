@@ -59,6 +59,7 @@ export const StompClientProvider = ({ children }) => {
                     body: JSON.stringify({
                         uid: user.uid,
                         fullname: user.displayName,
+                        photoURL: user.photoURL,
                         status: 'ONLINE',
                         email: user.email
                     })
