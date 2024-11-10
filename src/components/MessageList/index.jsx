@@ -6,7 +6,8 @@ import { useAuth } from "../../hooks/useAuth";
 function MessageList ({ roomId, userId }) {
   const messages = useMessages(roomId);
   const containerRef = React.useRef(null);
-
+   const [showConfirmation, setShowConfirmation] = useState(false);
+   const [linkToNavigate, setLinkToNavigate] = useState("");
   useLayoutEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
@@ -70,23 +71,44 @@ function MessageList ({ roomId, userId }) {
       </div>
     );
   };
+  const handleLinkClick = (linkk) => {
+    console.log("Link clicked: ", linkk); // Kiểm tra link khi nhấp
+    setLinkToNavigate(linkk); // Lưu link vào state
+    setShowConfirmation(true);
+  };
 
-
-  if (!messages) return null;
-  return (
-    <div className="chat-container" ref={containerRef}>
-      {messages &&
-        messages.map((x) => (
-          console.log('x: ', x),
-          <Message key={x.id}
-            message={x}
-            type={x.sender?.uid === userId ? "outgoing" : "incoming"}
-          />
-        ))}
-    </div>
-  );
-
-  function Message ({ message, type }) {
+  const confirmNavigation = async () => {
+    setShowConfirmation(false);
+    const parts = linkToNavigate.split("/chat/");
+    const room = parts[1];
+    const requestBody = {
+      roomId: room,
+      newMemberId: userId,
+    };
+  
+    console.log(requestBody);
+  
+    try {
+      const addMemberResponse = await fetch("http://localhost:8080/addNewMember", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+  
+      if (addMemberResponse.ok) {
+          alert("Member added successfully ");
+        } 
+      else {
+        alert("Failed to add member.");
+      }
+    } catch (error) {
+      alert("Error occurred: " + error.message);
+    }
+  };
+  
+  function Message({ message, type }) {
     const { sender, content, imageUrl } = message;
     const [displayedSender, setDisplayedSender] = useState(sender);
 
@@ -111,6 +133,29 @@ function MessageList ({ roomId, userId }) {
       );
     }
 
+    const senderName = sender.fullname;
+    const renderContent = (content) => {
+      const parts = content.split(" ");
+      return parts.map((part, index) => {
+        if (part.startsWith("http")) {
+          return (
+          
+            <a 
+          key={index} 
+          href={part} 
+          onClick={(e) => {
+            e.preventDefault(); 
+            handleLinkClick(part); 
+          }}
+          style={{ color: "blue", textDecoration: "underline" }}
+        >
+              {part}
+            </a>
+          );
+        }
+        return <span key={index}>{part} </span>;
+      });
+    };
     return (
       <div className={["message", type].join(" ")}>
         <div className={["sender", type].join(" ")}>
@@ -118,14 +163,32 @@ function MessageList ({ roomId, userId }) {
           {/* {isSenderMissing ? "Loading sender..." : type === "outgoing" ? "You" : sender.fullname} */}
         </div>
         <div className="message-content">
-          {content && <div className="text">{content}</div>}
+          {content && <div className="text">{renderContent(content)}</div>}
+
           {imageUrl && <ImageComponent imageUrl={imageUrl} />}
         </div>
       </div>
     );
   }
 
-
+  return (
+    <div className="chat-container" ref={containerRef}>
+      {messages &&
+        messages.map((x) => (
+          <Message key={x.id} 
+          message={x} 
+          type={x.sender.uid === userId ? "outgoing" : "incoming"} />
+          
+        ))}
+        {showConfirmation && (
+        <div className="confirmation-dialog">
+          <p>Bạn có muốn tham gia nhóm này không?</p>
+          <button onClick={confirmNavigation}>Có</button>
+          <button onClick={() => setShowConfirmation(false)}>Không</button>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default MessageList;

@@ -21,11 +21,8 @@ const Sidebar = () => {
           setMemberEmail([...membersEmail, memberEmail]);
         }
         if (!membersId.includes(memberId)) {
-          setMembersId([...membersId, memberId]); // Store ID instead of email
-          // alert(`Added member with ID ${memberId} to the members list.`);
-        } else {
-          // alert(`Member with ID ${memberId} is already in the members list.`);
-        }
+          setMembersId([...membersId, memberId]); 
+        } 
       } else {
         alert("User not found.");
       }

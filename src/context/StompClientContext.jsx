@@ -22,6 +22,7 @@ export const StompClientProvider = ({ children }) => {
 
     function onMessageReceived (newMessage) {
         const parsedNewMessage = JSON.parse(newMessage.body);
+        console.log('new Message: ', newMessage);
 
         // Gọi hàm callback nếu nó đã được set
         if (messageCallbackRef.current) {

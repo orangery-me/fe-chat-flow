@@ -17,7 +17,6 @@ function MessageInput ({ roomId }) {
   var [typing, setTyping] = useState("");
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
-
   useEffect(() => {
     if (!loading && !user) {
       navigate("/");
@@ -27,16 +26,30 @@ function MessageInput ({ roomId }) {
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("chatRoomId", roomId);
-    formData.append("senderId", user.uid);
-    formData.append("content", typing);
+    if (roomId.startsWith("pr")){
+      const parts = roomId.slice(2).split("_");
+      const receiverId = parts.find(id => id !== user.uid);
+      url = "http://localhost:8080/sendMessageToUser";
+      formData.append("senderId", user.uid);
+      formData.append("receiverId", receiverId );
+      formData.append("content", typing); 
     if (image) {
-      formData.append("file", image);
+        formData.append("file", image); 
     }
-
-    const res = await fetch("http://localhost:8080/sendMessageToRoom", {
-      method: "POST",
-      body: formData,
+  }
+  else{
+    formData.append("chatRoomId", roomId); 
+    formData.append("senderId", user.uid); 
+    formData.append("content", typing); 
+    if (image) {
+        formData.append("file", image); 
+    }
+    var url="http://localhost:8080/sendMessageToRoom";
+  }
+   
+    const res = await fetch(url, {
+        method: "POST",
+        body: formData,
     });
 
     setTyping("");

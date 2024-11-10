@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import ImageSlider from "../components/components/ImageSlider";
 import Sidebar from "../components/components/Sidebar";
 
-import "./AuthenticatedApp.css";
 import Form from "../components/components/Form";
+import "./AuthenticatedApp.css";
 
 function AuthenticatedApp() {
 
