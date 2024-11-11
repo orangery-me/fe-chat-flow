@@ -13,8 +13,6 @@ function AuthenticatedApp() {
       <Sidebar />
       <Form />
       <ImageSlider />
-
-
     </div>
   );
 }

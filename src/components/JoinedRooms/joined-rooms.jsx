@@ -1,63 +1,98 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useRooms } from '../../hooks/useRooms';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from "react";
+import { useRooms } from "../../hooks/useRooms";
+import { Link } from "react-router-dom";
+import "./style.css";
+function JoinedRooms({ userId }) {
+  const containerRef = useRef(null);
+  const joinedRooms = useRooms(userId);
+  const [displayNames, setDisplayNames] = useState({});
+  const [lastMessages, setLastMessages] = useState({});
+  const [avatar, setAvatar] = useState({});
+  useEffect(() => {
+    const fetchDisplayNames = async () => {
+      const names = {};
+      const avatars = {};
+      await Promise.all(
+        joinedRooms.map(async (room) => {
+          const { roomName, user1Id, avatar } = room;
 
-function JoinedRooms ({ userId }) {
-    const containerRef = useRef(null);
-    const joinedRooms = useRooms(userId);
-    const [displayNames, setDisplayNames] = useState({});
+          if (roomName) {
+            names[room.id] = roomName;
+            avatars[room.id] = avatar;
+          }
+          if (user1Id) {
+            try {
+              const response = await fetch(
+                `http://localhost:8080/findById?Id=${user1Id}`
+              );
+              const data = await response.json();
 
-    useEffect(() => {
-        const fetchDisplayNames = async () => {
-            const names = {};
-            await Promise.all(
-                joinedRooms.map(async (room) => {
-                    const { roomName, user1Id } = room;
-                    if (roomName) {
-                        names[room.id] = roomName;
-                    }
-                    if (user1Id) {
-                        try {
-                            const response = await fetch(`http://localhost:8080/findById?Id=${user1Id}`);
-                            const data = await response.json();
+              names[room.id] = data.fullname;
+              avatars[room.id] = data.photoURL;
+              console.log(names);
+              console.log(avatars);
+            } catch (error) {
+              names[room.id] = "Error loading name";
+            }
+          }
+        })
+      );
+      setDisplayNames(names);
+      setAvatar(avatars);
+    };
 
-                            names[room.id] = data.fullname;
-                            console.log(names);
+    fetchDisplayNames();
+  }, [joinedRooms]);
 
-                        } catch (error) {
-                            names[room.id] = 'Error loading name';
-                        }
-                    }
-                })
+  useEffect(() => {
+    const fetchLastMessages = async () => {
+      const messages = {};
+      await Promise.all(
+        joinedRooms.map(async (room) => {
+          try {
+            console.log(room.id);
+            const response = await fetch(
+              `http://localhost:8080/getChatLastMessage/${room.id}`
             );
-            setDisplayNames(names);
-        };
+            const data = await response.json();
+            console.log(data);
+            messages[room.id] = data.message || "No messages yet";
+          } catch (error) {
+            messages[room.id] = "Error loading message";
+          }
+        })
+      );
+      setLastMessages(messages);
+    };
 
-        fetchDisplayNames();
-    }, [joinedRooms]);
+    fetchLastMessages();
+  }, [joinedRooms]);
 
-    useEffect(() => {
-        if (containerRef.current) {
-            containerRef.current.scrollTop = containerRef.current.scrollHeight;
-        }
-    }, [joinedRooms]);
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [joinedRooms]);
 
-    return (
-        <div ref={containerRef}>
-            {joinedRooms.map((room) => (
-                <div className="group" key={room.id}>
-                    <img src="" alt="avatar" className="imagine" />
-                    <div className="group-item">
-                        <div className="info">
-                            <Link to={`/chat/${room.id}`}>
-                                {displayNames[room.id] || 'Loading...'}
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            ))}
+  return (
+    <div ref={containerRef}>
+      {joinedRooms.map((room) => (
+        <div className="group" key={room.id}>
+          <img src={avatar[room.id]} alt="avatar" className="imagine" />
+          <div className="group-item">
+            <div className="info">
+              <Link to={`/chat/${room.id}`} className="link">
+                {displayNames[room.id] || "Loading..."}
+              </Link>
+            </div>
+            <div className="last-message">
+              {lastMessages[room.id] || "Loading..."}
+            </div>
+          </div>
         </div>
-    );
+      ))}
+    </div>
+  );
 }
 
 export { JoinedRooms };

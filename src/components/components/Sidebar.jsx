@@ -9,10 +9,13 @@ const Sidebar = () => {
   const [currentMemberEmail, setCurrentMemberEmail] = useState("");
   const [membersId, setMembersId] = useState([]);
   const [membersEmail, setMemberEmail] = useState([]);
-
+  const [groupAvatar, setGroupAvatar] = useState(null);
+  const [avatar, setAvatar] = useState(null);
   const handleAddMemberByEmail = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/findByEmail?email=${currentMemberEmail}`);
+      const response = await fetch(
+        `http://localhost:8080/findByEmail?email=${currentMemberEmail}`
+      );
       const data = await response.json();
       if (response.ok && data.length > 0) {
         const memberId = data[0].uid; // Assuming that you want to use the ID from the response
@@ -21,18 +24,23 @@ const Sidebar = () => {
           setMemberEmail([...membersEmail, memberEmail]);
         }
         if (!membersId.includes(memberId)) {
-          setMembersId([...membersId, memberId]); 
-        } 
+          setMembersId([...membersId, memberId]);
+        }
       } else {
         alert("User not found.");
       }
-
     } catch (error) {
       console.error("Error finding user by email:", error);
       alert("Error finding user by email: " + error.message);
     }
   };
-
+  const handleAvatarUpload = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setAvatar(file);
+      setGroupAvatar(URL.createObjectURL(file));
+    }
+  };
   const handleCreateRoom = async (e) => {
     e.preventDefault();
 
@@ -41,51 +49,24 @@ const Sidebar = () => {
       return;
     }
 
-    const requestBody = {
-      roomName: roomName,
-      roomOwnerId: user.uid,
-      otherMembersId: membersId,
-    };
+    const formData = new FormData();
+    console.log(roomName + " " + user.uid + " " + membersId + "  " + avatar);
+    formData.append("roomName", roomName);
+    formData.append("roomOwnerId", user.uid);
+    formData.append("otherMembersId", membersId);
+    if (avatar) formData.append("avatar", avatar);
 
-    console.log("Request Body:", JSON.stringify(requestBody));
-
-    try {
-      const response = await fetch("http://localhost:8080/createChatRoom", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      const textResponse = await response.text();
-      console.log("Raw Response:", textResponse);
-
-      // Check if the response is JSON by verifying the Content-Type header
-      if (response.headers.get("content-type")?.includes("application/json")) {
-        const data = JSON.parse(textResponse);
-
-        if (response.ok) {
-          alert("Room created successfully: " + JSON.stringify(data));
-        } else {
-          console.error("Failed to create room:", data);
-          alert("Failed to create room: " + JSON.stringify(data));
-        }
-      } else {
-        // If not JSON, assume it's a success message or ID and display it directly
-        if (response.ok) {
-          alert("Room created successfully. Response: " + textResponse);
-        } else {
-          alert("Failed to create room: " + textResponse);
-        }
-      }
-    } catch (error) {
-      console.error("Error creating room:", error);
-      if (error instanceof TypeError) {
-        alert("Network error: " + error.message);
-      } else {
-        alert("Error creating room: " + error.message);
-      }
+    console.log("Request Body:", JSON.stringify(formData));
+    var url = "http://localhost:8080/createChatRoom";
+    const res = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+    if (res.ok) {
+      alert("Room created successfully: " + JSON.stringify(data));
+    } else {
+      console.error("Failed to create room:", data);
+      alert("Failed to create room: " + JSON.stringify(data));
     }
   };
 
@@ -103,24 +84,56 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
-      <div className="sidebar-item profile">
-        <img src="/Logo.png" alt="Logo" className="logo" />
-      </div>
       <div className="sidebar-item">
-        <button onClick={openOverlay} style={{ background: "none", border: "none", cursor: "pointer" }}>
-          <i className="far fa-plus-square" style={{ fontSize: "24px", color: "white" }}></i>
+        <img src="/image.png" alt="Logo" className="logo" />
+        <p className="logoText">Chat Bot</p>
+      </div>
+      <div style={{ border: "1px solid #ccc" }}></div>
+      <div className="sidebar-item">
+        <button onClick={openOverlay}>
+          <i
+            className="far fa-plus-square"
+            style={{ fontSize: "24px", color: "white" }}
+          ></i>
+          <p className="logoText">Tạo phòng</p>
         </button>
       </div>
-
       {isOverlayOpen && (
         <div className="overlay">
           <div className="overlay-content">
             <div className="overlay-title">
               <h4>Tạo nhóm</h4>
               <button onClick={closeOverlay}>
-                <i className="far fa-times-circle" style={{ fontSize: "24px" }}></i>
+                <i
+                  className="far fa-times-circle"
+                  style={{ fontSize: "24px" }}
+                ></i>
               </button>
             </div>
+            <div className="avatar-upload">
+              <div
+                className="avatar-preview"
+                onClick={() => document.getElementById("file-input").click()}
+              >
+                {groupAvatar ? (
+                  <img
+                    src={groupAvatar}
+                    alt="Avatar nhóm"
+                    className="avatar-img"
+                  />
+                ) : (
+                  <div className="placeholder-avatar">No Image</div>
+                )}
+              </div>
+              <input
+                id="file-input"
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarUpload}
+                className="file-input"
+              />
+            </div>
+
             <div>
               <input
                 type="text"
@@ -130,8 +143,9 @@ const Sidebar = () => {
                 onChange={(e) => setRoomName(e.target.value)}
               />
             </div>
+
             <h4 style={{ textAlign: "left" }}>Thêm danh sách các thành viên</h4>
-            <div className="search">
+            <div className="search-email">
               <input
                 type="text"
                 value={currentMemberEmail}
@@ -139,20 +153,19 @@ const Sidebar = () => {
                 placeholder="Nhập email"
                 className="search-input"
               />
-              <button
-                onClick={handleAddMemberByEmail}>Thêm</button>
+              <button onClick={handleAddMemberByEmail}>Thêm</button>
             </div>
             <div className="list">
-              <ul style={{ listStyleType: 'none' }}>
+              <ul className="email-list">
                 {membersEmail.map((email, index) => (
-                  <li key={index} className="email-item">{email}</li>
+                  <li key={index} className="email-item">
+                    {email}
+                  </li>
                 ))}
               </ul>
             </div>
-            <button
-              onClick={handleCreateRoom}
-              className="styled-button"
-            >
+
+            <button onClick={handleCreateRoom} className="styled-button">
               Tạo Phòng
             </button>
           </div>
@@ -160,8 +173,15 @@ const Sidebar = () => {
       )}
 
       <div className="sidebar-item">
-        <button onClick={logout} style={{ background: "none", border: "none", cursor: "pointer" }}>
-          <i className="fas fa-sign-out-alt" style={{ fontSize: "26px", color: "white" }}></i>
+        <button
+          onClick={logout}
+          style={{ background: "none", border: "none", cursor: "pointer" }}
+        >
+          <i
+            className="fas fa-sign-out-alt"
+            style={{ fontSize: "26px", color: "white" }}
+          ></i>
+          <p className="logoText">Đăng xuất</p>
         </button>
       </div>
     </div>

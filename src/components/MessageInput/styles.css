@@ -6,32 +6,33 @@
   width: 98%;
 }
 
-.textZone {
+.style-input-message {
   flex: 1;
-  padding: 10px;
+  padding: 2px;
   border-radius: 20px;
-  background-color: #f0f0f0;
+  background-color: #bababa;
   display: flex;
   align-items: center;
   width: 100%;
+  position: relative;
 }
 
-.textZone input {
+.style-input-message input {
   background-color: transparent;
   border: none;
   width: 90%;
 }
 
-.textZone input:focus {
+.style-input-message input:focus {
   outline: none;
 }
 
-.textZone i {
+.style-input-message i {
   cursor: pointer;
   transition: transform 0.3s ease;
 }
 
-.textZone i:hover {
+.style-input-message i:hover {
   transform: scale(1.1);
 }
 
@@ -52,7 +53,6 @@
   transition: transform 0.3s ease-in-out;
 }
 
-/* Nút xóa hình ảnh trong preview */
 .image-preview-container button {
   position: absolute;
   top: 5px;
@@ -94,33 +94,4 @@
   font-size: 1.5rem;
   color: #000;
   cursor: pointer;
-}
-
-/* Style cho emoji picker */
-.emoji-picker-react {
-  background-color: #080420;
-  box-shadow: 0 5px 10px #9a86f3;
-  border-color: #9a86f3;
-}
-
-.emoji-picker-react .emoji-scroll-wrapper::-webkit-scrollbar {
-  background-color: #080420;
-  width: 5px;
-}
-
-.emoji-picker-react .emoji-scroll-wrapper::-webkit-scrollbar-thumb {
-  background-color: #9a86f3;
-}
-
-.emoji-picker-react .emoji-categories button {
-  filter: contrast(0);
-}
-
-.emoji-picker-react .emoji-search {
-  background-color: transparent;
-  border-color: #9a86f3;
-}
-
-.emoji-picker-react .emoji-group:before {
-  background-color: #080420;
 }

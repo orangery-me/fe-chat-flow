@@ -3,17 +3,16 @@ import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 import "./styles.css";
 import { useAuth } from "../../hooks/useAuth";
 
-function MessageList ({ roomId, userId }) {
+function MessageList({ roomId, userId }) {
   const messages = useMessages(roomId);
   const containerRef = React.useRef(null);
-   const [showConfirmation, setShowConfirmation] = useState(false);
-   const [linkToNavigate, setLinkToNavigate] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [linkToNavigate, setLinkToNavigate] = useState("");
   useLayoutEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [messages]);
-
 
   const ImageComponent = ({ imageUrl }) => {
     const [isShowImg, setShowImg] = useState(false);
@@ -53,18 +52,25 @@ function MessageList ({ roomId, userId }) {
               <button onClick={closeShowImg}>
                 <i class="far fa-times-circle" style={{ fontSize: "24px" }}></i>
               </button>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px', width: '100%' }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "300px",
+                  width: "100%",
+                }}
+              >
                 <img
                   src={imageUrl}
                   alt="Image"
                   style={{
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                    objectFit: 'contain'
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    objectFit: "contain",
                   }}
                 />
               </div>
-
             </div>
           </div>
         )}
@@ -85,29 +91,31 @@ function MessageList ({ roomId, userId }) {
       roomId: room,
       newMemberId: userId,
     };
-  
+
     console.log(requestBody);
-  
+
     try {
-      const addMemberResponse = await fetch("http://localhost:8080/addNewMember", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
-  
+      const addMemberResponse = await fetch(
+        "http://localhost:8080/addNewMember",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
+
       if (addMemberResponse.ok) {
-          alert("Member added successfully ");
-        } 
-      else {
+        alert("Member added successfully ");
+      } else {
         alert("Failed to add member.");
       }
     } catch (error) {
       alert("Error occurred: " + error.message);
     }
   };
-  
+
   function Message({ message, type }) {
     const { sender, content, imageUrl } = message;
     const [displayedSender, setDisplayedSender] = useState(sender);
@@ -122,9 +130,7 @@ function MessageList ({ roomId, userId }) {
     if (!sender) {
       return (
         <div className={["message", type].join(" ")}>
-          <div className={["sender", type].join(" ")}>
-            Loading sender...
-          </div>
+          <div className={["sender", type].join(" ")}>Loading sender...</div>
           <div className="message-content">
             {content && <div className="text">{content}</div>}
             {imageUrl && <ImageComponent imageUrl={imageUrl} />}
@@ -139,16 +145,15 @@ function MessageList ({ roomId, userId }) {
       return parts.map((part, index) => {
         if (part.startsWith("http")) {
           return (
-          
-            <a 
-          key={index} 
-          href={part} 
-          onClick={(e) => {
-            e.preventDefault(); 
-            handleLinkClick(part); 
-          }}
-          style={{ color: "blue", textDecoration: "underline" }}
-        >
+            <a
+              key={index}
+              href={part}
+              onClick={(e) => {
+                e.preventDefault();
+                handleLinkClick(part);
+              }}
+              style={{ color: "white", textDecoration: "underline" }}
+            >
               {part}
             </a>
           );
@@ -159,8 +164,9 @@ function MessageList ({ roomId, userId }) {
     return (
       <div className={["message", type].join(" ")}>
         <div className={["sender", type].join(" ")}>
-          {type === "outgoing" ? "You" : displayedSender.fullname || "Loading sender..."}
-          {/* {isSenderMissing ? "Loading sender..." : type === "outgoing" ? "You" : sender.fullname} */}
+          {type === "outgoing"
+            ? "You"
+            : displayedSender.fullname || "Loading sender..."}
         </div>
         <div className="message-content">
           {content && <div className="text">{renderContent(content)}</div>}
@@ -175,12 +181,13 @@ function MessageList ({ roomId, userId }) {
     <div className="chat-container" ref={containerRef}>
       {messages &&
         messages.map((x) => (
-          <Message key={x.id} 
-          message={x} 
-          type={x.sender.uid === userId ? "outgoing" : "incoming"} />
-          
+          <Message
+            key={x.id}
+            message={x}
+            type={x.sender.uid === userId ? "outgoing" : "incoming"}
+          />
         ))}
-        {showConfirmation && (
+      {showConfirmation && (
         <div className="confirmation-dialog">
           <p>Bạn có muốn tham gia nhóm này không?</p>
           <button onClick={confirmNavigation}>Có</button>
