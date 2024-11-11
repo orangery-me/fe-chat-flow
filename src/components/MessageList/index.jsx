@@ -6,8 +6,9 @@ import { useAuth } from "../../hooks/useAuth";
 function MessageList ({ roomId, userId }) {
   const messages = useMessages(roomId);
   const containerRef = React.useRef(null);
-   const [showConfirmation, setShowConfirmation] = useState(false);
-   const [linkToNavigate, setLinkToNavigate] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [linkToNavigate, setLinkToNavigate] = useState("");
+
   useLayoutEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
@@ -85,9 +86,9 @@ function MessageList ({ roomId, userId }) {
       roomId: room,
       newMemberId: userId,
     };
-  
+
     console.log(requestBody);
-  
+
     try {
       const addMemberResponse = await fetch("http://localhost:8080/addNewMember", {
         method: "POST",
@@ -96,10 +97,10 @@ function MessageList ({ roomId, userId }) {
         },
         body: JSON.stringify(requestBody),
       });
-  
+
       if (addMemberResponse.ok) {
-          alert("Member added successfully ");
-        } 
+        alert("Member added successfully ");
+      }
       else {
         alert("Failed to add member.");
       }
@@ -107,8 +108,8 @@ function MessageList ({ roomId, userId }) {
       alert("Error occurred: " + error.message);
     }
   };
-  
-  function Message({ message, type }) {
+
+  function Message ({ message, type }) {
     const { sender, content, imageUrl } = message;
     const [displayedSender, setDisplayedSender] = useState(sender);
 
@@ -139,16 +140,16 @@ function MessageList ({ roomId, userId }) {
       return parts.map((part, index) => {
         if (part.startsWith("http")) {
           return (
-          
-            <a 
-          key={index} 
-          href={part} 
-          onClick={(e) => {
-            e.preventDefault(); 
-            handleLinkClick(part); 
-          }}
-          style={{ color: "blue", textDecoration: "underline" }}
-        >
+
+            <a
+              key={index}
+              href={part}
+              onClick={(e) => {
+                e.preventDefault();
+                handleLinkClick(part);
+              }}
+              style={{ color: "blue", textDecoration: "underline" }}
+            >
               {part}
             </a>
           );
@@ -175,12 +176,12 @@ function MessageList ({ roomId, userId }) {
     <div className="chat-container" ref={containerRef}>
       {messages &&
         messages.map((x) => (
-          <Message key={x.id} 
-          message={x} 
-          type={x.sender.uid === userId ? "outgoing" : "incoming"} />
-          
+          <Message key={x.id}
+            message={x}
+            type={x.sender.uid === userId ? "outgoing" : "incoming"} />
+
         ))}
-        {showConfirmation && (
+      {showConfirmation && (
         <div className="confirmation-dialog">
           <p>Bạn có muốn tham gia nhóm này không?</p>
           <button onClick={confirmNavigation}>Có</button>

@@ -5,12 +5,12 @@ import Sidebar from "../components/components/Sidebar";
 import Form from "../components/components/Form";
 import "./AuthenticatedApp.css";
 
-function AuthenticatedApp() {
+function AuthenticatedApp ({ info }) {
 
   return (
     <div className="home"
     >
-      <Sidebar />
+      <Sidebar info={info}></Sidebar>
       <Form />
       <ImageSlider />
 

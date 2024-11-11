@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import "./Sidebar.css"; // Custom CSS for styling
+import { useRooms } from "../../hooks/useRooms";
 import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
-const Sidebar = () => {
-  const { user, logout } = useAuth();
+function Sidebar ({ info }) {
+  const { logout } = useAuth();
   const [isOverlayOpen, setOverlayOpen] = useState(false);
   const [roomName, setRoomName] = useState("");
   const [currentMemberEmail, setCurrentMemberEmail] = useState("");
   const [membersId, setMembersId] = useState([]);
   const [membersEmail, setMemberEmail] = useState([]);
+  const [avatar, setAvatar] = useState(null);
+  const { onCreateRoom } = useRooms(info.user.uid);
 
   const handleAddMemberByEmail = async () => {
     try {
@@ -21,8 +25,8 @@ const Sidebar = () => {
           setMemberEmail([...membersEmail, memberEmail]);
         }
         if (!membersId.includes(memberId)) {
-          setMembersId([...membersId, memberId]); 
-        } 
+          setMembersId([...membersId, memberId]);
+        }
       } else {
         alert("User not found.");
       }
@@ -34,58 +38,25 @@ const Sidebar = () => {
   };
 
   const handleCreateRoom = async (e) => {
-    e.preventDefault();
-
     if (!roomName) {
       alert("Please provide a room name");
       return;
     }
 
-    const requestBody = {
-      roomName: roomName,
-      roomOwnerId: user.uid,
-      otherMembersId: membersId,
-    };
-
-    console.log("Request Body:", JSON.stringify(requestBody));
-
-    try {
-      const response = await fetch("http://localhost:8080/createChatRoom", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      const textResponse = await response.text();
-      console.log("Raw Response:", textResponse);
-
-      // Check if the response is JSON by verifying the Content-Type header
-      if (response.headers.get("content-type")?.includes("application/json")) {
-        const data = JSON.parse(textResponse);
-
-        if (response.ok) {
-          alert("Room created successfully: " + JSON.stringify(data));
-        } else {
-          console.error("Failed to create room:", data);
-          alert("Failed to create room: " + JSON.stringify(data));
-        }
-      } else {
-        // If not JSON, assume it's a success message or ID and display it directly
-        if (response.ok) {
-          alert("Room created successfully. Response: " + textResponse);
-        } else {
-          alert("Failed to create room: " + textResponse);
-        }
-      }
-    } catch (error) {
-      console.error("Error creating room:", error);
-      if (error instanceof TypeError) {
-        alert("Network error: " + error.message);
-      } else {
-        alert("Error creating room: " + error.message);
-      }
+    const formData = new FormData();
+    formData.append("roomName", roomName);
+    formData.append("roomOwnerId", info.user.uid);
+    formData.append("otherMembersId", membersId);
+    if (avatar) {
+      formData.append("avatar", avatar);
+    }
+    const result = await onCreateRoom(formData);
+    if (result) {
+      alert("Room created successfully!");
+      closeOverlay();
+      window.location.reload();
+    } else {
+      alert("Error creating room. Please try again later.");
     }
   };
 

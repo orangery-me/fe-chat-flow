@@ -3,12 +3,13 @@ import Sidebar from "../components/Sidebar";
 import ImageSlider from "../components/ImageSlider";
 import "./HomePage.css";
 import { useAuth } from "../../hooks/useAuth";
+import UnAuthenSidebar from "../components/UnAuthenSidebar";
 const HomePage = () => {
- 
+
 
   return (
     <div className="home">
-      <Sidebar />
+      <UnAuthenSidebar />
       <SignIn />
       <ImageSlider />
     </div>
@@ -19,13 +20,13 @@ const SignIn = () => {
   const { login, logout } = useAuth();
 
   const connect = (event) => {
-      event.preventDefault();
+    event.preventDefault();
 
-      login((result, error) => {
-          if (error) {
-              console.log('Error logging in', error);
-          }
-      });
+    login((result, error) => {
+      if (error) {
+        console.log('Error logging in', error);
+      }
+    });
   }
   return (
     <div className="profile-form">

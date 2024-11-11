@@ -7,12 +7,12 @@ const StompClientContext = createContext();
 
 export const StompClientProvider = ({ children }) => {
     const [stompClient, setStompClient] = useState(null);
-    // const [onMessageCallback, setOnMessageCallback] = useState(null);
     const [isConnected, setIsConnected] = useState(false);
     const { user } = useAuth();
 
     // Sử dụng ref để giữ giá trị của onMessageCallback
     const messageCallbackRef = useRef(null);
+    const notificationCallbackRef = useRef(null);
 
     // Hàm để set callback
     const setOnMessageCallback = (callback) => {
@@ -27,6 +27,18 @@ export const StompClientProvider = ({ children }) => {
         // Gọi hàm callback nếu nó đã được set
         if (messageCallbackRef.current) {
             messageCallbackRef.current(parsedNewMessage);
+        }
+    }
+
+    const setOnNotificationCallback = (callback) => {
+        notificationCallbackRef.current = callback;
+    };
+
+    function onNotificationReceived (newMessage) {
+        console.log('Notification: ', newMessage);
+        const parsedNewMessage = JSON.parse(newMessage.body);
+        if (notificationCallbackRef.current) {
+            notificationCallbackRef.current(parsedNewMessage);
         }
     }
 
@@ -51,7 +63,7 @@ export const StompClientProvider = ({ children }) => {
             // subcribe to the user's queue (receive noti)
             stompClient.subscribe(`/user/${user.uid}/queue/messages`, onMessageReceived);
             // subscribe to the public topic (got who is connected )
-            stompClient.subscribe(`/user/public`, onMessageReceived);
+            stompClient.subscribe(`/user/public`, onNotificationReceived);
 
             // register the connected user to server 
             stompClient.publish(
@@ -86,7 +98,7 @@ export const StompClientProvider = ({ children }) => {
 
 
     return (
-        <StompClientContext.Provider value={{ stompClient, isConnected, setOnMessageCallback }}>
+        <StompClientContext.Provider value={{ stompClient, isConnected, setOnMessageCallback, setOnNotificationCallback}}>
             {children}
         </StompClientContext.Provider>
     );
