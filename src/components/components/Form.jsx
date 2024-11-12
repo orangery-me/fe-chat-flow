@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useAuth } from '../../hooks/useAuth';
-import { JoinedRooms } from '../JoinedRooms/joined-rooms';
+import React, { useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
+import { JoinedRooms } from "../JoinedRooms/joined-rooms";
 import { useForm } from "react-hook-form";
 import { BsEmojiSmileFill } from "react-icons/bs";
 import Picker from "emoji-picker-react";
@@ -81,7 +81,9 @@ const Form = () => {
   const handleAddMemberByEmail = async () => {
     try {
       console.log(currentMemberEmail);
-      const response = await fetch(`http://localhost:8080/findByEmail?email=${currentMemberEmail}`);
+      const response = await fetch(
+        `http://localhost:8080/findByEmail?email=${currentMemberEmail}`
+      );
       const data = await response.json();
       console.log(data);
       if (response.ok && data.length > 0) {
@@ -114,11 +116,7 @@ const Form = () => {
           placeholder="Nhập email"
           className="search-input"
         />
-        <button
-          onClick={handleAddMemberByEmail}
-        >
-          Tìm kiếm
-        </button>
+        <button onClick={handleAddMemberByEmail}>Tìm kiếm</button>
       </div>
       <div className="chat">
         <JoinedRooms userId={user.uid} />
@@ -127,6 +125,7 @@ const Form = () => {
         <div className="overlay-message">
           <div className="overlay-message-content">
             <h3>Thông tin người dùng</h3>
+            <img src={foundUser.photoURL} alt="avatar" className="avatar"></img>
             <p>Email: {foundUser.email}</p>
             <p>Tên: {foundUser.fullname}</p>
             <p>ID: {foundUser.uid}</p>
@@ -139,6 +138,7 @@ const Form = () => {
                     value={typing}
                     onChange={handleChange}
                     aria-label="Message input"
+                    style={{ paddingRight: "100px" }} // Dành chỗ cho icon
                   />
                   <input
                     id="fileInput"
@@ -148,31 +148,31 @@ const Form = () => {
                     style={{ display: "none" }}
                     onChange={handleImageChange}
                   />
-                  <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
-                    <div className="button-container">
-                      <div className="emoji">
-                        <BsEmojiSmileFill onClick={handleEmojiPickerhideShow} />
-                        {showEmojiPicker && (
-                          <Picker
-                            onEmojiClick={handleEmojiClick}
-                            style={{
-                              marginTop: "-350px",
-                              height: "350px",
-                              width: "300px",
-                              backgroundColor: "#fff",
-                              borderRadius: "10px",
-                              boxShadow: "0 2px 5px rgba(0, 0, 0, 0.3)",
-                            }}
-                          />
-                        )}
-                      </div>
+                  <div className="input-icons">
+                    <div className="emoji">
+                      <BsEmojiSmileFill
+                        onClick={handleEmojiPickerhideShow}
+                        className="icon "
+                      />
+                      {showEmojiPicker && (
+                        <Picker
+                          onEmojiClick={handleEmojiClick}
+                          style={{
+                            marginTop: "-350px",
+                            height: "350px",
+                            width: "300px",
+                            backgroundColor: "#fff",
+                            borderRadius: "10px",
+                            boxShadow: "0 2px 5px rgba(0, 0, 0, 0.3)",
+                          }}
+                        />
+                      )}
                     </div>
                     <i
-                      className="fas fa-camera"
-                      style={{ fontSize: "26px", cursor: "pointer" }}
+                      className="fas fa-camera icon"
                       onClick={handleCameraClick}
                     ></i>
-                    <i className="fas fa-microphone" style={{ fontSize: "26px" }}></i>
+                    <i className="fas fa-microphone icon"></i>
                   </div>
                   <button
                     style={{
@@ -183,11 +183,14 @@ const Form = () => {
                       cursor: "pointer",
                       border: "none",
                       borderRadius: "5px",
+                      marginTop: "10px",
                     }}
                   >
                     Gửi
                   </button>
-                  <button onClick={closeOverlay} aria-label="Close overlay">Đóng</button>
+                  <button onClick={closeOverlay} aria-label="Close overlay">
+                    Đóng
+                  </button>
                 </div>
               </div>
             </form>
@@ -197,6 +200,5 @@ const Form = () => {
     </div>
   );
 };
-
 
 export default Form;

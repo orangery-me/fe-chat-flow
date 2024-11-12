@@ -19,27 +19,23 @@ export const StompClientProvider = ({ children }) => {
         messageCallbackRef.current = callback;
     };
 
+    const setOnNotificationCallback = (callback) => {
+        notificationCallbackRef.current = callback;
+    };
 
     function onMessageReceived (newMessage) {
         const parsedNewMessage = JSON.parse(newMessage.body);
-        console.log('new Message: ', newMessage);
+        console.log("soobin", parsedNewMessage);
 
         // Gọi hàm callback nếu nó đã được set
         if (messageCallbackRef.current) {
             messageCallbackRef.current(parsedNewMessage);
         }
-    }
 
-    const setOnNotificationCallback = (callback) => {
-        notificationCallbackRef.current = callback;
-    };
-
-    function onNotificationReceived (newMessage) {
-        console.log('Notification: ', newMessage);
-        const parsedNewMessage = JSON.parse(newMessage.body);
         if (notificationCallbackRef.current) {
             notificationCallbackRef.current(parsedNewMessage);
         }
+
     }
 
     useEffect(() => {
@@ -63,7 +59,7 @@ export const StompClientProvider = ({ children }) => {
             // subcribe to the user's queue (receive noti)
             stompClient.subscribe(`/user/${user.uid}/queue/messages`, onMessageReceived);
             // subscribe to the public topic (got who is connected )
-            stompClient.subscribe(`/user/public`, onNotificationReceived);
+            stompClient.subscribe(`/user/public`, onMessageReceived);
 
             // register the connected user to server 
             stompClient.publish(
@@ -98,7 +94,7 @@ export const StompClientProvider = ({ children }) => {
 
 
     return (
-        <StompClientContext.Provider value={{ stompClient, isConnected, setOnMessageCallback, setOnNotificationCallback}}>
+        <StompClientContext.Provider value={{ stompClient, isConnected, setOnMessageCallback, setOnNotificationCallback }}>
             {children}
         </StompClientContext.Provider>
     );

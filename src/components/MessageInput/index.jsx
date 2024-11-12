@@ -9,7 +9,7 @@ import Picker from "emoji-picker-react";
 import React from "react";
 import { useForm } from "react-hook-form";
 
-function MessageInput ({ roomId }) {
+function MessageInput({ roomId }) {
   const [messages, setMessages] = useState([]);
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -26,30 +26,29 @@ function MessageInput ({ roomId }) {
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    if (roomId.startsWith("pr")){
+    if (roomId.startsWith("pr")) {
       const parts = roomId.slice(2).split("_");
-      const receiverId = parts.find(id => id !== user.uid);
+      const receiverId = parts.find((id) => id !== user.uid);
       url = "http://localhost:8080/sendMessageToUser";
       formData.append("senderId", user.uid);
-      formData.append("receiverId", receiverId );
-      formData.append("content", typing); 
-    if (image) {
-        formData.append("file", image); 
+      formData.append("receiverId", receiverId);
+      formData.append("content", typing);
+      if (image) {
+        formData.append("file", image);
+      }
+    } else {
+      formData.append("chatRoomId", roomId);
+      formData.append("senderId", user.uid);
+      formData.append("content", typing);
+      if (image) {
+        formData.append("file", image);
+      }
+      var url = "http://localhost:8080/sendMessageToRoom";
     }
-  }
-  else{
-    formData.append("chatRoomId", roomId); 
-    formData.append("senderId", user.uid); 
-    formData.append("content", typing); 
-    if (image) {
-        formData.append("file", image); 
-    }
-    var url="http://localhost:8080/sendMessageToRoom";
-  }
-   
+
     const res = await fetch(url, {
-        method: "POST",
-        body: formData,
+      method: "POST",
+      body: formData,
     });
 
     setTyping("");
@@ -105,23 +104,12 @@ function MessageInput ({ roomId }) {
                 setImage(null);
                 setImagePreview(null); // Xóa ảnh xem trước
               }}
-              style={{
-                position: "absolute",
-                top: "10px",
-                right: "10px",
-                background: "rgba(255, 255, 255, 0.8)",
-                border: "none",
-                borderRadius: "50%",
-                cursor: "pointer",
-                padding: "5px",
-                color: "red",
-              }}
             >
               <i className="fas fa-times"></i>
             </button>
           </div>
         )}
-        <div className="textZone" style={{ position: "relative" }}>
+        <div className="style-input-message">
           <input
             type="text"
             placeholder="Message"
@@ -173,9 +161,11 @@ function MessageInput ({ roomId }) {
               cursor: typing.length > 0 || image ? "pointer" : "not-allowed",
             }}
           >
-            <i className="fas fa-paper-plane" style={{ fontSize: "26px" }}></i>
+            <i
+              className="fas fa-paper-plane"
+              style={{ fontSize: "26px", color: "#000" }}
+            ></i>
           </button>
-
         </div>
       </div>
     </form>

@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useStompClient } from "../../context/StompClientContext"
+import { useStompClient } from "../../context/StompClientContext";
+import { useNotificationsForRoom } from "../../hooks/useNotificationsForRoom";
 import MessageInput from "../MessageInput";
 import MessageList from "../MessageList";
 import { useAuth } from "../../hooks/useAuth";
 import "./styles.css";
 import Sidebar from "../components/Sidebar";
 import Form from "../components/Form";
-import { useMessages } from "../../hooks/useMessages";
 
 function ChatRoom () {
   const { stompClient } = useStompClient();
@@ -27,7 +27,9 @@ function ChatRoom () {
 
   const handleAddMemberByEmail = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/findByEmail?email=${currentMemberEmail}`);
+      const response = await fetch(
+        `http://localhost:8080/findByEmail?email=${currentMemberEmail}`
+      );
       const data = await response.json();
 
       if (response.ok && data.length > 0) {
@@ -42,7 +44,6 @@ function ChatRoom () {
       } else {
         alert("User not found.");
       }
-
 
       // Check if the user data exists
       if (!data || !data[0]?.uid) {
@@ -89,17 +90,19 @@ function ChatRoom () {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
-        frameRef.current && !frameRef.current.contains(event.target) &&
-        buttonRef.current && !buttonRef.current.contains(event.target)
+        frameRef.current &&
+        !frameRef.current.contains(event.target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target)
       ) {
         closeFrame();
       }
     };
 
-    document.addEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
 
     return () => {
-      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, []);
 
@@ -108,19 +111,17 @@ function ChatRoom () {
       navigate("/");
     }
   });
-
   const openFrame = () => {
     setFrame(true);
-  }
+  };
   const closeFrame = () => {
     setFrame(false);
-  }
+  };
 
   const handleAddMember = async () => {
     closeFrame();
     setOverlayVisible(true);
     console.log(requestBody);
-
   };
   const closeOverlay = () => {
     setOverlayVisible(false);
@@ -131,13 +132,16 @@ function ChatRoom () {
 
   const handleCopyLink = () => {
     const link = window.location.href;
-    navigator.clipboard.writeText(link).then(() => {
-      setLinkCopied(true);
-      console.log("Đã sao chép liên kết: " + link);
-      setTimeout(() => setLinkCopied(false), 2000);
-    }).catch(err => {
-      console.error("Lỗi sao chép liên kết", err);
-    });
+    navigator.clipboard
+      .writeText(link)
+      .then(() => {
+        setLinkCopied(true);
+        console.log("Đã sao chép liên kết: " + link);
+        setTimeout(() => setLinkCopied(false), 2000);
+      })
+      .catch((err) => {
+        console.error("Lỗi sao chép liên kết", err);
+      });
     closeFrame();
   };
   const addMessage = (newMessage) => {
@@ -148,10 +152,7 @@ function ChatRoom () {
   if (!stompClient || info.loading) {
 
     return <div>Connecting...</div>;
-
-  }
-  else {
-
+  } else {
     return (
       <div className="home">
         <Sidebar info={info}></Sidebar>
@@ -161,7 +162,7 @@ function ChatRoom () {
         </div>
         <div className="welcome-text">
           <div className="group-title">
-            <img src="" alt="avatar" className="imagine"></img>
+            <img src={info.user.photoURL} alt="avatar" className="imagine"></img>
             <div className="group-items">
               <h3 className="name"> {roomId.roomName}</h3>
               <div className="icons">
@@ -217,7 +218,11 @@ function ChatRoom () {
               </div>
             </div>
           )}
-          {linkCopied && <div className="copied-notification">Liên kết đã được sao chép!</div>}
+          {linkCopied && (
+            <div className="copied-notification">
+              Liên kết đã được sao chép!
+            </div>
+          )}
           <div
             style={{
               border: "1px solid #fff",
@@ -225,12 +230,11 @@ function ChatRoom () {
               boxShadow: "0 0 5px rgba(0, 0, 0, 0.2)",
             }}
           ></div>
-          <MessageList roomId={roomId} userId={info.user.uid} ></MessageList>
+          <MessageList roomId={roomId} userId={info.user.uid}  ></MessageList>
           <MessageInput roomId={roomId} addMessage={addMessage}  ></MessageInput>
         </div>
       </div>
     );
-
   }
 }
 

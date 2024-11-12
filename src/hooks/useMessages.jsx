@@ -6,17 +6,17 @@ function useMessages (roomId) {
     const { setOnMessageCallback } = useStompClient();
 
     async function fetchMessages (roomId) {
-        var url=`http://localhost:8080/getMessages/${roomId}`;
+        var url = `http://localhost:8080/getMessages/${roomId}`;
         if (roomId.startsWith("pr"))
             url = `http://localhost:8080/getPrivateMessages/${roomId}`;
-        
+
         var res = await fetch(url);
         var data = await res.json();
         return data;
     }
 
     useEffect(() => {
-        const messageCallback = (newMessage) => {
+        const messageCallback = () => {
             fetchMessages(roomId).then(data => {
                 setMessages(data);
             });

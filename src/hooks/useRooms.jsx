@@ -43,7 +43,6 @@ function useRooms (userId) {
             const dataPrivateRooms = await resPrivateRooms.json();
             const combinedRooms = [...dataJoinedRooms, ...dataPrivateRooms];
 
-            console.log("Joined Rooms Data:", combinedRooms);
             setJoinedRooms(combinedRooms);
         } catch (error) {
             console.error("Error fetching joined rooms:", error);

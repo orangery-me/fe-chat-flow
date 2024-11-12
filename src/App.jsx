@@ -6,9 +6,6 @@ import HomePage from "./components/HomePage/HomePage";
 
 function App () {
   const info = useAuth();
-  if (info.user) {
-    console.log('info nek', info.user);
-  }
 
   return <div>{info.user ? <AuthenticatedApp info={info}></AuthenticatedApp> : <HomePage />}</div>;
 }

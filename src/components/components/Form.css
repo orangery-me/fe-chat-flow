@@ -1,117 +1,205 @@
-.page{
-    width: 35% ;
-    margin-left: 20px;
-    margin-right: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #D6EAF8;
-    border: 2px solid #ccc;
-    border-radius: 20px;
-    gap:20px;
+.page {
+  width: 30%;
+  margin-left: 20px;
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  border: 2px solid #ccc;
+  border-radius: 20px;
+  gap: 20px;
 }
-.search{
-    display: flex;
-    width: 95%;
-    justify-content: center;
+.search {
+  display: flex;
+  width: 95%;
+  justify-content: center;
+}
+.search-input {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px 20px;
+  border: 2px solid #f28c81;
+  border-radius: 25px;
+  outline: none;
+  font-size: 16px;
+  transition: 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.styled-input::placeholder {
+  color: #aaa;
+}
+
+.styled-input:focus {
+  border-color: #f28c81;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.search button {
+  background-color: #f28c81;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  margin-left: 10px;
+  transition: background-color 0.3s;
+}
+
+.search button:hover {
+  background-color: #f28c81;
+}
+
+.chat {
+  padding: 10px 0;
+  width: 95%;
+  height: 500px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: darkgrey lightgrey;
+  border-radius: 10px;
+}
+
+/* Overlay background */
+.overlay-message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.5); /* Màu tối overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeInOverlay 0.3s ease-in-out;
+}
+
+/* Overlay content box */
+.overlay-message-content {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  width: 450px;
+  max-width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  animation: fadeInContent 0.4s ease-in-out;
+}
+
+.overlay-message-content h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 1.8rem;
+}
+
+/* Avatar styling */
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Input field styling */
+.textZonee input[type="text"] {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s;
+}
+
+.textZonee input[type="text"]:focus {
+  border-color: #4caf50;
+  outline: none;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
+}
+
+/* Emoji & icon section */
+.input-icons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  position: absolute;
+  top: 30%;
+  right: 2px;
+  transform: translateY(-50%);
+}
+
+.input-icons .icon {
+  font-size: 1.5rem;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.input-icons .icon:hover {
+  color: #007bff;
+}
+
+/* Buttons */
+button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button[aria-label="Close overlay"] {
+  background-color: #f44336;
+  margin-left: 10px;
+}
+
+button[aria-label="Close overlay"]:hover {
+  background-color: #d32f2f;
+}
+
+/* Animations */
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
   }
-  .search-input {
-    width: 100%;
-    max-width: 300px;        
-    padding: 10px 20px;       
-    border: 2px solid rgb(76, 157, 175); 
-    border-radius: 25px;    
-    outline: none;            
-    font-size: 16px;          
-    transition: 0.3s ease;   
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  to {
+    opacity: 1;
   }
-  
-  .styled-input::placeholder {
-    color: #aaa;              
+}
+
+@keyframes fadeInContent {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
   }
-  
-  .styled-input:focus {
-    border-color: rgb(66, 137, 155);   
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
-  } 
-  
-  .search button {
-    background-color: rgb(76, 157, 175); 
-    color: white;                        
-    padding: 10px 20px;                 
-    font-size: 16px;                    
-    cursor: pointer;                    
-    border: none;                       
-    border-radius: 5px;                
-    margin-left: 10px;              
-    transition: background-color 0.3s; 
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
-  
-  .search button:hover {
-    background-color: rgb(66, 137, 155); 
-  } 
-  .overlay-message{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 9999;
-    background: rgba(0, 0, 0, 0.2);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .overlay-message-content {
-    width: 32.5rem; /* 520px = 32.5rem */
-    height: 50vh;
-    background-color: white;
-    padding: 1.25rem; /* 20px = 1.25rem */
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  .textZonee {
-    flex: 1;
-    padding: 10px;
-    border-radius: 20px;
-    background-color: #f0f0f0;
-    display: flex;
-    align-items: center;
-    width: 100%;
-  }
-  
-  .textZonee input {
-    background-color: transparent;
-    border: none;
-    width: 90%;
-  }
-  
-  .textZonee input:focus {
-    outline: none;
-  }
-  
-  /* Điều chỉnh các icon trong khu vực nhập tin nhắn */
-  .textZonee i {
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-  
-  .textZonee i:hover {
-    transform: scale(1.1);
-  }
-  
+}
+
 @media (max-width: 768px) {
-    .home {
-        flex-direction: column;
-        height: auto;
-    }
-  
-    .profile-form {
-        width: 90%; /* Chiếm gần hết màn hình trên thiết bị nhỏ */
-        margin: 1rem;
-    }
+  .home {
+    flex-direction: column;
+    height: auto;
   }
-  
+
+  .profile-form {
+    width: 90%;
+    margin: 1rem;
+  }
+}
