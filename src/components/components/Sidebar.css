@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   border: 2px solid #1a1a40;
-  border-radius: 20px;
+  /* border-radius: 20px; */
   width: 15%;
 }
 
@@ -36,6 +36,7 @@
 }
 .sidebar-item button:hover {
   background-color: #333366;
+  width: 100%;
 }
 
 /* .avatar {

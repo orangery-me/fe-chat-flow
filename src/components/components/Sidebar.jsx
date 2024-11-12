@@ -4,7 +4,7 @@ import { useRooms } from "../../hooks/useRooms";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
-function Sidebar ({ info }) {
+function Sidebar({ info }) {
   const { logout } = useAuth();
   const [isOverlayOpen, setOverlayOpen] = useState(false);
   const [roomName, setRoomName] = useState("");
@@ -12,7 +12,7 @@ function Sidebar ({ info }) {
   const [membersId, setMembersId] = useState([]);
   const [membersEmail, setMemberEmail] = useState([]);
   const [groupAvatar, setGroupAvatar] = useState(null);
-  const [avatar, setAvatar] = useState(null); 
+  const [avatar, setAvatar] = useState(null);
   const { onCreateRoom } = useRooms(info.user.uid);
 
   const handleAddMemberByEmail = async () => {
@@ -84,9 +84,19 @@ function Sidebar ({ info }) {
     <div className="sidebar">
       <div className="sidebar-item">
         <img src="/image.png" alt="Logo" className="logo" />
-        <p className="logoText">Chat Bot</p>
+        <p className="logoText">BK Connect</p>
       </div>
       <div style={{ border: "1px solid #ccc" }}></div>
+      <div className="sidebar-item">
+        <button>
+          <i
+            class="far fa-comment"
+            style={{ fontSize: "24px", color: "white" }}
+          ></i>
+          <p className="logoText">Chat</p>
+        </button>
+      </div>
+
       <div className="sidebar-item">
         <button onClick={openOverlay}>
           <i
@@ -94,6 +104,15 @@ function Sidebar ({ info }) {
             style={{ fontSize: "24px", color: "white" }}
           ></i>
           <p className="logoText">Tạo phòng</p>
+        </button>
+      </div>
+      <div className="sidebar-item">
+        <button>
+          <i
+            class="far fa-edit"
+            style={{ fontSize: "24px", color: "white" }}
+          ></i>
+          <p className="logoText">Hồ sơ của tôi</p>
         </button>
       </div>
       {isOverlayOpen && (
@@ -184,6 +203,6 @@ function Sidebar ({ info }) {
       </div>
     </div>
   );
-};
+}
 
 export default Sidebar;

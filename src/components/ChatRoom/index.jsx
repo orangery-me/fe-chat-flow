@@ -9,7 +9,7 @@ import "./styles.css";
 import Sidebar from "../components/Sidebar";
 import Form from "../components/Form";
 
-function ChatRoom () {
+function ChatRoom() {
   const { stompClient } = useStompClient();
   const info = useAuth();
   const [messages, setMessages] = useState([]);
@@ -56,18 +56,25 @@ function ChatRoom () {
         newMemberId: data[0].uid,
       };
 
-      const addMemberResponse = await fetch("http://localhost:8080/addNewMember", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
+      const addMemberResponse = await fetch(
+        "http://localhost:8080/addNewMember",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
 
       const rawResponseText = await addMemberResponse.text();
       console.log("Raw Response:", rawResponseText);
 
-      if (addMemberResponse.headers.get("content-type")?.includes("application/json")) {
+      if (
+        addMemberResponse.headers
+          .get("content-type")
+          ?.includes("application/json")
+      ) {
         const jsonResponse = JSON.parse(rawResponseText);
 
         if (addMemberResponse.ok) {
@@ -148,9 +155,7 @@ function ChatRoom () {
     setMessages((prevMessages) => [...prevMessages, newMessage]);
   };
 
-
   if (!stompClient || info.loading) {
-
     return <div>Connecting...</div>;
   } else {
     return (
@@ -162,20 +167,27 @@ function ChatRoom () {
         </div>
         <div className="welcome-text">
           <div className="group-title">
-            <img src={info.user.photoURL} alt="avatar" className="imagine"></img>
+            <img
+              src={info.user.photoURL}
+              alt="avatar"
+              className="imagine"
+            ></img>
+            <h3>aaaaaaaaa</h3>
             <div className="group-items">
               <h3 className="name"> {roomId.roomName}</h3>
               <div className="icons">
                 <img src="/phone.png" alt=""></img>
                 <img src="/face.png" alt=" "></img>
-                <button style={{
-                  backgroundColor: "transparent",
-                  border: "none",
-                  cursor: "pointer",
-                  position: "relative"
-                }}
+                <button
+                  style={{
+                    backgroundColor: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    position: "relative",
+                  }}
                   ref={buttonRef}
-                  onClick={openFrame}>
+                  onClick={openFrame}
+                >
                   <img src="/detail.png" alt=""></img>
                 </button>
                 {isframe && (
@@ -204,13 +216,14 @@ function ChatRoom () {
                     placeholder="Nhập email"
                     className="input-mail"
                   />
-                  <button
-                    onClick={handleAddMemberByEmail}>Thêm</button>
+                  <button onClick={handleAddMemberByEmail}>Thêm</button>
                 </div>
                 <div className="list-mail">
-                  <ul style={{ listStyleType: 'none' }}>
+                  <ul style={{ listStyleType: "none" }}>
                     {membersEmail.map((email, index) => (
-                      <li key={index} className="email-item">{email}</li>
+                      <li key={index} className="email-item">
+                        {email}
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -230,8 +243,8 @@ function ChatRoom () {
               boxShadow: "0 0 5px rgba(0, 0, 0, 0.2)",
             }}
           ></div>
-          <MessageList roomId={roomId} userId={info.user.uid}  ></MessageList>
-          <MessageInput roomId={roomId} addMessage={addMessage}  ></MessageInput>
+          <MessageList roomId={roomId} userId={info.user.uid}></MessageList>
+          <MessageInput roomId={roomId} addMessage={addMessage}></MessageInput>
         </div>
       </div>
     );
