@@ -44,6 +44,7 @@ const Form = () => {
     } else {
       console.error("Error sending message:", res.statusText);
     }
+
     setTyping("");
     setImage(null);
     setImagePreview(null);

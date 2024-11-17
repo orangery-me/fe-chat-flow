@@ -1,12 +1,14 @@
 .page {
   width: 30%;
-  margin-left: 20px;
-  margin-right: 20px;
+  /* margin-left: 20px; */
+  margin-right: 10px;
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: white;
-  border: 2px solid #ccc;
+  /* border: 2px solid #ccc; */
+  border-radius: 8px;
   gap: 20px;
 }
 .search {
@@ -17,11 +19,11 @@
 .search-input {
   width: 100%;
   max-width: 300px;
-  padding: 10px 20px;
-  border: 2px solid #f28c81;
+  padding: 20px 20px;
+  border: 2px solid #3c6942;
   border-radius: 25px;
   outline: none;
-  font-size: 16px;
+  font-size: 13px;
   transition: 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -31,18 +33,18 @@
 }
 
 .styled-input:focus {
-  border-color: #f28c81;
+  border-color: #3c6942;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .search button {
-  background-color: #f28c81;
+  background-color: #3c6942;
   color: white;
-  padding: 10px 20px;
-  font-size: 16px;
+  width: 140px;
+  font-size: 13px;
   cursor: pointer;
   border: none;
-  border-radius: 5px;
+  border-radius: 40px;
   margin-left: 10px;
   transition: background-color 0.3s;
 }

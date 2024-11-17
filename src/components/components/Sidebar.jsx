@@ -4,7 +4,7 @@ import { useRooms } from "../../hooks/useRooms";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
-function Sidebar({ info }) {
+function Sidebar ({ info }) {
   const { logout } = useAuth();
   const [isOverlayOpen, setOverlayOpen] = useState(false);
   const [roomName, setRoomName] = useState("");
@@ -83,15 +83,20 @@ function Sidebar({ info }) {
   return (
     <div className="sidebar">
       <div className="sidebar-item">
-        <img src="/image.png" alt="Logo" className="logo" />
-        <p className="logoText">BK Connect</p>
+        <img src="/image.png" alt="Logo" className="logo" style={
+          {
+            borderRadius: "50%",
+            border: "1px solid #fff",
+          }
+        } />
+        <p className="logoText">BKConnect</p>
       </div>
       <div style={{ border: "1px solid #ccc" }}></div>
       <div className="sidebar-item">
         <button>
           <i
             class="far fa-comment"
-            style={{ fontSize: "24px", color: "white" }}
+            style={{ fontSize: "16px", color: "white" }}
           ></i>
           <p className="logoText">Chat</p>
         </button>
@@ -101,7 +106,7 @@ function Sidebar({ info }) {
         <button onClick={openOverlay}>
           <i
             className="far fa-plus-square"
-            style={{ fontSize: "24px", color: "white" }}
+            style={{ fontSize: "16px", color: "white" }}
           ></i>
           <p className="logoText">Tạo phòng</p>
         </button>
@@ -110,7 +115,7 @@ function Sidebar({ info }) {
         <button>
           <i
             class="far fa-edit"
-            style={{ fontSize: "24px", color: "white" }}
+            style={{ fontSize: "16px", color: "white" }}
           ></i>
           <p className="logoText">Hồ sơ của tôi</p>
         </button>
@@ -196,7 +201,7 @@ function Sidebar({ info }) {
         >
           <i
             className="fas fa-sign-out-alt"
-            style={{ fontSize: "26px", color: "white" }}
+            style={{ fontSize: "16px", color: "white" }}
           ></i>
           <p className="logoText">Đăng xuất</p>
         </button>
