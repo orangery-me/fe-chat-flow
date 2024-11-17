@@ -1,20 +1,12 @@
 import { useMessages } from "../../hooks/useMessages";
 import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 import "./styles.css";
-import { useNotificationsForRoom } from "../../hooks/useNotificationsForRoom";
 
 function MessageList ({ roomId, userId }) {
   const messages = useMessages(roomId);
   const containerRef = React.useRef(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [linkToNavigate, setLinkToNavigate] = useState("");
-  const { noti, markAsRead } = useNotificationsForRoom(roomId);
-
-  if (!noti) {
-    markAsRead(roomId);
-  } else {
-    console.log("empty");
-  }
 
   useLayoutEffect(() => {
     if (containerRef.current) {
@@ -183,7 +175,6 @@ function MessageList ({ roomId, userId }) {
   }
 
   return (
-    markAsRead(roomId),
     <div className="chat-container" ref={containerRef}>
       {messages &&
         messages.map((x) => (

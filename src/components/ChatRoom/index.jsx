@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useStompClient } from "../../context/StompClientContext";
-import { useNotificationsForRoom } from "../../hooks/useNotificationsForRoom";
 import MessageInput from "../MessageInput";
 import MessageList from "../MessageList";
 import { useAuth } from "../../hooks/useAuth";
