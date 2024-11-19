@@ -8,7 +8,7 @@ import { BsEmojiSmileFill } from "react-icons/bs";
 import Picker from "emoji-picker-react";
 import React from "react";
 import { useForm } from "react-hook-form";
-
+import { API } from "../../ipConfig";
 function MessageInput({ roomId }) {
   const [messages, setMessages] = useState([]);
   const [image, setImage] = useState(null);
@@ -29,7 +29,7 @@ function MessageInput({ roomId }) {
     if (roomId.startsWith("pr")) {
       const parts = roomId.slice(2).split("_");
       const receiverId = parts.find((id) => id !== user.uid);
-      url = "http://localhost:8080/sendMessageToUser";
+      url = `${API}sendMessageToUser`;
       formData.append("senderId", user.uid);
       formData.append("receiverId", receiverId);
       formData.append("content", typing);
@@ -43,7 +43,7 @@ function MessageInput({ roomId }) {
       if (image) {
         formData.append("file", image);
       }
-      var url = "http://localhost:8080/sendMessageToRoom";
+      var url = `${API}sendMessageToRoom`;
     }
 
     const res = await fetch(url, {

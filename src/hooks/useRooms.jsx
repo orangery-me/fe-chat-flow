@@ -1,68 +1,66 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
+import { API } from ".././ipConfig";
+function useRooms(userId) {
+  const [joinedRooms, setJoinedRooms] = useState([]);
 
+  const onCreateRoom = async (formData) => {
+    try {
+      const response = await fetch(`${API}createChatRoom`, {
+        method: "POST",
+        body: formData,
+      });
 
-function useRooms (userId) {
-    const [joinedRooms, setJoinedRooms] = useState([]);
+      const textResponse = await response.text();
 
-    const onCreateRoom = async (formData) => {
-        try {
-            const response = await fetch("http://localhost:8080/createChatRoom", {
-                method: "POST",
-                body: formData,
-            });
+      if (response.ok) {
+        const data = JSON.parse(textResponse);
+        updateWithNewRoom(data);
+        console.log("Room created successfully:", data);
+        return data;
+      }
+    } catch (error) {
+      console.error("Error creating room:", error);
+    }
+  };
 
-            const textResponse = await response.text();
+  const fetchAllJoinedRooms = async (userId) => {
+    try {
+      const [resJoinedRooms, resPrivateRooms] = await Promise.all([
+        fetch(`${API}getJoinedRooms?userId=${userId}`),
+        fetch(`${API}getJoinedPrivateRooms?userId=${userId}`),
+      ]);
+      if (!resJoinedRooms.ok) {
+        const errorMessage = await resJoinedRooms.text();
+        throw new Error(`Error fetching public rooms: ${errorMessage}`);
+      }
+      if (!resPrivateRooms.ok) {
+        const errorMessage = await resPrivateRooms.text();
+        throw new Error(`Error fetching private rooms: ${errorMessage}`);
+      }
 
-            if (response.ok) {
-                const data = JSON.parse(textResponse);
-                updateWithNewRoom(data);
-                console.log("Room created successfully:", data);
-                return data
-            }
-        } catch (error) {
-            console.error("Error creating room:", error);
-        }
-    };
+      const dataJoinedRooms = await resJoinedRooms.json();
+      const dataPrivateRooms = await resPrivateRooms.json();
+      const combinedRooms = [...dataJoinedRooms, ...dataPrivateRooms];
 
-    const fetchAllJoinedRooms = async (userId) => {
-        try {
-            const [resJoinedRooms, resPrivateRooms] = await Promise.all([
-                fetch(`http://localhost:8080/getJoinedRooms?userId=${userId}`),
-                fetch(`http://localhost:8080/getJoinedPrivateRooms?userId=${userId}`)
-            ]);
-            if (!resJoinedRooms.ok) {
-                const errorMessage = await resJoinedRooms.text();
-                throw new Error(`Error fetching public rooms: ${errorMessage}`);
-            }
-            if (!resPrivateRooms.ok) {
-                const errorMessage = await resPrivateRooms.text();
-                throw new Error(`Error fetching private rooms: ${errorMessage}`);
-            }
+      setJoinedRooms(combinedRooms);
+    } catch (error) {
+      console.error("Error fetching joined rooms:", error);
+    }
+  };
 
-            const dataJoinedRooms = await resJoinedRooms.json();
-            const dataPrivateRooms = await resPrivateRooms.json();
-            const combinedRooms = [...dataJoinedRooms, ...dataPrivateRooms];
+  useEffect(() => {
+    fetchAllJoinedRooms(userId);
+  }, [userId]);
 
-            setJoinedRooms(combinedRooms);
-        } catch (error) {
-            console.error("Error fetching joined rooms:", error);
-        }
-    };
+  const updateWithNewRoom = (newRoom) => {
+    setJoinedRooms((prevRooms) => {
+      const updatedRooms = [...prevRooms, newRoom];
+      return updatedRooms;
+    });
+    console.log("Updated joinedRooms: ", joinedRooms);
+  };
 
-    useEffect(() => {
-        fetchAllJoinedRooms(userId);
-    }, [userId]);
-
-    const updateWithNewRoom = (newRoom) => {
-        setJoinedRooms((prevRooms) => {
-            const updatedRooms = [...prevRooms, newRoom];
-            return updatedRooms;
-        });
-        console.log("Updated joinedRooms: ", joinedRooms);
-
-    };
-
-    return { joinedRooms, onCreateRoom };
+  return { joinedRooms, onCreateRoom };
 }
 
 export { useRooms };

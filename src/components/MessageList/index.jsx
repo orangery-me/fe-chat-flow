@@ -2,8 +2,8 @@ import { useMessages } from "../../hooks/useMessages";
 import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 import "./styles.css";
 import { useNotificationsForRoom } from "../../hooks/useNotificationsForRoom";
-
-function MessageList ({ roomId, userId }) {
+import { API } from "../../ipConfig";
+function MessageList({ roomId, userId }) {
   const messages = useMessages(roomId);
   const containerRef = React.useRef(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -103,7 +103,7 @@ function MessageList ({ roomId, userId }) {
     console.log(requestBody);
 
     try {
-      const addMemberResponse = await fetch("http://localhost:8080/addNewMember", {
+      const addMemberResponse = await fetch(`${API}addNewMember`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -121,7 +121,7 @@ function MessageList ({ roomId, userId }) {
     }
   };
 
-  function Message ({ message, type }) {
+  function Message({ message, type }) {
     const { sender, content, imageUrl } = message;
     const [displayedSender, setDisplayedSender] = useState(sender);
 
@@ -184,23 +184,25 @@ function MessageList ({ roomId, userId }) {
 
   return (
     markAsRead(roomId),
-    <div className="chat-container" ref={containerRef}>
-      {messages &&
-        messages.map((x) => (
-          <Message
-            key={x.id}
-            message={x}
-            type={x.sender.uid === userId ? "outgoing" : "incoming"}
-          />
-        ))}
-      {showConfirmation && (
-        <div className="confirmation-dialog">
-          <p>Bạn có muốn tham gia nhóm này không?</p>
-          <button onClick={confirmNavigation}>Có</button>
-          <button onClick={() => setShowConfirmation(false)}>Không</button>
-        </div>
-      )}
-    </div>
+    (
+      <div className="chat-container" ref={containerRef}>
+        {messages &&
+          messages.map((x) => (
+            <Message
+              key={x.id}
+              message={x}
+              type={x.sender.uid === userId ? "outgoing" : "incoming"}
+            />
+          ))}
+        {showConfirmation && (
+          <div className="confirmation-dialog">
+            <p>Bạn có muốn tham gia nhóm này không?</p>
+            <button onClick={confirmNavigation}>Có</button>
+            <button onClick={() => setShowConfirmation(false)}>Không</button>
+          </div>
+        )}
+      </div>
+    )
   );
 }
 

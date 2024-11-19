@@ -3,7 +3,7 @@ import "./Sidebar.css"; // Custom CSS for styling
 import { useRooms } from "../../hooks/useRooms";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-
+import { API } from "../../ipConfig";
 function Sidebar({ info }) {
   const { logout } = useAuth();
   const [isOverlayOpen, setOverlayOpen] = useState(false);
@@ -18,7 +18,7 @@ function Sidebar({ info }) {
   const handleAddMemberByEmail = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/findByEmail?email=${currentMemberEmail}`
+        `${API}findByEmail?email=${currentMemberEmail}`
       );
       const data = await response.json();
       if (response.ok && data.length > 0) {

@@ -6,7 +6,7 @@ import { BsEmojiSmileFill } from "react-icons/bs";
 import Picker from "emoji-picker-react";
 import { useStompClient } from "../../context/StompClientContext";
 import "./Form.css";
-
+import { API } from "../../ipConfig";
 const Form = () => {
   const { user, logout } = useAuth();
   const [membersId, setMembersId] = useState([]);
@@ -33,7 +33,7 @@ const Form = () => {
       formData.append("file", image);
     }
 
-    const res = await fetch("http://localhost:8080/sendMessageToUser", {
+    const res = await fetch(`${API}sendMessageToUser `, {
       method: "POST",
       body: formData,
     });
@@ -82,7 +82,7 @@ const Form = () => {
     try {
       console.log(currentMemberEmail);
       const response = await fetch(
-        `http://localhost:8080/findByEmail?email=${currentMemberEmail}`
+        `${API}findByEmail?email=${currentMemberEmail}`
       );
       const data = await response.json();
       console.log(data);

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Await } from "react-router-dom";
 import { useStompClient } from "../../context/StompClientContext";
 import { useNotificationsForRoom } from "../../hooks/useNotificationsForRoom";
 import MessageInput from "../MessageInput";
@@ -8,7 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 import "./styles.css";
 import Sidebar from "../components/Sidebar";
 import Form from "../components/Form";
-
+import { API } from "../../ipConfig";
 function ChatRoom() {
   const { stompClient } = useStompClient();
   const info = useAuth();
@@ -24,11 +24,63 @@ function ChatRoom() {
   const [linkToNavigate, setLinkToNavigate] = useState("");
   const [linkCopied, setLinkCopied] = useState(false);
   const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [avatar, setAvatar] = useState("");
 
+  useEffect(() => {
+    const fetchRoomData = async () => {
+      try {
+        if (roomId.startsWith("pr")) {
+          url = `${API}findPrivateRoomById?Id=${roomId}`;
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const text = await response.text();
+          console.log("Raw response text:", text);
+
+          // Ensure the response is valid JSON
+          const data = JSON.parse(text);
+          const { user1Id, user2Id } = data;
+          var urll = "";
+          if (user1Id && user2Id) {
+            if (user2Id === info.user.uid) {
+              urll = `${API}findById?Id=${user1Id}`;
+            } else urll = `${API}findById?Id=${user2Id}`;
+            const response = await fetch(urll);
+            const dataa = await response.json();
+
+            setName(dataa.fullname);
+            setAvatar(dataa.photoURL);
+          }
+        } else {
+          var url = `${API}findRoomById?Id=${roomId}`;
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const text = await response.text();
+          console.log("Raw response text:", text);
+
+          // Ensure the response is valid JSON
+          const data = JSON.parse(text);
+
+          setName(data.roomName);
+          setAvatar(data.avatar);
+        }
+      } catch (error) {
+        console.error("Error fetching room data:", error);
+      }
+    };
+    console.log("sadd");
+    fetchRoomData();
+  }, [roomId]);
   const handleAddMemberByEmail = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/findByEmail?email=${currentMemberEmail}`
+        `${API}findByEmail?email=${currentMemberEmail}`
       );
       const data = await response.json();
 
@@ -56,16 +108,13 @@ function ChatRoom() {
         newMemberId: data[0].uid,
       };
 
-      const addMemberResponse = await fetch(
-        "http://localhost:8080/addNewMember",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
-        }
-      );
+      const addMemberResponse = await fetch(`${API}addNewMember`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
 
       const rawResponseText = await addMemberResponse.text();
       console.log("Raw Response:", rawResponseText);
@@ -167,12 +216,8 @@ function ChatRoom() {
         </div>
         <div className="welcome-text">
           <div className="group-title">
-            <img
-              src={info.user.photoURL}
-              alt="avatar"
-              className="imagine"
-            ></img>
-            <h3>aaaaaaaaa</h3>
+            <img src={avatar} alt="avatar" className="imagine"></img>
+            <h3>{name}</h3>
             <div className="group-items">
               <h3 className="name"> {roomId.roomName}</h3>
               <div className="icons">
