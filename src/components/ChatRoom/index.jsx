@@ -8,7 +8,8 @@ import "./styles.css";
 import Sidebar from "../components/Sidebar";
 import Form from "../components/Form";
 import { API } from "../../ipConfig";
-function ChatRoom() {
+
+function ChatRoom () {
   const { stompClient } = useStompClient();
   const info = useAuth();
   const [messages, setMessages] = useState([]);
@@ -186,6 +187,10 @@ function ChatRoom() {
     setMemberEmail([]);
   };
 
+  const callVideo = () => {
+    navigate(`/call/${roomId}`);
+  }
+
   const handleCopyLink = () => {
     const link = window.location.href;
     navigator.clipboard
@@ -222,7 +227,7 @@ function ChatRoom() {
               {/* <h3 className="name"> {roomId.roomName}</h3> */}
               <div className="icons">
                 <img src="/phone.png" alt=""></img>
-                <img src="/face.png" alt=" "></img>
+                <img src="/face.png" alt=" " onClick={callVideo} ></img>
                 <button
                   style={{
                     backgroundColor: "transparent",
