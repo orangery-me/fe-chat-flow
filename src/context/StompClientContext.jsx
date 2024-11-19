@@ -9,6 +9,27 @@ export const StompClientProvider = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
   const { user } = useAuth();
 
+  const lastMessagesRef = useRef({});
+
+  async function fetchChatNoti(userId) {
+    const response = await fetch(
+      "http://localhost:8080/getLatestNotificationsByChatRoomIdAndUserId/" +
+        userId
+    );
+    const data = await response.json();
+
+    console.log("data", data);
+
+    // Cập nhật lastMessagesRef từ dữ liệu tải về
+    lastMessagesRef.current = data.reduce((acc, room) => {
+      acc[room.chatRoomId] = {
+        sender: room.sender,
+        timestamp: room.timestamp,
+      };
+      return acc;
+    }, {});
+  }
+
   // Sử dụng ref để giữ giá trị của onMessageCallback
   const messageCallbackRef = useRef(null);
   const notificationCallbackRef = useRef(null);
@@ -24,7 +45,12 @@ export const StompClientProvider = ({ children }) => {
 
   function onMessageReceived(newMessage) {
     const parsedNewMessage = JSON.parse(newMessage.body);
-    console.log("soobin", parsedNewMessage);
+
+    const { chatRoomId, sender, timestamp } = parsedNewMessage;
+    lastMessagesRef.current[chatRoomId] = {
+      sender: sender,
+      timestamp: timestamp,
+    };
 
     // Gọi hàm callback nếu nó đã được set
     if (messageCallbackRef.current) {
@@ -48,11 +74,12 @@ export const StompClientProvider = ({ children }) => {
 
     stompClient.activate();
 
-    stompClient.onConnect = () => {
+    stompClient.onConnect = async () => {
       console.log("ok connected");
 
       setIsConnected(true);
       // subscribe to the topic, the callback is invoked whenever a message is received
+      await fetchChatNoti(user.uid);
 
       // subcribe to the user's queue (receive noti)
       stompClient.subscribe(
@@ -97,6 +124,7 @@ export const StompClientProvider = ({ children }) => {
         isConnected,
         setOnMessageCallback,
         setOnNotificationCallback,
+        lastMessagesRef,
       }}
     >
       {children}

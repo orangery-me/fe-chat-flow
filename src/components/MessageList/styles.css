@@ -16,7 +16,7 @@
 .incoming .message-content .text {
   padding: 10px 15px;
   border-radius: 20px;
-  background-color: #1a1a40;
+  background-color: #3c6942;
 }
 .outgoing .message-content {
   align-self: flex-end;
@@ -24,7 +24,7 @@
 .outgoing .message-content .text {
   padding: 10px 15px;
   border-radius: 20px;
-  background-color: #f28c81;
+  background-color: darkgrey;
 }
 .message.outgoing {
   justify-content: flex-end;
@@ -44,7 +44,7 @@
 }
 
 .outgoing .sender {
-  color: #f28c81;
+  color: black;
   align-self: flex-end;
   padding-right: 15px;
   font-weight: normal;
@@ -107,7 +107,9 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
   padding: 20px;
-  font-family: Arial, sans-serif;
+  /* font-family: Arial, sans-serif; */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Roboto",
+    "Apple Color Emoji", "Helvetica Neue", sans-serif;
   z-index: 1000;
 }
 

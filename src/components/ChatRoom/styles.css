@@ -17,11 +17,14 @@
 }
 
 .group-title {
+  /* background: #3c6942; */
   display: flex;
   align-items: center;
   gap: 10px;
   justify-content: flex-start;
-  margin-top: 10px;
+  padding-bottom: 8px;
+  padding-top: 8px;
+  border-radius: 8px;
 }
 .group-title h3 {
   margin-right: auto;
@@ -55,7 +58,7 @@
 .group-title .icons img {
   margin-right: 10px;
   cursor: pointer;
-  height: 1.25rem;
+  height: 1rem;
   width: auto;
   max-width: 100%;
 }
@@ -195,8 +198,8 @@ button:hover {
 }
 
 div[style] {
-  margin-top: 20px;
-  margin-bottom: 10px;
+  /* margin-top: 20px; */
+  /* margin-bottom: 10px; */
 }
 
 .MessageList {

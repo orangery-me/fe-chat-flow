@@ -18,6 +18,7 @@
 }
 
 .style-input-message input {
+  padding: 12px;
   background-color: transparent;
   border: none;
   width: 90%;

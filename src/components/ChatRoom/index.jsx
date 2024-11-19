@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate, Await } from "react-router-dom";
 import { useStompClient } from "../../context/StompClientContext";
-import { useNotificationsForRoom } from "../../hooks/useNotificationsForRoom";
 import MessageInput from "../MessageInput";
 import MessageList from "../MessageList";
 import { useAuth } from "../../hooks/useAuth";
@@ -166,7 +165,8 @@ function ChatRoom() {
     if (!info.user) {
       navigate("/");
     }
-  });
+  }, [info.user]);
+
   const openFrame = () => {
     setFrame(true);
   };
@@ -214,12 +214,12 @@ function ChatRoom() {
         <div className="connecting" hidden={stompClient.connected}>
           Connecting...
         </div>
-        <div className="welcome-text">
+        <div className="welcome-text homechat">
           <div className="group-title">
             <img src={avatar} alt="avatar" className="imagine"></img>
             <h3>{name}</h3>
             <div className="group-items">
-              <h3 className="name"> {roomId.roomName}</h3>
+              {/* <h3 className="name"> {roomId.roomName}</h3> */}
               <div className="icons">
                 <img src="/phone.png" alt=""></img>
                 <img src="/face.png" alt=" "></img>
@@ -281,13 +281,13 @@ function ChatRoom() {
               Liên kết đã được sao chép!
             </div>
           )}
-          <div
+          {/* <div
             style={{
               border: "1px solid #fff",
               borderRadius: "10px",
               boxShadow: "0 0 5px rgba(0, 0, 0, 0.2)",
             }}
-          ></div>
+          ></div> */}
           <MessageList roomId={roomId} userId={info.user.uid}></MessageList>
           <MessageInput roomId={roomId} addMessage={addMessage}></MessageInput>
         </div>

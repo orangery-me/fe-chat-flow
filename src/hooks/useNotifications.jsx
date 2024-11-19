@@ -32,7 +32,7 @@ function useNotifications(userId) {
     });
   }, [userId]);
 
-  return noti;
+  return { noti, setNoti };
 }
 
 export { useNotifications };
