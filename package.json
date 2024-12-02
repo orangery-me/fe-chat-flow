@@ -17,7 +17,8 @@
         "socket.io-client": "^4.8.1"
     },
     "scripts": {
-        "dev": "vite"
+        "dev": "vite",
+        "build": "vite build"
     },
     "devDependencies": {
         "@vitejs/plugin-react": "^4.3.1",
