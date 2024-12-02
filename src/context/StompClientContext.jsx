@@ -4,6 +4,8 @@ import { Client } from "@stomp/stompjs";
 import { useAuth } from "../hooks/useAuth";
 const StompClientContext = createContext();
 import { WS } from "../ipConfig";
+import { API } from "../ipConfig";
+
 export const StompClientProvider = ({ children }) => {
   const [stompClient, setStompClient] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -11,14 +13,12 @@ export const StompClientProvider = ({ children }) => {
 
   const lastMessagesRef = useRef({});
 
-  async function fetchChatNoti(userId) {
+  async function fetchChatNoti (userId) {
     const response = await fetch(
-      "http://localhost:8080/getLatestNotificationsByChatRoomIdAndUserId/" +
-        userId
+      `${API}getLatestNotificationsByChatRoomIdAndUserId/` +
+      userId
     );
     const data = await response.json();
-
-    console.log("data", data);
 
     // Cập nhật lastMessagesRef từ dữ liệu tải về
     lastMessagesRef.current = data.reduce((acc, room) => {
@@ -43,7 +43,7 @@ export const StompClientProvider = ({ children }) => {
     notificationCallbackRef.current = callback;
   };
 
-  function onMessageReceived(newMessage) {
+  function onMessageReceived (newMessage) {
     const parsedNewMessage = JSON.parse(newMessage.body);
 
     const { chatRoomId, sender, timestamp } = parsedNewMessage;
