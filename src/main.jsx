@@ -2,10 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { AuthContext, AuthProvider } from "./Context/AuthContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ChatRoom from "./components/ChatRoom/index";
 import { StompClientProvider } from "./context/StompClientContext";
+import { AuthProvider } from "./Context/AuthContext";
 import CallRoom from "./components/CallRoom/index";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
