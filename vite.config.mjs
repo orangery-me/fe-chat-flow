@@ -18,7 +18,8 @@ export default defineConfig({
         main: '/src/main.jsx',
         // Thêm các entry file khác nếu cần
       }
-    }
+    },
+    manifest: true,
   },
   resolve: {
     alias: {
