@@ -2,11 +2,15 @@ import { useMessages } from "../../hooks/useMessages";
 import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 import "./styles.css";
 import { API } from "../../ipConfig";
+import { useNavigate } from "react-router-dom";
+import Noti from "../Noti/Noti";
 function MessageList({ roomId, userId }) {
   const messages = useMessages(roomId);
+  const navigate = useNavigate();
   const containerRef = React.useRef(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [linkToNavigate, setLinkToNavigate] = useState("");
+  const [notification, setNotification] = useState("");
 
   useLayoutEffect(() => {
     if (containerRef.current) {
@@ -48,9 +52,20 @@ function MessageList({ roomId, userId }) {
         </button>
         {isShowImg && (
           <div className="showimg">
-            <div className="showimg-content">
-              <button onClick={closeShowImg}>
-                <i class="far fa-times-circle" style={{ fontSize: "24px" }}></i>
+            <div className="showimg-content" style={{ position: "relative" }}>
+              <button
+                onClick={closeShowImg}
+                style={{
+                  position: "absolute",
+                  top: "1px",
+                  background: "transparent",
+                  cursor: "pointer",
+                }}
+              >
+                <i
+                  className="far fa-times-circle"
+                  style={{ fontSize: "24px" }}
+                ></i>
               </button>
               <div
                 style={{
@@ -78,8 +93,8 @@ function MessageList({ roomId, userId }) {
     );
   };
   const handleLinkClick = (linkk) => {
-    console.log("Link clicked: ", linkk); // Kiểm tra link khi nhấp
-    setLinkToNavigate(linkk); // Lưu link vào state
+    console.log("Link clicked: ", linkk);
+    setLinkToNavigate(linkk);
     setShowConfirmation(true);
   };
 
@@ -104,12 +119,13 @@ function MessageList({ roomId, userId }) {
       });
 
       if (addMemberResponse.ok) {
-        alert("Member added successfully ");
+        setNotification("Member added successfully ");
+        navigate(`/chat/${room}`);
       } else {
-        alert("Failed to add member.");
+        setNotification("Failed to add member.");
       }
     } catch (error) {
-      alert("Error occurred: " + error.message);
+      setNotification("Error occurred");
     }
   };
 
@@ -158,6 +174,12 @@ function MessageList({ roomId, userId }) {
         return <span key={index}>{part} </span>;
       });
     };
+    // const leaveChatRoom = (message) => {
+    //   const mes = "da roi nhom";
+    //   if (typeof message === "string" && message.endsWith(mes)) {
+    //     return <div className="messageout"> {message}</div>;
+    //   } else return null;
+    // };
     return (
       <div className={["message", type].join(" ")}>
         <div className={["sender", type].join(" ")}>
@@ -166,6 +188,7 @@ function MessageList({ roomId, userId }) {
             : displayedSender.fullname || "Loading sender..."}
         </div>
         <div className="message-content">
+          {/* {leaveChatRoom(message)} */}
           {content && <div className="text">{renderContent(content)}</div>}
 
           {imageUrl && <ImageComponent imageUrl={imageUrl} />}
@@ -176,6 +199,8 @@ function MessageList({ roomId, userId }) {
 
   return (
     <div className="chat-container" ref={containerRef}>
+      <Noti message={notification} />
+
       {messages &&
         messages.map((x) => (
           <Message

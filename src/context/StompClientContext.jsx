@@ -2,10 +2,10 @@ import { createContext, useContext } from "react";
 import { useState, useEffect, useRef } from "react";
 import { Client } from "@stomp/stompjs";
 import { useAuth } from "../hooks/useAuth";
-const StompClientContext = createContext();
 import { WS } from "../ipConfig";
 import { API } from "../ipConfig";
 
+const StompClientContext = createContext();
 export const StompClientProvider = ({ children }) => {
   const [stompClient, setStompClient] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -13,10 +13,9 @@ export const StompClientProvider = ({ children }) => {
 
   const lastMessagesRef = useRef({});
 
-  async function fetchChatNoti (userId) {
+  async function fetchChatNoti(userId) {
     const response = await fetch(
-      `${API}getLatestNotificationsByChatRoomIdAndUserId/` +
-      userId
+      `${API}getLatestNotificationsByChatRoomIdAndUserId/` + userId
     );
     const data = await response.json();
 
@@ -43,7 +42,7 @@ export const StompClientProvider = ({ children }) => {
     notificationCallbackRef.current = callback;
   };
 
-  function onMessageReceived (newMessage) {
+  function onMessageReceived(newMessage) {
     const parsedNewMessage = JSON.parse(newMessage.body);
 
     const { chatRoomId, sender, timestamp } = parsedNewMessage;

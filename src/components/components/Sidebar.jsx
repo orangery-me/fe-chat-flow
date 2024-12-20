@@ -4,8 +4,10 @@ import { useRooms } from "../../hooks/useRooms";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { API } from "../../ipConfig";
-function Sidebar ({ info }) {
-  const { logout } = useAuth();
+import Noti from "../Noti/Noti";
+
+function Sidebar({ info }) {
+  const { logout, user } = useAuth();
   const [isOverlayOpen, setOverlayOpen] = useState(false);
   const [roomName, setRoomName] = useState("");
   const [currentMemberEmail, setCurrentMemberEmail] = useState("");
@@ -13,7 +15,9 @@ function Sidebar ({ info }) {
   const [membersEmail, setMemberEmail] = useState([]);
   const [groupAvatar, setGroupAvatar] = useState(null);
   const [avatar, setAvatar] = useState(null);
-  const { onCreateRoom } = useRooms(info.user.uid);
+  const navigate = useNavigate();
+  const [notification, setNotification] = useState("");
+  const { onCreateRoom } = useRooms(user.uid);
 
   const handleAddMemberByEmail = async () => {
     try {
@@ -31,11 +35,11 @@ function Sidebar ({ info }) {
           setMembersId([...membersId, memberId]);
         }
       } else {
-        alert("User not found.");
+        setNotification("User not found.");
       }
     } catch (error) {
       console.error("Error finding user by email:", error);
-      alert("Error finding user by email: " + error.message);
+      setNotification("Error finding user by email");
     }
   };
   const handleAvatarUpload = (e) => {
@@ -47,7 +51,7 @@ function Sidebar ({ info }) {
   };
   const handleCreateRoom = async (e) => {
     if (!roomName) {
-      alert("Please provide a room name");
+      setNotification("Please provide a room name");
       return;
     }
 
@@ -60,11 +64,12 @@ function Sidebar ({ info }) {
     }
     const result = await onCreateRoom(formData);
     if (result) {
-      alert("Room created successfully!");
+      console.log(result);
+      setNotification("Room created successfully!");
       closeOverlay();
-      window.location.reload();
+      navigate(`/chat/${result.id}`);
     } else {
-      alert("Error creating room. Please try again later.");
+      setNotification("Error creating room. Please try again later.");
     }
   };
 
@@ -80,23 +85,29 @@ function Sidebar ({ info }) {
     setMemberEmail([]);
   };
 
+  const handleMyProfile = () => {
+    navigate("/myprofile");
+  };
+  const handleChat = () => {
+    navigate("/");
+  };
+  const handleNoti = () => {
+    navigate("/mynotification");
+  };
   return (
     <div className="sidebar">
-      <div className="sidebar-item">
-        <img
-          src="/image.png"
-          alt="Logo"
-          className="logo"
-          style={{
-            borderRadius: "50%",
-            border: "1px solid #fff",
-          }}
-        />
-        <p className="logoText">BKConnect</p>
+      <Noti message={notification} />
+      <div
+        className="sidebar-item"
+        style={{ background: "white", height: "108px", gap: "10px" }}
+      >
+        <img src="/image.png" alt="Logo" className="logo" />
+        <p className="Textlogo" style={{ marginTop: "16px" }}>
+          BKConnect
+        </p>
       </div>
-      <div style={{ border: "1px solid #ccc" }}></div>
       <div className="sidebar-item">
-        <button>
+        <button onClick={handleChat}>
           <i
             className="far fa-comment"
             style={{ fontSize: "16px", color: "white" }}
@@ -115,7 +126,7 @@ function Sidebar ({ info }) {
         </button>
       </div>
       <div className="sidebar-item">
-        <button>
+        <button onClick={handleMyProfile}>
           <i
             className="far fa-edit"
             style={{ fontSize: "16px", color: "white" }}
@@ -163,7 +174,7 @@ function Sidebar ({ info }) {
               <input
                 type="text"
                 placeholder="Tên nhóm"
-                className="search-input"
+                className="searchinput"
                 value={roomName}
                 onChange={(e) => setRoomName(e.target.value)}
               />
@@ -176,7 +187,7 @@ function Sidebar ({ info }) {
                 value={currentMemberEmail}
                 onChange={(e) => setCurrentMemberEmail(e.target.value)}
                 placeholder="Nhập email"
-                className="search-input"
+                className="searchinput"
               />
               <button onClick={handleAddMemberByEmail}>Thêm</button>
             </div>
@@ -196,17 +207,29 @@ function Sidebar ({ info }) {
           </div>
         </div>
       )}
+      <div className="sidebar-item">
+        <button onClick={handleNoti}>
+          <i
+            className="far fa-bell"
+            style={{ fontSize: "16px", color: "white" }}
+          ></i>
+          <p className="logoText">Thông báo</p>
+        </button>
+      </div>
 
       <div className="sidebar-item">
-        <button
-          onClick={logout}
-          style={{ background: "none", border: "none", cursor: "pointer" }}
-        >
+        <button onClick={logout}>
           <i
             className="fas fa-sign-out-alt"
             style={{ fontSize: "16px", color: "white" }}
           ></i>
           <p className="logoText">Đăng xuất</p>
+        </button>
+      </div>
+      <div className="sidebar-item user">
+        <button onClick={handleMyProfile}>
+          <img src={user.photoURL} alt="" className="photoURL"></img>
+          <p className="logoText">Tôi</p>
         </button>
       </div>
     </div>

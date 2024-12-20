@@ -1,2 +1,2 @@
-export const API = "http://192.168.1.13:8080/";
-export const WS = "ws://192.168.1.13:8080/ws";
+export const API = "https://a1f3-116-103-22-64.ngrok-free.app";
+export const WS = "ws://a1f3-116-103-22-64.ngrok-free.app/signaling";
