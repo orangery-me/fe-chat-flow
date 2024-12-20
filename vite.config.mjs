@@ -15,7 +15,7 @@ export default defineConfig({
     assetsDir: 'assets', // Tạo thư mục assets để chứa các tài nguyên tĩnh
     rollupOptions: {
       input: {
-        main: 'src/main.jsx',
+        main: '/src/main.jsx',
         // Thêm các entry file khác nếu cần
       }
     },
