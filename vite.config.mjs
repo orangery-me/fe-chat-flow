@@ -19,7 +19,6 @@ export default defineConfig({
         // Thêm các entry file khác nếu cần
       }
     },
-    manifest: true,
   },
   resolve: {
     alias: {
