@@ -17,7 +17,7 @@ import Form from "../components/Form";
 import { API } from "../../ipConfig";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function ChatRoom() {
+function ChatRoom () {
   const [showConfirmation, setShowConfirmation] = useState();
   const { stompClient } = useStompClient();
   const info = useAuth();
@@ -44,7 +44,12 @@ function ChatRoom() {
       try {
         if (roomId.startsWith("pr")) {
           url = `${API}findPrivateRoomById?Id=${roomId}`;
-          const response = await fetch(url);
+          const response = await fetch(url, {
+            headers: {
+              "Content-Type": "application/json",
+              'ngrok-skip-browser-warning': 'true'
+            },
+          });
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -60,7 +65,12 @@ function ChatRoom() {
             if (user2Id === info.user.uid) {
               urll = `${API}findById?Id=${user1Id}`;
             } else urll = `${API}findById?Id=${user2Id}`;
-            const response = await fetch(urll);
+            const response = await fetch(urll, {
+              headers: {
+                "Content-Type": "application/json",
+                'ngrok-skip-browser-warning': 'true'
+              },
+            });
             const dataa = await response.json();
 
             setName(dataa.fullname);
@@ -68,7 +78,12 @@ function ChatRoom() {
           }
         } else {
           var url = `${API}findRoomById?Id=${roomId}`;
-          const response = await fetch(url);
+          const response = await fetch(url, {
+            headers: {
+              "Content-Type": "application/json",
+              'ngrok-skip-browser-warning': 'true'
+            },
+          });
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -101,6 +116,7 @@ function ChatRoom() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'ngrok-skip-browser-warning': 'true'
         },
       });
 
@@ -121,7 +137,12 @@ function ChatRoom() {
   const handleAddMemberByEmail = async () => {
     try {
       const response = await fetch(
-        `${API}findByEmail?email=${currentMemberEmail}`
+        `${API}findByEmail?email=${currentMemberEmail}`, {
+        headers: {
+          "Content-Type": "application/json",
+          'ngrok-skip-browser-warning': 'true'
+        },
+      }
       );
       const data = await response.json();
 
@@ -151,6 +172,7 @@ function ChatRoom() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'ngrok-skip-browser-warning': 'true'
         },
         body: JSON.stringify(requestBody),
       });
@@ -172,6 +194,7 @@ function ChatRoom() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'ngrok-skip-browser-warning': 'true'
         },
       });
 
@@ -290,7 +313,7 @@ function ChatRoom() {
                     color="#3092e9"
                     className="img"
                     style={{ transform: "scaleX(-1)" }}
-                    />{" "}
+                  />{" "}
                 </button>
                 <button
                   style={{
@@ -303,7 +326,7 @@ function ChatRoom() {
                   onClick={callVideo}
                 >
                   <FaVideo size={25} color="#3092e9" className="img" />
-                  </button>
+                </button>
                 <button
                   style={{
                     backgroundColor: "transparent",

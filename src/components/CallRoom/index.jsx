@@ -17,10 +17,9 @@ function CallRoom () {
     }, []);
 
     useEffect(() => {
+        console.log("Cập nhập participants", participants);
         async function startCreateOffer () {
-            if (participants.length > 0) {
-                await createOffer();
-            }
+            await createOffer();
         }
         startCreateOffer();
     }, [participants]);

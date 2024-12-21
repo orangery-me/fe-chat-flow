@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { API } from "../ipConfig";
-function useNotificationsForRoom(roomId) {
+function useNotificationsForRoom (roomId) {
   const [noti, setNoti] = useState([]);
 
   const markAsRead = async (roomId) => {
@@ -14,9 +14,14 @@ function useNotificationsForRoom(roomId) {
     });
   };
 
-  async function fetchNotificationsByRoom(roomId) {
+  async function fetchNotificationsByRoom (roomId) {
     var url = `${API}getNotificationsByRoom/` + roomId;
-    var res = await fetch(url);
+    var res = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        'ngrok-skip-browser-warning': 'true'
+      },
+    });
     var data = await res.json();
     return data;
   }

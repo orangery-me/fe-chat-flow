@@ -1,15 +1,20 @@
 import { useState, useEffect } from "react";
 import { useStompClient } from "../context/StompClientContext";
 import { API } from ".././ipConfig";
-function useMessages(roomId) {
+function useMessages (roomId) {
   const [messages, setMessages] = useState([]);
   const { setOnMessageCallback } = useStompClient();
 
-  async function fetchMessages(roomId) {
+  async function fetchMessages (roomId) {
     var url = `${API}getMessages/${roomId}`;
     if (roomId.startsWith("pr")) url = `${API}getPrivateMessages/${roomId}`;
 
-    var res = await fetch(url);
+    var res = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        'ngrok-skip-browser-warning': 'true'
+      },
+    });
     var data = await res.json();
     return data;
   }

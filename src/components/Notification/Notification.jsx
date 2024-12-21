@@ -7,7 +7,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { API } from "../../ipConfig";
 
-function Notification() {
+function Notification () {
   const info = useAuth();
   const navigate = useNavigate();
 
@@ -40,7 +40,12 @@ const MyNotification = ({ user }) => {
       try {
         console.log(chatRoomId);
         const url = `${API}findRoomById?Id=${chatRoomId}`;
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+            'ngrok-skip-browser-warning': 'true'
+          },
+        });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -59,7 +64,12 @@ const MyNotification = ({ user }) => {
 
     const fetchNotifications = async () => {
       try {
-        const response = await fetch(`${API}getNotifications/${user.uid}`);
+        const response = await fetch(`${API}getNotifications/${user.uid}`, {
+          headers: {
+            "Content-Type": "application/json",
+            'ngrok-skip-browser-warning': 'true'
+          },
+        });
         const data = await response.json();
 
         if (Array.isArray(data)) {
@@ -113,9 +123,8 @@ const MyNotification = ({ user }) => {
               return (
                 <li
                   key={index}
-                  className={`notification-item ${
-                    notification.isRead ? "read" : "unread"
-                  }`}
+                  className={`notification-item ${notification.isRead ? "read" : "unread"
+                    }`}
                   onClick={() => {
                     console.log("Clicked!");
                     navigate(`/chat/${notification.chatRoomId}`);
@@ -128,17 +137,13 @@ const MyNotification = ({ user }) => {
                   />
                   <div className="notification-details">
                     {notification.notificationType === "MEMBER_ADDED" ? (
-                      <p>{`${
-                        notification.sender.fullname
-                      } được thêm vào đoạn chat ${
-                        roomName ? `${roomName}` : ""
-                      }.`}</p>
+                      <p>{`${notification.sender.fullname
+                        } được thêm vào đoạn chat ${roomName ? `${roomName}` : ""
+                        }.`}</p>
                     ) : notification.notificationType === "MEMBER_REMOVED" ? (
-                      <p>{`${
-                        notification.sender.fullname
-                      } đã rời khỏi đoạn chat ${
-                        roomName ? `${roomName}` : ""
-                      }.`}</p>
+                      <p>{`${notification.sender.fullname
+                        } đã rời khỏi đoạn chat ${roomName ? `${roomName}` : ""
+                        }.`}</p>
                     ) : (
                       <p>{notification.message}</p>
                     )}

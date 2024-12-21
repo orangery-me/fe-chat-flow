@@ -13,9 +13,14 @@ export const StompClientProvider = ({ children }) => {
 
   const lastMessagesRef = useRef({});
 
-  async function fetchChatNoti(userId) {
+  async function fetchChatNoti (userId) {
     const response = await fetch(
-      `${API}getLatestNotificationsByChatRoomIdAndUserId/` + userId
+      `${API}getLatestNotificationsByChatRoomIdAndUserId/` + userId, {
+      headers: {
+        "Content-Type": "application/json",
+        'ngrok-skip-browser-warning': 'true'
+      },
+    }
     );
     const data = await response.json();
 
@@ -42,7 +47,7 @@ export const StompClientProvider = ({ children }) => {
     notificationCallbackRef.current = callback;
   };
 
-  function onMessageReceived(newMessage) {
+  function onMessageReceived (newMessage) {
     const parsedNewMessage = JSON.parse(newMessage.body);
 
     const { chatRoomId, sender, timestamp } = parsedNewMessage;
@@ -67,7 +72,7 @@ export const StompClientProvider = ({ children }) => {
       return;
     }
     const stompClient = new Client({
-      brokerURL: `${WS}`,
+      brokerURL: `${WS}ws`,
     });
     setStompClient(stompClient);
 
@@ -79,6 +84,7 @@ export const StompClientProvider = ({ children }) => {
       setIsConnected(true);
       // subscribe to the topic, the callback is invoked whenever a message is received
       await fetchChatNoti(user.uid);
+      console.log("fetchChatNoti");
 
       // subcribe to the user's queue (receive noti)
       stompClient.subscribe(
@@ -88,9 +94,14 @@ export const StompClientProvider = ({ children }) => {
       // subscribe to the public topic (got who is connected )
       stompClient.subscribe(`/user/public`, onMessageReceived);
 
+      console.log("Subscribed to /user/public");
       // register the connected user to server
       stompClient.publish({
         destination: "/app/addUser",
+        headers: {
+          "Content-Type": "application/json",
+          'ngrok-skip-browser-warning': 'true'
+        },
         body: JSON.stringify({
           uid: user.uid,
           fullname: user.displayName,
@@ -99,6 +110,7 @@ export const StompClientProvider = ({ children }) => {
           email: user.email,
         }),
       });
+      console.log("User connected to server");
     };
 
     stompClient.onWebSocketError = (error) => {

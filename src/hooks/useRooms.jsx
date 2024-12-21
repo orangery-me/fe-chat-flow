@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { API } from ".././ipConfig";
-function useRooms(userId) {
+function useRooms (userId) {
   const [joinedRooms, setJoinedRooms] = useState([]);
 
   const onCreateRoom = async (formData) => {
     try {
       const response = await fetch(`${API}createChatRoom`, {
         method: "POST",
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        },
         body: formData,
       });
 
@@ -25,21 +28,21 @@ function useRooms(userId) {
 
   const fetchAllJoinedRooms = async (userId) => {
     try {
-      const [resJoinedRooms, resPrivateRooms] = await Promise.all([
-        fetch(`${API}getJoinedRooms?userId=${userId}`),
-        fetch(`${API}getJoinedPrivateRooms?userId=${userId}`),
-      ]);
-      if (!resJoinedRooms.ok) {
-        const errorMessage = await resJoinedRooms.text();
-        throw new Error(`Error fetching public rooms: ${errorMessage}`);
-      }
-      if (!resPrivateRooms.ok) {
-        const errorMessage = await resPrivateRooms.text();
-        throw new Error(`Error fetching private rooms: ${errorMessage}`);
-      }
-
-      const dataJoinedRooms = await resJoinedRooms.json();
-      const dataPrivateRooms = await resPrivateRooms.json();
+      const dataJoinedRooms = await fetch(`${API}getJoinedRooms?userId=${userId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          'ngrok-skip-browser-warning': 'true'
+        },
+      })
+        .then((res) => res.clone().json());
+      const dataPrivateRooms = await fetch(`${API}getJoinedPrivateRooms?userId=${userId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          'ngrok-skip-browser-warning': 'true'
+        },
+      }).then((res) => res.clone().json());
+      console.log("dataJoinedRooms: ", dataJoinedRooms);
+      console.log("dataPrivateRooms: ", dataPrivateRooms);
       const combinedRooms = [...dataJoinedRooms, ...dataPrivateRooms];
 
       setJoinedRooms(combinedRooms);

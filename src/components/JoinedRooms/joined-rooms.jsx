@@ -25,7 +25,12 @@ function JoinedRooms ({ userId }) {
     noti.forEach(async (notification) => {
       if (notification.chatRoomId === roomId) {
         const url = `${API}markAsRead/${notification.notificationId}`;
-        await fetch(url);
+        await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+            'ngrok-skip-browser-warning': 'true'
+          },
+        });
       }
     });
   };
@@ -48,7 +53,12 @@ function JoinedRooms ({ userId }) {
               if (user2Id === userId) {
                 url = `${API}findById?Id=${user1Id}`;
               } else url = `${API}findById?Id=${user2Id}`;
-              const response = await fetch(url);
+              const response = await fetch(url, {
+                headers: {
+                  "Content-Type": "application/json",
+                  'ngrok-skip-browser-warning': 'true'
+                },
+              });
               const data = await response.json();
 
               names[room.id] = data.fullname;

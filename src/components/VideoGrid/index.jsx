@@ -7,8 +7,9 @@ function VideoGrid ({ participants, remoteStreams }) {
 
     useEffect(() => {
         setRemoteCount(Object.keys(remoteStreams).length);
+        // setRemoteCount(participants.length);
         console.log("Maybe someone has left the chat ?", remoteStreams);
-    }, [remoteStreams])
+    }, [remoteStreams]);
 
     // Duyệt qua remoteStreams
     if (remoteStreams != null && remoteCount > 0) {

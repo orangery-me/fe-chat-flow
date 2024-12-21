@@ -4,7 +4,7 @@ import "./styles.css";
 import { API } from "../../ipConfig";
 import { useNavigate } from "react-router-dom";
 import Noti from "../Noti/Noti";
-function MessageList({ roomId, userId }) {
+function MessageList ({ roomId, userId }) {
   const messages = useMessages(roomId);
   const navigate = useNavigate();
   const containerRef = React.useRef(null);
@@ -114,6 +114,7 @@ function MessageList({ roomId, userId }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'ngrok-skip-browser-warning': 'true'
         },
         body: JSON.stringify(requestBody),
       });
@@ -129,7 +130,7 @@ function MessageList({ roomId, userId }) {
     }
   };
 
-  function Message({ message, type }) {
+  function Message ({ message, type }) {
     const { sender, content, imageUrl } = message;
     const [displayedSender, setDisplayedSender] = useState(sender);
 

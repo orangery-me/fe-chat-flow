@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { API } from "../../ipConfig";
 import Noti from "../Noti/Noti";
 
-function Sidebar({ info }) {
+function Sidebar ({ info }) {
   const { logout, user } = useAuth();
   const [isOverlayOpen, setOverlayOpen] = useState(false);
   const [roomName, setRoomName] = useState("");
@@ -22,7 +22,12 @@ function Sidebar({ info }) {
   const handleAddMemberByEmail = async () => {
     try {
       const response = await fetch(
-        `${API}findByEmail?email=${currentMemberEmail}`
+        `${API}findByEmail?email=${currentMemberEmail}`, {
+        headers: {
+          "Content-Type": "application/json",
+          'ngrok-skip-browser-warning': 'true'
+        },
+      }
       );
       const data = await response.json();
       if (response.ok && data.length > 0) {

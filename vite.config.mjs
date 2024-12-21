@@ -7,7 +7,6 @@ import react from "@vitejs/plugin-react";
 // });
 export default defineConfig({
   server: {
-    host: "0.0.0.0",
     port: 5173,
   },
   build: {
@@ -15,7 +14,7 @@ export default defineConfig({
     assetsDir: 'assets', // Tạo thư mục assets để chứa các tài nguyên tĩnh
     rollupOptions: {
       input: {
-        main: '/src/main.jsx',
+        main: './index.html',
         // Thêm các entry file khác nếu cần
       }
     },

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { API } from "../../ipConfig";
 import { FaEdit } from "react-icons/fa"; // Import icon
 
-function Profile() {
+function Profile () {
   const info = useAuth();
   const navigate = useNavigate();
 
@@ -40,7 +40,12 @@ const MyProfile = ({ user }) => {
     const fetchUserData = async () => {
       try {
         const url = `${API}findById?Id=${user?.uid}`;
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+            'ngrok-skip-browser-warning': 'true'
+          },
+        });
         if (!response.ok) throw new Error("User data fetch failed");
 
         const data = await response.json();
@@ -69,6 +74,7 @@ const MyProfile = ({ user }) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          'ngrok-skip-browser-warning': 'true'
         },
         body: JSON.stringify(updatedUser),
       });

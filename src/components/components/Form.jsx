@@ -40,6 +40,9 @@ const Form = () => {
 
     const res = await fetch(`${API}sendMessageToUser `, {
       method: "POST",
+      headers: {
+        'ngrok-skip-browser-warning': 'true'
+      },
       body: formData,
     });
 
@@ -89,7 +92,12 @@ const Form = () => {
     try {
       console.log(currentMemberEmail);
       const response = await fetch(
-        `${API}findByEmail?email=${currentMemberEmail}`
+        `${API}findByEmail?email=${currentMemberEmail}`, {
+        headers: {
+          "Content-Type": "application/json",
+          'ngrok-skip-browser-warning': 'true'
+        },
+      }
       );
       const data = await response.json();
       console.log(data);

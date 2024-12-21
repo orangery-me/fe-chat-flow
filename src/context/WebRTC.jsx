@@ -6,7 +6,7 @@ import { WS } from '../ipConfig';
 const WebRTCContext = createContext();
 
 export const WebRTCProvider = ({ children }) => {
-    const signalingServerUrl = WS;
+    const signalingServerUrl = `${WS}signaling`;
     const peerConnections = useRef({});
     const [active, setActive] = useState(false);
     const [localStream, setLocalStream] = useState(null);
@@ -83,8 +83,15 @@ export const WebRTCProvider = ({ children }) => {
 
     // Gửi tin nhắn signaling đến server
     function sendMessage (message) {
-        console.log("Sending message:", message);
-        socket.current.send(JSON.stringify(message));
+        const mess = {
+            content: message,
+            metadata: {
+                contentType: "application/json",
+                skipWarning: true,
+            },
+        };
+        console.log("Sending message:", mess);
+        socket.current.send(JSON.stringify(mess));
     }
 
     // ------------------------------------------------------------------------------------------------
@@ -108,6 +115,7 @@ export const WebRTCProvider = ({ children }) => {
 
     const createOffer = async () => {
         try {
+            console.log("Creating offer...");
             // send offer to all participants
             for (const userId of participants) {
                 if (!peerConnections.current[userId]) {
@@ -254,6 +262,7 @@ export const WebRTCProvider = ({ children }) => {
             // Nhận tin nhắn signaling từ server
             socket.current.onmessage = (event) => {
                 const message = JSON.parse(event.data);
+                console.log("Received message:", message);
 
                 if (message.type === "offer") {
                     handleOffer(message);

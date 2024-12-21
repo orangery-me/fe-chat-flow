@@ -1,13 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import { useStompClient } from "../context/StompClientContext";
 import { API } from ".././ipConfig";
-function useNotifications(userId) {
+function useNotifications (userId) {
   const [noti, setNoti] = useState([]);
   const { setOnNotificationCallback } = useStompClient();
 
-  async function fetchNotificationsByUser(userId) {
+  async function fetchNotificationsByUser (userId) {
     var url = `${API}getNotifications/` + userId;
-    var res = await fetch(url);
+    var res = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        'ngrok-skip-browser-warning': 'true'
+      },
+    });
     var data = await res.json();
     return data;
   }

@@ -13,21 +13,21 @@ import CallRoom from "./components/CallRoom/index";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <Router>
-      <AuthProvider>
-        <StompClientProvider>
-          <WebRTCProvider>
-            <Routes>
-              <Route path="/" element={<App />} />
-              <Route path="/chat/:roomId" element={<ChatRoom />} />
-              <Route path="/call/:roomId" element={<CallRoom />} />
-              <Route path="/myprofile" element={<Profile />} />
-              <Route path="/mynotification" element={<Notification />} />
-            </Routes>
-          </WebRTCProvider>
-        </StompClientProvider>
-      </AuthProvider>
-    </Router>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <Router>
+    <AuthProvider>
+      <StompClientProvider>
+        <WebRTCProvider>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/chat/:roomId" element={<ChatRoom />} />
+            <Route path="/call/:roomId" element={<CallRoom />} />
+            <Route path="/myprofile" element={<Profile />} />
+            <Route path="/mynotification" element={<Notification />} />
+          </Routes>
+        </WebRTCProvider>
+      </StompClientProvider>
+    </AuthProvider>
+  </Router>
+  // </React.StrictMode>
 );

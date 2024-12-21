@@ -9,7 +9,7 @@ import Picker from "emoji-picker-react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { API } from "../../ipConfig";
-function MessageInput({ roomId }) {
+function MessageInput ({ roomId }) {
   const [messages, setMessages] = useState([]);
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -50,6 +50,9 @@ function MessageInput({ roomId }) {
 
     const res = await fetch(url, {
       method: "POST",
+      headers: {
+        'ngrok-skip-browser-warning': 'true'
+      },
       body: formData,
     });
     if (res.ok) {
