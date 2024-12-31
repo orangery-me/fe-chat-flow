@@ -66,8 +66,11 @@ function MessageList ({ roomId, userId }) {
 
 
     let messageType = type;
-    if (content?.endsWith(" đã rời nhóm") || content?.endsWith(" đã được thêm vào nhóm")) {
+    if (content?.endsWith(" đã rời nhóm ") || content?.endsWith(" đã thêm vào nhóm ")) {
       messageType = "noti";
+    }
+    else if (content?.endsWith(" đã tham gia cuộc gọi video") || content?.endsWith(" đã rời khỏi cuộc gọi video")) {
+      messageType = "video";
     }
 
 
@@ -96,7 +99,7 @@ function MessageList ({ roomId, userId }) {
 
     return (
       <div className={`message ${messageType}`}>
-        {messageType !== "noti" && (
+        {messageType !== "noti" && messageType !== "video" && (
           <div className={`sender ${messageType}`}>
             {messageType === "outgoing"
               ? "You"

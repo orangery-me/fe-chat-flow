@@ -49,12 +49,21 @@
   font-style: italic;
   margin: 5px 0;
 }
-
+.message.video{
+   color: #322d2d;
+  padding: 10px;
+  /*border-left: 4px solid #b58900;*/
+  font-style: italic;
+  margin: 5px 0;
+}
 .sender.noti {
   font-weight: bold;
   /*color: #b58900;*/
 }
-
+.sender.video{
+  font-weight: bold;
+  
+}
 .chat-container {
   padding: 20px;
   display: flex;
