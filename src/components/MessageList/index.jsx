@@ -1,16 +1,19 @@
-import { useMessages } from "../../hooks/useMessages";
 import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
-import "./styles.css";
+import { useMessages } from "../../hooks/useMessages";
 import { API } from "../../ipConfig";
 import { useNavigate } from "react-router-dom";
 import Noti from "../Noti/Noti";
+import "./styles.css";
+
+
 function MessageList ({ roomId, userId }) {
   const messages = useMessages(roomId);
   const navigate = useNavigate();
-  const containerRef = React.useRef(null);
+  const containerRef = useRef(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [linkToNavigate, setLinkToNavigate] = useState("");
   const [notification, setNotification] = useState("");
+
 
   useLayoutEffect(() => {
     if (containerRef.current) {
@@ -18,145 +21,58 @@ function MessageList ({ roomId, userId }) {
     }
   }, [messages]);
 
-  const ImageComponent = ({ imageUrl }) => {
-    const [isShowImg, setShowImg] = useState(false);
 
-    const openShowImg = () => {
-      setShowImg(true);
-    };
-
-    const closeShowImg = () => {
-      setShowImg(false);
-    };
-
-    return (
-      <div className="image-container">
-        <button
-          onClick={openShowImg}
-          style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          <img
-            className="custom-img"
-            src={imageUrl}
-            alt="Uploaded"
-            style={{
-              maxWidth: "200px",
-              maxHeight: "200px",
-              marginTop: "10px",
-            }}
-          />
-        </button>
-        {isShowImg && (
-          <div className="showimg">
-            <div className="showimg-content" style={{ position: "relative" }}>
-              <button
-                onClick={closeShowImg}
-                style={{
-                  position: "absolute",
-                  top: "1px",
-                  background: "transparent",
-                  cursor: "pointer",
-                }}
-              >
-                <i
-                  className="far fa-times-circle"
-                  style={{ fontSize: "24px" }}
-                ></i>
-              </button>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "300px",
-                  width: "100%",
-                }}
-              >
-                <img
-                  src={imageUrl}
-                  alt="Image"
-                  style={{
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                    objectFit: "contain",
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
-  const handleLinkClick = (linkk) => {
-    console.log("Link clicked: ", linkk);
-    setLinkToNavigate(linkk);
+  const handleLinkClick = (link) => {
+    setLinkToNavigate(link);
     setShowConfirmation(true);
   };
+
 
   const confirmNavigation = async () => {
     setShowConfirmation(false);
     const parts = linkToNavigate.split("/chat/");
     const room = parts[1];
-    const requestBody = {
-      roomId: room,
-      newMemberId: userId,
-    };
 
-    console.log(requestBody);
+    const url = `${API}addMemberChatRoom/${room}?userId=${userId}`;
+    const finalResponse = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        'ngrok-skip-browser-warning': 'true'
+      },
+    });
+    console.log("Request URL:", url);
 
-    try {
-      const addMemberResponse = await fetch(`${API}addNewMember`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          'ngrok-skip-browser-warning': 'true'
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (addMemberResponse.ok) {
-        setNotification("Member added successfully ");
-        navigate(`/chat/${room}`);
-      } else {
-        setNotification("Failed to add member.");
-      }
-    } catch (error) {
-      setNotification("Error occurred");
+    if (finalResponse.ok) {
+      setNotification("Member added successfully ");
+      navigate(`/chat/${room}`);
+    } else {
+      setNotification("Có lỗi xảy ra khi thêm thành viên vào nhóm.");
     }
+
   };
+
 
   function Message ({ message, type }) {
     const { sender, content, imageUrl } = message;
     const [displayedSender, setDisplayedSender] = useState(sender);
 
-    // Khi sender thay đổi, cập nhật lại state
+
     useEffect(() => {
       if (sender) {
         setDisplayedSender(sender);
       }
     }, [sender]);
 
-    if (!sender) {
-      return (
-        <div className={["message", type].join(" ")}>
-          <div className={["sender", type].join(" ")}>Loading sender...</div>
-          <div className="message-content">
-            {content && <div className="text">{content}</div>}
-            {imageUrl && <ImageComponent imageUrl={imageUrl} />}
-          </div>
-        </div>
-      );
+
+    let messageType = type;
+    if (content?.endsWith(" đã rời nhóm") || content?.endsWith(" đã được thêm vào nhóm")) {
+      messageType = "noti";
     }
 
-    const senderName = sender.fullname;
+
     const renderContent = (content) => {
-      const parts = content.split(" ");
-      return parts.map((part, index) => {
+      return content.split(" ").map((part, index) => {
         if (part.startsWith("http")) {
           return (
             <a
@@ -175,33 +91,73 @@ function MessageList ({ roomId, userId }) {
         return <span key={index}>{part} </span>;
       });
     };
-    // const leaveChatRoom = (message) => {
-    //   const mes = "da roi nhom";
-    //   if (typeof message === "string" && message.endsWith(mes)) {
-    //     return <div className="messageout"> {message}</div>;
-    //   } else return null;
-    // };
-    return (
-      <div className={["message", type].join(" ")}>
-        <div className={["sender", type].join(" ")}>
-          {type === "outgoing"
-            ? "You"
-            : displayedSender.fullname || "Loading sender..."}
-        </div>
-        <div className="message-content">
-          {/* {leaveChatRoom(message)} */}
-          {content && <div className="text">{renderContent(content)}</div>}
+    console.log(messageType);
 
+
+    return (
+      <div className={`message ${messageType}`}>
+        {messageType !== "noti" && (
+          <div className={`sender ${messageType}`}>
+            {messageType === "outgoing"
+              ? "You"
+              : displayedSender?.fullname || "Loading sender..."}
+          </div>
+        )}
+        <div className="message-content">
+          {content && <div className="text">{renderContent(content)}</div>}
           {imageUrl && <ImageComponent imageUrl={imageUrl} />}
         </div>
       </div>
     );
   }
 
+
+  const ImageComponent = ({ imageUrl }) => {
+    const [isShowImg, setShowImg] = useState(false);
+
+
+    return (
+      <div className="image-container">
+        <button
+          onClick={() => setShowImg(true)}
+          style={{ background: "none", border: "none", cursor: "pointer" }}
+        >
+          <img
+            className="custom-img"
+            src={imageUrl}
+            alt="Uploaded"
+            style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "10px" }}
+          />
+        </button>
+        {isShowImg && (
+          <div className="showimg">
+            <div className="showimg-content" style={{ position: "relative" }}>
+              <button
+                onClick={() => setShowImg(false)}
+                style={{ position: "absolute", top: "1px", background: "transparent", cursor: "pointer" }}
+              >
+                <i className="far fa-times-circle" style={{ fontSize: "24px" }}></i>
+              </button>
+              <div
+                style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "300px", width: "100%" }}
+              >
+                <img
+                  src={imageUrl}
+                  alt="Image"
+                  style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+
   return (
     <div className="chat-container" ref={containerRef}>
       <Noti message={notification} />
-
       {messages &&
         messages.map((x) => (
           <Message
@@ -220,5 +176,6 @@ function MessageList ({ roomId, userId }) {
     </div>
   );
 }
+
 
 export default MessageList;

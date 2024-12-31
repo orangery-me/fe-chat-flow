@@ -6,33 +6,53 @@
 
 .message-content {
   max-width: 75%;
-  color: white;
+  color: #474343;
   word-wrap: break-word; /* Allow long words to break onto the next line */
 }
+
 .messageout {
   background-color: white;
   color: #333;
   text-align: center;
   align-items: center;
 }
+
 .incoming .message-content {
   align-self: flex-start;
 }
+
 .incoming .message-content .text {
   padding: 10px 15px;
   border-radius: 20px;
   background-color: #3092e9;
 }
+
 .outgoing .message-content {
   align-self: flex-end;
 }
+
 .outgoing .message-content .text {
   padding: 10px 15px;
   border-radius: 20px;
   background-color: darkgrey;
 }
+
 .message.outgoing {
   justify-content: flex-end;
+}
+
+.message.noti {
+  /*background-color: #ffffff;*/
+  color: #322d2d;
+  padding: 10px;
+  /*border-left: 4px solid #b58900;*/
+  font-style: italic;
+  margin: 5px 0;
+}
+
+.sender.noti {
+  font-weight: bold;
+  /*color: #b58900;*/
 }
 
 .chat-container {
@@ -62,6 +82,8 @@
   font-weight: normal;
 }
 
+/* Media Queries for Responsiveness */
+
 @media (max-width: 768px) {
   .chat-container {
     height: 300px; /* Reduced height for smaller screens */
@@ -70,7 +92,32 @@
   .message-content {
     max-width: 90%; /* Increase max-width for mobile devices */
   }
+
+  .message-content .text {
+    padding: 8px 12px; /* Adjust padding for mobile devices */
+  }
+
+  .message.outgoing {
+    justify-content: flex-start; /* Adjust outgoing message alignment */
+  }
 }
+
+@media (max-width: 480px) {
+  .message-content {
+    max-width: 95%; /* Max width increases further for very small screens */
+  }
+
+  .message-content .text {
+    padding: 6px 10px; /* Further reduce padding on small screens */
+  }
+
+  .chat-container {
+    height: 250px; /* Further reduce height for very small screens */
+  }
+}
+
+/* Image Lightbox */
+
 .showimg {
   position: fixed;
   top: 0;
@@ -90,15 +137,20 @@
   display: flex;
   flex-direction: row-reverse;
 }
+
 .showimg-content button {
   background: none;
   border: none;
   cursor: pointer;
   height: 20px;
 }
+
 .custom-img {
   background-color: transparent !important;
 }
+
+/* Confirmation Dialog */
+
 .confirmation-dialog {
   position: fixed;
   top: 50%;
@@ -110,7 +162,6 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
   padding: 20px;
-  /* font-family: Arial, sans-serif; */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Roboto",
     "Apple Color Emoji", "Helvetica Neue", sans-serif;
   z-index: 1000;

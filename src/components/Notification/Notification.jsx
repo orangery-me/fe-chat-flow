@@ -7,18 +7,22 @@ import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { API } from "../../ipConfig";
 
+
 function Notification () {
   const info = useAuth();
   const navigate = useNavigate();
+
 
   if (info.loading) {
     return <div>Loading...</div>;
   }
 
+
   if (!info.user) {
     navigate("/login");
     return null;
   }
+
 
   return (
     <div className="home">
@@ -29,11 +33,13 @@ function Notification () {
   );
 }
 
+
 const MyNotification = ({ user }) => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [roomNames, setRoomNames] = useState({});
   const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchRoomData = async (chatRoomId) => {
@@ -41,17 +47,19 @@ const MyNotification = ({ user }) => {
         console.log(chatRoomId);
         const url = `${API}findRoomById?Id=${chatRoomId}`;
         const response = await fetch(url, {
+          method: "GET",
           headers: {
-            "Content-Type": "application/json",
             'ngrok-skip-browser-warning': 'true'
-          },
+          }
         });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
+
         const text = await response.text();
         console.log("Raw response text:", text);
+
 
         const data = JSON.parse(text);
         console.log(data.roomName);
@@ -62,21 +70,25 @@ const MyNotification = ({ user }) => {
       }
     };
 
+
     const fetchNotifications = async () => {
       try {
         const response = await fetch(`${API}getNotifications/${user.uid}`, {
+          method: "GET",
           headers: {
-            "Content-Type": "application/json",
             'ngrok-skip-browser-warning': 'true'
-          },
+          }
         });
         const data = await response.json();
+
 
         if (Array.isArray(data)) {
           setNotifications(data);
           console.log(data);
 
+
           const roomNamesData = {};
+
 
           for (const notification of data) {
             const chatRoomId = notification.chatRoomId;
@@ -92,6 +104,7 @@ const MyNotification = ({ user }) => {
           setNotifications([]);
         }
 
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching notifications:", error);
@@ -99,12 +112,9 @@ const MyNotification = ({ user }) => {
       }
     };
 
+
     fetchNotifications();
   }, [user.uid]);
-
-  if (loading) {
-    return <div>Loading notifications...</div>;
-  }
 
   return (
     <div className="form">
@@ -113,43 +123,48 @@ const MyNotification = ({ user }) => {
           <FaBell style={{ marginRight: "10px" }} />
           THÔNG BÁO
         </h6>
-        {notifications.length === 0 ? (
+        {loading || notifications.length === 0 ? (
           <p>Không có thông báo nào.</p>
         ) : (
           <ul className="notification-list">
             {notifications.map((notification, index) => {
               const roomName = roomNames[notification.chatRoomId];
               console.log("data: " + roomName);
-              return (
-                <li
-                  key={index}
-                  className={`notification-item ${notification.isRead ? "read" : "unread"
-                    }`}
-                  onClick={() => {
-                    console.log("Clicked!");
-                    navigate(`/chat/${notification.chatRoomId}`);
-                  }}
-                >
-                  <img
-                    src={notification.sender.photoURL}
-                    alt={notification.sender.fullname}
-                    className="notification-avatar"
-                  />
-                  <div className="notification-details">
-                    {notification.notificationType === "MEMBER_ADDED" ? (
-                      <p>{`${notification.sender.fullname
-                        } được thêm vào đoạn chat ${roomName ? `${roomName}` : ""
-                        }.`}</p>
-                    ) : notification.notificationType === "MEMBER_REMOVED" ? (
-                      <p>{`${notification.sender.fullname
-                        } đã rời khỏi đoạn chat ${roomName ? `${roomName}` : ""
-                        }.`}</p>
-                    ) : (
-                      <p>{notification.message}</p>
-                    )}
-                  </div>
-                </li>
-              );
+              console.log("type " + notification.isRead);
+              if (notification.notificationType !== "MESSAGE") {
+                return (
+                  <li
+                    key={index}
+                    className={`notification-item ${notification.isRead ? "read" : "unread"
+                      }`}
+                    onClick={() => {
+                      console.log("Clicked!");
+                      navigate(`/chat/${notification.chatRoomId}`);
+                    }}
+                  >
+                    <img
+                      src={notification.sender.photoURL}
+                      alt={notification.sender.fullname}
+                      className="notification-avatar"
+                    />
+                    <div className="notification-details">
+                      {notification.notificationType === "MEMBER_ADDED" ? (
+                        <p>{`${notification.sender.fullname
+                          } được thêm vào đoạn chat ${roomName ? `${roomName}` : ""
+                          }.`}</p>
+                      ) : notification.notificationType === "MEMBER_REMOVED" ? (
+                        <p>{`${notification.sender.fullname
+                          } đã rời khỏi đoạn chat ${roomName ? `${roomName}` : ""
+                          }.`}</p>
+                      ) : (
+                        <p>{notification.message}</p>
+                      )}
+                    </div>
+                  </li>
+                );
+              }
+
+
             })}
           </ul>
         )}
@@ -158,4 +173,7 @@ const MyNotification = ({ user }) => {
   );
 };
 
+
 export default Notification;
+
+

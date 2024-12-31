@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useRooms } from "../../hooks/useRooms";
-import { useMessages } from "../../hooks/useMessages";
 import { useNotifications } from "../../hooks/useNotifications";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
 import { API } from "../../ipConfig.js";
 import { useLastMessage } from "../../hooks/useLastMessages";
 
 function JoinedRooms ({ userId }) {
   const containerRef = useRef(null);
+  const navigate = useNavigate();
   const { joinedRooms } = useRooms(userId);
   const [displayNames, setDisplayNames] = useState({});
   const [avatar, setAvatar] = useState({});
@@ -82,11 +82,17 @@ function JoinedRooms ({ userId }) {
     }
   }, [joinedRooms]);
 
+  const navigateToRoom = (link) => {
+    return () => {
+      navigate(link);
+    };
+  }
+
   return (
     <div ref={containerRef}>
       {joinedRooms.map((room) => {
         return (
-          <div className="group" key={room.id}>
+          <div className="group" key={room.id} onClick={navigateToRoom(`/chat/${room.id}`)}>
             <img src={avatar[room.id]} alt="avatar" className="imagine" />
             <div className="group-item">
               <div className="info">
@@ -95,7 +101,7 @@ function JoinedRooms ({ userId }) {
                   className="link"
                   onClick={() => markAllNotiInARoomAsRead(room.id)}
                 >
-                  {displayNames[room.id] || "Loading..."}
+                  {displayNames[room.id] || "..."}
                 </Link>
               </div>
               <div className="last-message">

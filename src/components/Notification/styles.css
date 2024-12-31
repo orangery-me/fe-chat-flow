@@ -1,4 +1,3 @@
-/* Container tổng thể cho thông báo */
 .form {
   width: 100%;
   max-width: 503px; /* Chiều rộng tối đa */
@@ -8,6 +7,7 @@
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+  height: 100vh;
 }
 
 /* Tiêu đề thông báo */
@@ -37,13 +37,15 @@
   background-color: #f9f9f9;
   padding: 15px;
   margin-bottom: 10px;
-  border: 1px solid #ddd;
   border-radius: 5px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   transition: background-color 0.2s, transform 0.2s;
+}
+
+.notification-details {
+  justify-items: start;
 }
 
 /* Hiệu ứng hover cho item */
@@ -60,6 +62,12 @@
   flex: 1; /* Chiếm phần lớn không gian */
 }
 
+.notification-avatar {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px; /* Đảm bảo avatar có kích thước cố định */
+}
+
 /* Ngày của thông báo */
 .notification-date {
   font-size: 14px;
@@ -72,4 +80,40 @@
   font-size: 16px;
   color: #666;
   text-align: center;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .form {
+    max-width: 90%; /* Tăng độ rộng cho các thiết bị di động */
+    padding: 15px;
+  }
+
+  .notification-item {
+    flex-direction: column; /* Chuyển các item thành chiều dọc cho phù hợp với màn hình nhỏ */
+    align-items: flex-start; /* Căn trái các phần tử trong mỗi item */
+    gap: 10px; /* Giảm khoảng cách giữa các phần tử */
+  }
+
+  .notification-avatar {
+    width: 50px; /* Giảm kích thước avatar trên thiết bị di động */
+    height: 50px; /* Đảm bảo hình vuông */
+  }
+
+  .notification-item p {
+    font-size: 14px; /* Giảm kích thước font cho thiết bị di động */
+  }
+
+  .notification-date {
+    font-size: 12px; /* Giảm kích thước ngày cho màn hình nhỏ */
+  }
+
+  .form h2 {
+    font-size: 20px; /* Giảm kích thước tiêu đề cho thiết bị di động */
+    margin-bottom: 15px;
+  }
+
+  .content {
+    margin-top: 10px; /* Giảm khoảng cách ở phần nội dung cho thiết bị di động */
+  }
 }

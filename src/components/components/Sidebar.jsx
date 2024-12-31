@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { API } from "../../ipConfig";
 import Noti from "../Noti/Noti";
 
+
 function Sidebar ({ info }) {
   const { logout, user } = useAuth();
   const [isOverlayOpen, setOverlayOpen] = useState(false);
@@ -19,15 +20,11 @@ function Sidebar ({ info }) {
   const [notification, setNotification] = useState("");
   const { onCreateRoom } = useRooms(user.uid);
 
+
   const handleAddMemberByEmail = async () => {
     try {
       const response = await fetch(
-        `${API}findByEmail?email=${currentMemberEmail}`, {
-        headers: {
-          "Content-Type": "application/json",
-          'ngrok-skip-browser-warning': 'true'
-        },
-      }
+        `${API}findByEmail?email=${currentMemberEmail}`
       );
       const data = await response.json();
       if (response.ok && data.length > 0) {
@@ -60,6 +57,7 @@ function Sidebar ({ info }) {
       return;
     }
 
+
     const formData = new FormData();
     formData.append("roomName", roomName);
     formData.append("roomOwnerId", info.user.uid);
@@ -78,9 +76,11 @@ function Sidebar ({ info }) {
     }
   };
 
+
   const openOverlay = () => {
     setOverlayOpen(true);
   };
+
 
   const closeOverlay = () => {
     setOverlayOpen(false);
@@ -89,6 +89,7 @@ function Sidebar ({ info }) {
     setMembersId([]);
     setMemberEmail([]);
   };
+
 
   const handleMyProfile = () => {
     navigate("/myprofile");
@@ -120,6 +121,7 @@ function Sidebar ({ info }) {
           <p className="logoText">Chat</p>
         </button>
       </div>
+
 
       <div className="sidebar-item">
         <button onClick={openOverlay}>
@@ -175,6 +177,7 @@ function Sidebar ({ info }) {
               />
             </div>
 
+
             <div>
               <input
                 type="text"
@@ -184,6 +187,7 @@ function Sidebar ({ info }) {
                 onChange={(e) => setRoomName(e.target.value)}
               />
             </div>
+
 
             <h4 style={{ textAlign: "left" }}>Thêm danh sách các thành viên</h4>
             <div className="search-email">
@@ -206,6 +210,7 @@ function Sidebar ({ info }) {
               </ul>
             </div>
 
+
             <button onClick={handleCreateRoom} className="styled-button">
               Tạo Phòng
             </button>
@@ -222,6 +227,7 @@ function Sidebar ({ info }) {
         </button>
       </div>
 
+
       <div className="sidebar-item">
         <button onClick={logout}>
           <i
@@ -233,7 +239,7 @@ function Sidebar ({ info }) {
       </div>
       <div className="sidebar-item user">
         <button onClick={handleMyProfile}>
-          <img src={user.photoURL} alt="" className="photoURL"></img>
+          <img src={user.photoURL} alt="" className="photoURL" />
           <p className="logoText">Tôi</p>
         </button>
       </div>
@@ -241,4 +247,6 @@ function Sidebar ({ info }) {
   );
 }
 
+
 export default Sidebar;
+

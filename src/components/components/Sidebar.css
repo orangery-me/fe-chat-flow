@@ -3,7 +3,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  width: 11%;
+  width: 14%;
   border-radius: 10px;
   margin-right: 10px;
   margin-top: 10px;
@@ -15,6 +15,13 @@
   align-items: center;
   gap: -0.5rem;
 }
+
+.sidebar-item.user {
+  margin-top: auto;
+  background: #3092e9;
+  padding-bottom: 10px;
+}
+
 .logo {
   width: 55px;
   height: 50px;
@@ -27,6 +34,7 @@
   margin-top: 16px;
 }
 .sidebar-item button {
+  margin-bottom: 10px;
   width: 95%;
   background: #3092e9;
   color: white;

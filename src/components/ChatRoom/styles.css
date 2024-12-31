@@ -99,25 +99,67 @@ button {
   margin-left: 0.3rem;
   margin-top: 1.625rem;
 }
-.blockquote button {
-  width: 95%;
-  background: white;
-  color: black;
-  padding: 0rem 0rem 0rem 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
+
+.blockquote {
   display: flex;
   align-items: center;
-  gap: 15px;
-}
-.blockquote button:hover {
-  background-color: #ccc;
-  width: 100%;
+  justify-content: space-between; /* Hoặc flex-start nếu muốn căn về bên trái */
+  gap: 8px; /* Khoảng cách giữa các phần tử */
 }
 
+.blockquote button {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* Khoảng cách giữa icon và text */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.blockquote button:hover {
+  background-color: #007bff;
+  width: 100%;
+  color: #e0f1ff;
+}
+
+.blockquote button[text]:hover {
+  background-color: #007bff;
+  width: 100%;
+  color: #e0f1ff;
+}
+.Text {
+  margin: 0; /* Đảm bảo không có margin mặc định */
+  font-size: 14px;
+}
+.confirmation-dialog {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.confirmation-dialog button {
+  background-color: #4caf50;
+  color: #e0f1ff;
+  width: 65px;
+  height: 35px;
+  margin: 5px;
+  padding: 10px;
+}
+.yes-no {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.yes-no button {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.yes-no button:hover {
+  background-color: #0056b3;
+}
 .Frame-item h3 {
   font-size: 18px;
   margin: 5px 0;
@@ -243,13 +285,22 @@ button:hover {
 .copied-notification {
   animation: fadeIn 0.5s ease-in-out;
 }
-/* .avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-} */
+
+svg {
+  color: black;
+}
+
+.icon-button {
+  display: flex;
+  gap: 10px;
+  padding: 10px 40px;
+  width: 100%;
+}
+
+.icon-button:hover {
+  background-color: #ddd;
+}
+
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -257,11 +308,6 @@ button:hover {
   100% {
     opacity: 1;
   }
-}
-
-div[style] {
-  /* margin-top: 20px; */
-  /* margin-bottom: 10px; */
 }
 
 .MessageList {

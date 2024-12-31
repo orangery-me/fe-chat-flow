@@ -6,22 +6,21 @@ import {
   AiOutlineLink,
   AiOutlineLogout,
 } from "react-icons/ai"; // Import các icon cần thiết
-import Noti from "../Noti/Noti";
 import { useStompClient } from "../../context/StompClientContext";
 import MessageInput from "../MessageInput";
 import MessageList from "../MessageList";
 import { useAuth } from "../../hooks/useAuth";
-import "./styles.css";
 import Sidebar from "../components/Sidebar";
 import Form from "../components/Form";
 import { API } from "../../ipConfig";
+import "./styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+
 
 function ChatRoom () {
   const [showConfirmation, setShowConfirmation] = useState();
   const { stompClient } = useStompClient();
   const info = useAuth();
-  // const userID = info.user.uid;
   const [userID, setUserID] = useState("");
   const [messages, setMessages] = useState([]);
   const [isframe, setFrame] = useState(false);
@@ -39,6 +38,7 @@ function ChatRoom () {
   const [avatar, setAvatar] = useState("");
   const [notification, setNotification] = useState("");
 
+
   useEffect(() => {
     const fetchRoomData = async () => {
       try {
@@ -54,8 +54,10 @@ function ChatRoom () {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
 
+
           const text = await response.text();
           console.log("Raw response text:", text);
+
 
           // Ensure the response is valid JSON
           const data = JSON.parse(text);
@@ -73,6 +75,7 @@ function ChatRoom () {
             });
             const dataa = await response.json();
 
+
             setName(dataa.fullname);
             setAvatar(dataa.photoURL);
           }
@@ -82,17 +85,20 @@ function ChatRoom () {
             headers: {
               "Content-Type": "application/json",
               'ngrok-skip-browser-warning': 'true'
-            },
+            }
           });
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
 
+
           const text = await response.text();
           console.log("Raw response text:", text);
 
+
           // Ensure the response is valid JSON
           const data = JSON.parse(text);
+
 
           setName(data.roomName);
           setAvatar(data.avatar);
@@ -104,13 +110,16 @@ function ChatRoom () {
     fetchRoomData();
   }, [roomId]);
 
+
   useEffect(() => {
     if (info.user != null) setUserID(info.user.uid);
   }, [info.user]);
 
+
   const handleLeaveGroup = async () => {
     try {
       const url = `${API}leaveChatRoom/${roomId}?userId=${userID}`;
+
 
       const response = await fetch(url, {
         method: "POST",
@@ -146,47 +155,25 @@ function ChatRoom () {
       );
       const data = await response.json();
 
+
       if (!response.ok || data.length === 0 || !data[0]?.uid) {
         console.log("User not found.");
         console.error("User not found or UID missing.");
         return;
       }
 
+
       const memberId = data[0].uid;
       const memberEmail = data[0].email;
+
 
       if (!membersEmail.includes(memberEmail)) {
         setMemberEmail([...membersEmail, memberEmail]);
       }
 
+
       if (!membersId.includes(memberId)) {
         setMembersId([...membersId, memberId]);
-      }
-
-      const requestBody = {
-        roomId: roomId,
-        newMemberId: memberId,
-      };
-
-      const addMemberResponse = await fetch(`${API}addNewMember`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          'ngrok-skip-browser-warning': 'true'
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      const rawResponseText = await addMemberResponse.text();
-      console.log("Raw Response:", rawResponseText);
-
-      if (addMemberResponse.ok) {
-        setNotification("Member added successfully!");
-        navigate(`/chat/${roomId}`);
-      } else {
-        setNotification("Failed to add member.");
-        console.error("Add member response error:", rawResponseText);
-        return;
       }
 
       const url = `${API}addMemberChatRoom/${roomId}?userId=${memberId}`;
@@ -198,20 +185,19 @@ function ChatRoom () {
         },
       });
 
-      console.log("Request URL:", url);
-
       if (finalResponse.ok) {
-        // setNotification("Đã thêm thành viên nhóm thành công!");
         closeOverlay();
         navigate(`/chat/${roomId}`);
       } else {
         setNotification("Có lỗi xảy ra khi thêm thành viên vào nhóm.");
       }
+
     } catch (error) {
       console.error("An error occurred:", error);
       setNotification("Không thể kết nối tới server.");
     }
   };
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -225,12 +211,15 @@ function ChatRoom () {
       }
     };
 
+
     document.addEventListener("click", handleClickOutside);
+
 
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
 
   const openFrame = () => {
     setFrame(true);
@@ -239,9 +228,11 @@ function ChatRoom () {
     setFrame(false);
   };
 
+
   const handleAddMember = async () => {
     closeFrame();
     setOverlayVisible(true);
+
 
     console.log(requestBody);
   };
@@ -252,9 +243,11 @@ function ChatRoom () {
     setMemberEmail([]);
   };
 
+
   const callVideo = () => {
     navigate(`/call/${roomId}`);
   }
+
 
   const handleCopyLink = () => {
     const link = window.location.href;
@@ -262,6 +255,7 @@ function ChatRoom () {
     textArea.value = link;
     document.body.appendChild(textArea);
     textArea.select();
+
 
     try {
       document.execCommand("copy");
@@ -275,9 +269,11 @@ function ChatRoom () {
     document.body.removeChild(textArea);
   };
 
+
   const addMessage = (newMessage) => {
     setMessages((prevMessages) => [...prevMessages, newMessage]);
   };
+
 
   const handleClick = () => {
     setShowConfirmation(true);
@@ -346,6 +342,7 @@ function ChatRoom () {
                         <div className="blockquote text">
                           <b>Thông tin phòng chat</b>
 
+
                           <img
                             src={avatar}
                             alt="avatar"
@@ -354,31 +351,35 @@ function ChatRoom () {
                           <h3>{name}</h3>
                         </div>
                         <div className="blockquote">
-                          <button onClick={handleAddMember}>
+                          <div className="icon-button" onClick={handleAddMember}>
                             <AiOutlineUserAdd size={24} />
                             <p className="Text">Thêm thành viên mới</p>
-                          </button>
+                          </div>
                         </div>
                         <div className="blockquote">
-                          <button onClick={handleCopyLink}>
+                          <div className="icon-button" onClick={handleCopyLink}>
                             <AiOutlineLink size={24} />
                             <p className="Text">Sao chép liên kết</p>
-                          </button>
+                          </div>
                         </div>
                         <div className="blockquote">
-                          <button onClick={handleClick}>
+                          <div className="icon-button" onClick={handleClick}>
                             <AiOutlineLogout size={24} />
                             <p className="Text">Rời khỏi nhóm</p>
-                          </button>
+                          </div>
                           {showConfirmation && (
                             <div className="confirmation-dialog">
                               <p>Bạn có muốn rời nhóm này không?</p>
-                              <button onClick={handleLeaveGroup}>Có</button>
-                              <button
-                                onClick={() => setShowConfirmation(false)}
-                              >
-                                Không
-                              </button>
+                              <div class="yes-no">
+                                <button onClick={handleLeaveGroup}>
+                                  Có
+                                </button>
+                                <button
+                                  onClick={() => setShowConfirmation(false)}
+                                >
+                                  Không
+                                </button>
+                              </div>
                             </div>
                           )}
                         </div>
@@ -428,6 +429,7 @@ function ChatRoom () {
                   ×
                 </button>
 
+
                 <h4 className="text-center mb-4">Nhập Email Thành Viên</h4>
                 <form>
                   <div className="mb-3">
@@ -476,5 +478,6 @@ function ChatRoom () {
     );
   }
 }
+
 
 export default ChatRoom;
